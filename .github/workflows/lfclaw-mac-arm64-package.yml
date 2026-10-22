@@ -5,11 +5,11 @@ on:
   workflow_dispatch:
     inputs:
       release_id:
-        description: 'Release ID in YYYYMMDDxx form, for example 2026102202'
+        description: 'Release ID in YYYYMMDDxx form, for example 2026102201'
         type: string
         required: true
       confirmed_desktop_version:
-        description: 'Confirm the complete Desktop version, for example 2026.10.22-2'
+        description: 'Confirm the complete Desktop version, for example 2026.10.22-1'
         type: string
         required: true
 
@@ -53,6 +53,21 @@ jobs:
           test "$version" = "$LFCLAW_CONFIRMED_VERSION" || { echo 'Confirmed Desktop version does not match release ID' >&2; exit 1; }
           printf 'version=%s\n' "$version" >> "$GITHUB_OUTPUT"
           printf 'Release ID: %s\nDesktop version: %s\n' "$LFCLAW_RELEASE_ID" "$version" >> "$GITHUB_STEP_SUMMARY"
+      - name: Match published Windows release
+        env:
+          LFCLAW_RELEASE_ID: ${{ inputs.release_id }}
+          PACKAGE_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          node --input-type=module <<'NODE'
+          const url = 'http://8.216.38.213:39811/lfclaw-updates/win-x64/nightly.yml'
+          const response = await fetch(url, { signal: AbortSignal.timeout(15000) })
+          if (!response.ok) throw new Error(`Windows release feed returned ${response.status}`)
+          const feed = await response.json()
+          const installer = `LFClaw-${process.env.LFCLAW_RELEASE_ID}-windows-x64.exe`
+          if (feed.version !== process.env.PACKAGE_VERSION || feed.files?.[0]?.url !== installer) {
+            throw new Error(`macOS release must match the published Windows version ${feed.version}`)
+          }
+          NODE
       - name: Check packaging configuration and toolchain
         env:
           PACKAGE_VERSION: ${{ steps.version.outputs.version }}

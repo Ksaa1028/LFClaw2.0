@@ -1,13 +1,26 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2024"],
+    "exactOptionalPropertyTypes": false,
+    "noUncheckedIndexedAccess": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "composite": true,
     "noEmit": false,
     "emitDeclarationOnly": true,
-    "declaration": true,
     "rootDir": "src",
     "outDir": "lib/types",
     "tsBuildInfoFile": "lib/tsconfig.build.tsbuildinfo"
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "references": [
+    { "path": "../../../vendor/cordis" },
+    { "path": "../../../vendor/schemastery" },
+    { "path": "../../../packages/boot/cmdline" },
+    { "path": "../../../packages/host/webserver" },
+    { "path": "../../../packages/client/ui-enterprise-skills/tsconfig.host.json" }
+  ]
 }

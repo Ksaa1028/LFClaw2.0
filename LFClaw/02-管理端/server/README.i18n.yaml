@@ -3,8 +3,8 @@
 # After editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write LFClaw/02-管理端/server/README.md
 /lfclaw-enterprise-service:
-  en: 70487e0a30736773
-  zh: 333c3e4caae27a8b
+  en: 482c181c14459d2a
+  zh: 1a045bb49c6bacd2
 /lfclaw-enterprise-service/session-sharing-and-notifications:
   en: 14bd5132c42a8c78
   zh: 8918605f11fad7f9

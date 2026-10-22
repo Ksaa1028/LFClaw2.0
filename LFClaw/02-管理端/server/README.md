@@ -4,7 +4,7 @@ English | [中文](README.zh.md)
 
 <a id="lfclaw-企业服务"></a>
 
-The repository Host build references server declarations through `tsconfig.build.json`, emitting `lib/types`. The server retains its NodeNext compiler configuration; client compilation excludes server tests.
+The repository Host build references server declarations through `tsconfig.build.json`, emitting `lib/types`. That build config uses the repository workspace paths and references its five direct workspace dependencies, so a clean checkout can compile without preexisting package output. The server retains NodeNext module resolution; client compilation excludes server tests.
 
 Employee-owned enterprise OAuth supports desktop loopback callbacks while the enterprise service retains its public HTTP IP. The client authenticates to `oauth-loopback` with a temporary `127.0.0.1` callback, then calls `oauth-complete` under the same identity after browser return. The server validates employee, connector, configuration, single-use state and PKCE before exchanging the code, discovering tools and saving employee credentials. The client stores no enterprise OAuth tokens; tool calls remain server-mediated.
 
