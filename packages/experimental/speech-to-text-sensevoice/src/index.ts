@@ -1,4 +1,4 @@
-/** Optional local SenseVoice provider; activation performs no downloads or model loading. */
+/** Local SenseVoice provider with deployment-controlled automatic preparation. */
 import { isAbsolute } from 'node:path'
 import type { Context } from '@deepseek-ai/cordis'
 import type {} from '@deepseek-ai/dsh-experimental-speech-to-text'
@@ -13,7 +13,7 @@ export const name = 'experimental-speech-to-text-sensevoice'
 export const inject = ['speechToText', 'subprocess']
 
 /**
- * Register the local recognizer and inspect disk caches without downloading or loading models.
+ * Register the local recognizer; prepare automatically when configured, otherwise inspect caches.
  * @param ctx - Host registry and subprocess owner.
  * @param config - validated runtime configuration.
  */
@@ -32,7 +32,8 @@ export function apply(ctx: Context, config: Config): void {
       preparation: worker,
       transcribe: async (input, signal) => await worker.transcribe(input, signal),
     })
-    worker.inspect()
+    if (config.autoPrepare) worker.prepare()
+    else worker.inspect()
     return async () => {
       const removing = unregister()
       await worker.dispose()

@@ -1,0 +1,13 @@
+{
+  "dashboardTrend": [
+    { "date": "2026-10-10", "conversations": 1, "tokens": 100, "missingTokenCalls": 0, "activeEmployees": 1 },
+    { "date": "2026-10-11", "conversations": 0, "tokens": 0, "missingTokenCalls": 0, "activeEmployees": 0 },
+    { "date": "2026-10-12", "conversations": 0, "tokens": 0, "missingTokenCalls": 0, "activeEmployees": 0 },
+    { "date": "2026-10-13", "conversations": 0, "tokens": 0, "missingTokenCalls": 0, "activeEmployees": 0 },
+    { "date": "2026-10-14", "conversations": 0, "tokens": 0, "missingTokenCalls": 0, "activeEmployees": 0 },
+    { "date": "2026-10-15", "conversations": 1, "tokens": 200, "missingTokenCalls": 0, "activeEmployees": 1 },
+    { "date": "2026-10-16", "conversations": 3, "tokens": 1200, "missingTokenCalls": 1, "activeEmployees": 2 }
+  ],
+  "recentActivities": [],
+  "monthlyCost": { "status": "unavailable" }
+}

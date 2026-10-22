@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MessageItem arms > keeps the selected skill label visible in the echo and admitted message before skill loading 1`] = `"<button type="button" class="_refChip_3545aa _slashChip_3545aa _fileMention_404681" data-ref-chip="skill" title="Obsidian笔记">@Obsidian笔记</button>"`;

@@ -1,0 +1,13 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write LFClaw/07-工作日志/README.md
+/lfclaw-work-log:
+  en: 924679a369703592
+  zh: d79177360a0ce1ce
+/lfclaw-work-log/record-index:
+  en: 285bfb6bec5a21c4
+  zh: a135cf0f5f83c428
+/lfclaw-work-log/maintenance:
+  en: 3c58661fca078b38
+  zh: c74be0b244e2d1f6

@@ -117,6 +117,10 @@ Before pushing, follow [dsh-pre-push-checks](.agents/skills/dsh-pre-push-checks/
 - `test:coverage`, not `test`, is the CI coverage gate ([why](docs/testing.md)).
 - **Web browser automation and GIF recording:** launch with `pnpm dsh web --patch apps/web/tests/pin-browse-picker.overlay.yml` to use the [in-page directory picker](apps/web/tests/pin-browse-picker.overlay.yml); omit this override only when testing native picker behavior explicitly.
 
+## LFClaw release deployment
+
+Desktop updates and hosted services use one validated, versioned release archive per target. Keep deployment directories few and named by purpose; never hand-add files to a live release. Follow the [LFClaw release procedure](docs/cookbook/lfclaw-release-deployment.md) for publication order, persistent data, verification, and rollback.
+
 ## Secrets / .env
 
 Windows packaging/signing: [required reading](apps/desktop/README.md#windows-ev-signing).

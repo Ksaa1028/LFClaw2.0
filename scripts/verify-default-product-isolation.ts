@@ -1,7 +1,6 @@
 /**
  * Keep experimental packages outside default installations, runtime imports, and shipped compositions.
- * The one declared exception is a bundle the launcher names in `OPTIONAL_BUNDLES`: shipped for the person to
- * switch on, selected by no shipped template, its own dependency graph outside the default product's.
+ * Shipped optional bundles remain separate; Web/Desktop also enables the four explicitly listed voice plugins.
  */
 
 import { existsSync, globSync, readFileSync, statSync } from 'node:fs'
@@ -23,6 +22,14 @@ import {
 import { isExperimentalPackageName } from './experimental-package-policy.ts'
 // The independently published entry package owns platform-engine dependencies.
 const EXTERNAL_KIT_PACKAGES = new Set(['@deepseek-ai/libreoffice-kit'])
+// Web/Desktop enables only these experimental voice contributions by default.
+const DEFAULT_VOICE_BUNDLE = '@deepseek-ai/dsh-experimental-voice-input-bundle'
+const DEFAULT_VOICE_PLUGINS = new Set([
+  '@deepseek-ai/dsh-experimental-speech-to-text',
+  '@deepseek-ai/dsh-experimental-speech-to-text-sensevoice',
+  '@deepseek-ai/dsh-experimental-api-speech-to-text',
+  '@deepseek-ai/dsh-experimental-client-ui-voice-input',
+])
 const PROFILE_SOURCE = 'packages/boot/app-boot/src/profile.ts'
 const PRESET_PATTERN = 'packages/bundle/web-app/presets/*.patch.yml'
 const RUNTIME_SECTIONS = ['dependencies', 'optionalDependencies', 'peerDependencies'] as const
@@ -191,7 +198,9 @@ export function verifyDefaultProductIsolation(root: string): ProductIsolationRes
           const target = resolve(dirname(path), entry.name)
           const targetOwner = ownerOf(target)
           if (targetOwner !== undefined) add(targetOwner, display(path))
-        } else reference(entry.name, display(path), owner)
+        } else if (!(composedWeb && path === profilePath && DEFAULT_VOICE_PLUGINS.has(entry.name))) {
+          reference(entry.name, display(path), owner)
+        }
       }
       if (isCordisGroupEntry(entry) || entry.name === 'cordis:group' && Array.isArray(entry.config)) {
         (entry.config as unknown[]).forEach(visit)
@@ -242,11 +251,11 @@ export function verifyDefaultProductIsolation(root: string): ProductIsolationRes
   }
   if (selection !== undefined) {
     for (const name of selection.packages) {
-      reference(name, PROFILE_SOURCE)
+      if (name !== DEFAULT_VOICE_BUNDLE) reference(name, PROFILE_SOURCE)
       if (packages.get(name)?.manifest.dsh?.bundle?.patch === undefined) {
         failures.push(`${PROFILE_SOURCE}: default bundle ${name} must declare dsh.bundle.patch`)
       }
-      if (optionalBundles.has(name)) failures.push(`${PROFILE_SOURCE}: optional bundle ${name} must not be a default bundle`)
+      if (optionalBundles.has(name) && name !== DEFAULT_VOICE_BUNDLE) failures.push(`${PROFILE_SOURCE}: optional bundle ${name} must not be a default bundle`)
     }
     const webLayers = selection.webBundles.flatMap((name) => {
       const pkg = packages.get(name)
@@ -408,6 +417,6 @@ if (import.meta.main) {
   } else {
     console.log(`verify-default-product-isolation: ${String(result.packageCount)} packages, `
       + `${String(result.sourceCount)} runtime sources, ${String(result.configCount)} configurations, `
-      + `${String(result.webPluginCount)} composed Web plugins exclude experimental packages.`)
+      + `${String(result.webPluginCount)} composed Web plugins checked with the explicit voice-input exception.`)
   }
 }

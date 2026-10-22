@@ -8,6 +8,7 @@
     "rewriteRelativeImportExtensions": false
   },
   "include": [
+    "apps/web/tests/deliverable-catalog.e2e.ts",
     "apps/web/tests/collapse-timing.e2e.ts",
     "apps/web/tests/chat-flow-layout.e2e.ts",
     "apps/web/product-isolation.ts",
@@ -221,6 +222,8 @@
     "scripts/client-bundle-purity.spec.ts"
   ],
   "references": [
+    { "path": "./LFClaw/02-管理端/server/tsconfig.build.json" },
+    { "path": "./packages/client/ui-enterprise-connectors/tsconfig.host.json" },
     { "path": "./packages/experimental/client-ui-cot-translation/tsconfig.host.json" },
     { "path": "./packages/experimental/cot-translation-bundle" },
     { "path": "./packages/experimental/session-search" },
@@ -245,6 +248,10 @@
     { "path": "./packages/host/product-telemetry-otel" },
     { "path": "./packages/boot/config-editor" },
     { "path": "./packages/client/connection/tsconfig.host.json" },
+    { "path": "./packages/client/ui-activation/tsconfig.host.json" },
+    { "path": "./packages/client/ui-lfclaw/tsconfig.host.json" },
+    { "path": "./packages/client/ui-enterprise-skills/tsconfig.host.json" },
+    { "path": "./packages/client/ui-session-actions/tsconfig.host.json" },
     { "path": "./packages/skill/skill-office" },
     { "path": "./packages/skill/tool-workspace-dependencies" },
     { "path": "./packages/browser-use/browser-use" },

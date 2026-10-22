@@ -1,0 +1,32 @@
+# LFClaw 企业服务作为 DSH Web profile 的扩展启动。
+# 首次启动设置 LFCLAW_ADMIN_PASSWORD，部署时指定专用数据目录。
+- id: ui-lfclaw
+  disabled: false
+- id: ui-activation
+  disabled: false
+- id: ui-enterprise-skills
+  disabled: false
+- id: ui-enterprise-connectors
+  disabled: false
+- insert:
+    - id: lfclaw-enterprise-api
+      name: './src/index.ts'
+      config:
+        dataDirectory: !!js process.env.LFCLAW_DATA_DIR ?? './LFClaw/02-管理端/server/data'
+        routePrefix: /lfclaw/api
+        allowedOrigin: !!js process.env.LFCLAW_ADMIN_ORIGIN ?? 'http://127.0.0.1:5173'
+        initialPasswordEnv: LFCLAW_ADMIN_PASSWORD
+        skillArchiveLimits:
+          maxArchiveBytes: 33554432
+          maxUnpackedBytes: 67108864
+          maxFiles: 20000
+        oauthCallbackUrl: !!js process.env.LFCLAW_OAUTH_CALLBACK_URL ?? 'http://127.0.0.1:39811/lfclaw/api/connectors/oauth/callback'
+        oauthFlowTtlMs: 600000
+        mcpTimeoutMs: 30000
+        expertTimeoutMs: 180000
+        modelTimeoutMs: 120000
+        authWindowMs: 900000
+        loginMaxFailures: 5
+        activationMaxFailures: 10
+        adminSessionTtlMs: 43200000
+        employeeSessionTtlMs: 2592000000

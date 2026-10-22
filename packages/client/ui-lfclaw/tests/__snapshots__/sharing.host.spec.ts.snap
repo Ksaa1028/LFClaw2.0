@@ -1,0 +1,16 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`transfers upload and AI output bytes, creates an inherited local copy, and uses receiver composition 1`] = `
+{
+  "data": {
+    "senderId": "sender",
+    "senderName": "甲",
+    "shareId": "00000000-0000-4000-8000-000000000001",
+    "sharedAt": 1,
+    "title": "分析聊天",
+  },
+  "seq": 3,
+  "time": 1,
+  "type": "lfclaw/share-received",
+}
+`;

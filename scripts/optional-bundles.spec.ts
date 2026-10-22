@@ -93,6 +93,19 @@ describe.each(['web', 'desktop'] as const)('%s optional bundle overrides', (surf
 describe('optional bundles', () => {
   const shipped = ['@deepseek-ai/dsh-base', '@deepseek-ai/dsh-web-app'].map(name => bundle(name).patches)
 
+  it('enables voice in new Web and Desktop profiles with automatic preparation', () => {
+    const name = '@deepseek-ai/dsh-experimental-voice-input-bundle'
+    expect(PROFILE_TEMPLATES.web!.bundles).toContain(name)
+    for (const surface of ['web', 'desktop'] as const) {
+      expect(composeEntries(profileLayers(surface)).some(row => row.id === 'ui-voice-input')).toBe(true)
+    }
+    const rows = composeEntries([...shipped, bundle(name).patches])
+    expect(rows.find(row => row.id === 'speech-to-text-sensevoice')?.config).toMatchObject({ autoPrepare: true })
+    for (const profile of ['headless', 'sdk', 'sdk-minimal', 'acp']) {
+      expect(PROFILE_TEMPLATES[profile]!.bundles).not.toContain(name)
+    }
+  })
+
   it('ships at least one bundle switched off', () => {
     expect(OPTIONAL_BUNDLES.length).toBeGreaterThan(0)
   })

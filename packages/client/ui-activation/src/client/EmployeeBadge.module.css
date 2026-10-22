@@ -1,0 +1,11 @@
+.badge { display: flex; align-items: center; gap: 10px; min-width: 0; width: 100%; padding: 12px 16px; box-sizing: border-box; }
+.avatar { display: grid; place-items: center; width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--dsw-alias-bg-layer-1); border: 1px solid var(--dsw-alias-border-l2); color: var(--dsw-alias-label-primary); font-size: 13px; }
+.details { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.name, .department { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.name { font-size: 13px; font-weight: 500; color: var(--dsw-alias-label-primary); }
+.department { font-size: 12px; color: var(--dsw-alias-label-secondary); }
+.badge[data-wide='false'] { justify-content: center; padding: 8px 0; }
+.badge { background: transparent; border: 0; text-align: left; font: inherit; cursor: pointer; color: var(--dsw-alias-label-primary); }
+.badge:hover { background: var(--dsw-alias-bg-layer-1); }
+.badge:focus-visible { outline: 2px solid var(--dsw-alias-label-primary); outline-offset: -2px; }
+.actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px; }

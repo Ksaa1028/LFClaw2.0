@@ -85,6 +85,8 @@ kind: "package-reference"
 - **兑现即发布。** `startActivation()` 仅在子级已接受且句柄可取消该次执行后返回。
 - **同进程值可信。** 请求、描述符与结果按不可变约定借用；序列化与不可信输入校验属于进程与协议边界。
 
+删除调用方只针对所选会话传入 `includeDescendants: false` 时，`workspace/session-stop` 不停止子孙会话。
+
 ### 源码地图
 
 | 文件 | 职责 |

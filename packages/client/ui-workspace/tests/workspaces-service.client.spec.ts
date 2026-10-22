@@ -838,6 +838,14 @@ describe('UiWorkspaceService', () => {
       expect(b.notify).not.toHaveBeenCalled()
     })
 
+    it('creates a fresh target for skill selection without reusing existing blank drafts', async () => {
+      const b = bench({ workspaces: workspaceState([workspace('a')]) })
+      b.uiWorkspace.startSession(wid('a'), { prompt: '/exact-skill ', reuseBlank: false })
+      await vi.waitFor(() => { expect(b.requestDraftInitialization).toHaveBeenCalledOnce() })
+      expect(b.sessions.create).toHaveBeenCalledExactlyOnceWith({ workspaceId: wid('a') })
+      expect(b.requestDraftInitialization.mock.calls[0]![1]).toEqual({ prompt: '/exact-skill ', reuseBlank: false })
+    })
+
     it('opens the retained target when its draft is preserved', async () => {
       const backing = persistSelection({})
       const b = bench({ workspaces: workspaceState([workspace('a')]) })

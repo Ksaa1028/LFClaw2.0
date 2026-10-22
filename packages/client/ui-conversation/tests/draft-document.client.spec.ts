@@ -317,6 +317,18 @@ describe('draft documents in the input shell', () => {
     expect(chips(shell)).toEqual([])
   })
 
+  it('initializes a named skill chip while preserving its exact invocation through persistence', () => {
+    const shell = makeShell()
+    const ref = '/enterprise-skill-creator-0f05c7'
+    const prompt = documentOf({ source: 'skill', ref, label: 'skill-creator', clipboardText: ref }, ' ')
+    expect(shell.requestDraftInitialization({ prompt })).toBe('applied')
+    expect(chips(shell)[0]).toMatchObject({ label: 'skill-creator', ref })
+    expect(shell.draftSnapshot).toEqual(prompt)
+    const restored = makeShell()
+    restored.setDraft(shell.draftSnapshot)
+    expect(chips(restored)[0]).toMatchObject({ label: 'skill-creator', ref })
+  })
+
   it('preserves existing text or attachments unless target text is explicitly cleared', () => {
     const shell = makeShell()
     const old = documentOf('existing ', session)

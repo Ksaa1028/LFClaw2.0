@@ -15,6 +15,8 @@ export interface MessageIconActionsProps {
   text: string
   /** Unix epoch ms for the clock label; omitted for transient messages. */
   time?: number | undefined
+  /** Model ID recorded with this reply; independent of the current picker. */
+  modelId?: string | undefined
   /** Clock before icons (user) or after (assistant). */
   clock: 'start' | 'end'
   /** Fork the session at this message; omission hides the branch action. */
@@ -43,7 +45,7 @@ export interface MessageIconActionsProps {
  * @returns The actions row element.
  */
 export function MessageIconActions({
-  text, time, clock, onBranch, branchUnavailable = false, className,
+  text, time, modelId, clock, onBranch, branchUnavailable = false, className,
   extraActions, usageAction, t,
 }: MessageIconActionsProps) {
   const day = useCalendarDay()
@@ -108,7 +110,11 @@ export function MessageIconActions({
         <span id={reasonId} className={css.visuallyHidden}>{t('message.branchUnavailable')}</span>
       )}
       {clock === 'end'
-        ? <span className={css.endInfo}>{usageAction}{clockEl}</span>
+        ? <span className={css.endInfo}>{usageAction}{clockEl}{modelId !== undefined && (
+          <span className={css.timeEnd} aria-label={t('message.modelId', { model: modelId })}>
+            {modelId}
+          </span>
+        )}</span>
         : usageAction}
     </div>
   )

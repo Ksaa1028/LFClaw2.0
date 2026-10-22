@@ -141,6 +141,18 @@ describe('Subagent archive admission: stopping', () => {
     expect(parentAgent.cancels).toEqual([[{ kind: 'user' }, undefined]])
   })
 
+  it('stops only the selected Session when deletion excludes descendants', async () => {
+    const ctx = await harness()
+    const parent = ctx.sessions.create(SessionId('delete-parent'))
+    const parentAgent = await liveAgent(ctx, parent, 'running')
+    const childAgent = await liveAgent(ctx, childOf(ctx, 'retained-child', parent.id), 'running')
+
+    await ctx.parallel('workspace/session-stop', { sessionId: parent.id, includeDescendants: false })
+
+    expect(parentAgent.cancels).toEqual([[{ kind: 'user' }, undefined]])
+    expect(childAgent.cancels).toEqual([])
+  })
+
   it('keeps asking the remaining descendants to stop when one cancel throws', async () => {
     const ctx = await harness()
     const parent = ctx.sessions.create(SessionId('stubborn'))

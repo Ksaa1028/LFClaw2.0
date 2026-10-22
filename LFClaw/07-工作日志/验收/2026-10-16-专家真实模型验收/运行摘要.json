@@ -1,0 +1,324 @@
+[
+  {
+    "id": "3988b219-1834-402b-8a41-cc509827553f",
+    "firstAt": "2026-10-16T10:09:52.139Z",
+    "latestAt": "2026-10-16T10:13:50.803Z",
+    "elapsedMs": 238664,
+    "turns": [
+      {
+        "time": "2026-10-16T10:13:50.803Z",
+        "reason": {
+          "kind": "completed"
+        }
+      }
+    ],
+    "calls": [
+      {
+        "name": "send_message",
+        "time": "2026-10-16T10:13:26.680Z"
+      }
+    ],
+    "answers": 1
+  },
+  {
+    "id": "936cc99e-1ed7-4780-a027-6a11eab05601",
+    "firstAt": "2026-10-16T10:21:54.359Z",
+    "latestAt": "2026-10-16T10:47:52.918Z",
+    "elapsedMs": 1558559,
+    "turns": [
+      {
+        "time": "2026-10-16T10:47:52.918Z",
+        "reason": {
+          "kind": "completed"
+        }
+      }
+    ],
+    "calls": [
+      {
+        "name": "write",
+        "time": "2026-10-16T10:25:06.159Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-16T10:25:12.076Z"
+      },
+      {
+        "name": "write",
+        "time": "2026-10-16T10:26:49.993Z"
+      },
+      {
+        "name": "read",
+        "time": "2026-10-16T10:26:53.089Z"
+      },
+      {
+        "name": "write",
+        "time": "2026-10-16T10:27:20.930Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-16T10:27:34.284Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-16T10:27:49.904Z"
+      },
+      {
+        "name": "write",
+        "time": "2026-10-16T10:29:54.860Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-16T10:30:08.215Z"
+      },
+      {
+        "name": "write",
+        "time": "2026-10-16T10:32:06.198Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-16T10:32:11.342Z"
+      },
+      {
+        "name": "write",
+        "time": "2026-10-16T10:34:15.973Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-16T10:34:23.084Z"
+      },
+      {
+        "name": "write",
+        "time": "2026-10-16T10:36:07.757Z"
+      },
+      {
+        "name": "pwash",
+        "time": "2026-10-16T10:36:09.863Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-16T10:36:17.575Z"
+      },
+      {
+        "name": "write",
+        "time": "2026-10-16T10:37:42.531Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-16T10:37:54.438Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-16T10:38:26.962Z"
+      },
+      {
+        "name": "write",
+        "time": "2026-10-16T10:39:29.481Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-16T10:39:37.756Z"
+      },
+      {
+        "name": "write",
+        "time": "2026-10-16T10:41:00.008Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-16T10:41:12.837Z"
+      },
+      {
+        "name": "write",
+        "time": "2026-10-16T10:42:28.042Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-16T10:42:36.088Z"
+      },
+      {
+        "name": "write",
+        "time": "2026-10-16T10:43:29.841Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-16T10:43:36.841Z"
+      },
+      {
+        "name": "write",
+        "time": "2026-10-16T10:44:12.437Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-16T10:44:21.250Z"
+      },
+      {
+        "name": "edit",
+        "time": "2026-10-16T10:44:57.720Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-16T10:45:04.371Z"
+      },
+      {
+        "name": "edit",
+        "time": "2026-10-16T10:45:16.155Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-16T10:45:26.791Z"
+      },
+      {
+        "name": "edit",
+        "time": "2026-10-16T10:45:35.675Z"
+      },
+      {
+        "name": "read",
+        "time": "2026-10-16T10:45:41.886Z"
+      },
+      {
+        "name": "edit",
+        "time": "2026-10-16T10:46:10.474Z"
+      },
+      {
+        "name": "edit",
+        "time": "2026-10-16T10:46:15.790Z"
+      },
+      {
+        "name": "edit",
+        "time": "2026-10-16T10:46:25.638Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-16T10:46:37.389Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-16T10:46:54.192Z"
+      },
+      {
+        "name": "send_message",
+        "time": "2026-10-16T10:47:34.004Z"
+      }
+    ],
+    "answers": 1
+  },
+  {
+    "id": "d5f9787c-8188-462e-b0f2-c5dd55f2b9b8",
+    "firstAt": "2026-10-16T10:14:23.203Z",
+    "latestAt": "2026-10-16T10:19:18.242Z",
+    "elapsedMs": 295039,
+    "turns": [
+      {
+        "time": "2026-10-16T10:19:18.242Z",
+        "reason": {
+          "kind": "completed"
+        }
+      }
+    ],
+    "calls": [
+      {
+        "name": "send_message",
+        "time": "2026-10-16T10:19:02.023Z"
+      }
+    ],
+    "answers": 2
+  },
+  {
+    "id": "session-401351d8-db1e-4505-aecf-d8fa738e67ae",
+    "firstAt": "2026-10-16T10:15:34.710Z",
+    "latestAt": "2026-10-16T10:15:37.299Z",
+    "elapsedMs": 2589,
+    "turns": [
+      {
+        "time": "2026-10-16T10:15:37.299Z",
+        "reason": {
+          "kind": "completed"
+        }
+      }
+    ],
+    "calls": [],
+    "answers": 1
+  },
+  {
+    "id": "session-5e095be4-ad5f-4bc0-98de-03603b23d3cc",
+    "firstAt": "2026-10-16T10:07:21.355Z",
+    "latestAt": "2026-10-16T10:10:12.859Z",
+    "elapsedMs": 171504,
+    "turns": [
+      {
+        "time": "2026-10-16T10:10:12.859Z",
+        "reason": {
+          "kind": "completed"
+        }
+      }
+    ],
+    "calls": [],
+    "answers": 1
+  },
+  {
+    "id": "session-f3c8d405-482d-4269-92d4-54a7bf08f732",
+    "firstAt": "2026-10-16T10:08:06.337Z",
+    "latestAt": "2026-10-16T10:49:04.737Z",
+    "elapsedMs": 2458400,
+    "turns": [
+      {
+        "time": "2026-10-16T10:10:08.760Z",
+        "reason": {
+          "kind": "completed"
+        }
+      },
+      {
+        "time": "2026-10-16T10:14:31.813Z",
+        "reason": {
+          "kind": "completed"
+        }
+      },
+      {
+        "time": "2026-10-16T10:22:10.921Z",
+        "reason": {
+          "kind": "completed"
+        }
+      },
+      {
+        "time": "2026-10-16T10:49:04.737Z",
+        "reason": {
+          "kind": "completed"
+        }
+      }
+    ],
+    "calls": [
+      {
+        "name": "list_expert_resources",
+        "time": "2026-10-16T10:09:51.913Z"
+      },
+      {
+        "name": "subagent",
+        "time": "2026-10-16T10:09:51.935Z"
+      },
+      {
+        "name": "list_agents",
+        "time": "2026-10-16T10:09:59.265Z"
+      },
+      {
+        "name": "subagent",
+        "time": "2026-10-16T10:14:23.025Z"
+      },
+      {
+        "name": "list_agents",
+        "time": "2026-10-16T10:14:26.739Z"
+      },
+      {
+        "name": "subagent",
+        "time": "2026-10-16T10:21:54.165Z"
+      },
+      {
+        "name": "list_agents",
+        "time": "2026-10-16T10:22:07.571Z"
+      },
+      {
+        "name": "list_agents",
+        "time": "2026-10-16T10:48:23.289Z"
+      }
+    ],
+    "answers": 9
+  }
+]

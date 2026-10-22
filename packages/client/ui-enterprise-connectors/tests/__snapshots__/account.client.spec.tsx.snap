@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`asks for the server update when its employee OAuth relay is unavailable 1`] = `"企业服务器尚不支持客户端本机授权回调，请管理员更新服务端后重试。"`;
+
+exports[`identifies a missing enterprise OAuth callback without blaming employee credentials 1`] = `"企业服务器尚未配置网页授权回调。请管理员配置可访问的 HTTPS 回调地址后重试。"`;
+
+exports[`submits only the current connector account and clears credentials after success 1`] = `"账号连接填写自己的凭据，或通过浏览器登录并授权。凭据按员工账号分别保存，不作为工具参数提供给模型。AppIDAppSecret保存并检查连接"`;

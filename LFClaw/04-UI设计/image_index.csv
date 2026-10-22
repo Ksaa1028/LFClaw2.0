@@ -1,0 +1,21 @@
+﻿序号,版本,端,中文界面名称,图片路径
+1,最新版,客户端,首页 / 会话,01_Current/Client/01_Home_Chat.png
+2,最新版,客户端,账号与权限,01_Current/Client/02_Account_Permissions.png
+3,最新版,客户端,技能,01_Current/Client/03_Skills.png
+4,最新版,客户端,连接器,01_Current/Client/04_Connectors.png
+5,最新版,客户端,专家,01_Current/Client/05_Experts.png
+6,最新版,客户端,自动化任务,01_Current/Client/06_Scheduled_Tasks.png
+7,最新版,客户端,会话分享,01_Current/Client/07_Conversation_Sharing.png
+8,最新版,管理后台,总览,01_Current/Admin/08_Dashboard.png
+9,最新版,管理后台,员工与激活码,01_Current/Admin/09_Employee_Activation.png
+10,最新版,管理后台,模型管理,01_Current/Admin/10_Model_Management.png
+11,早期参考,客户端,首页 / 会话（旧稿）,02_Earlier_Concepts/Client/01_Home_Chat.png
+12,早期参考,管理后台,总览（旧稿）,02_Earlier_Concepts/Admin/02_Dashboard.png
+13,早期参考,客户端,插件（旧稿）,02_Earlier_Concepts/Client/03_Plugins.png
+14,早期参考,客户端,专家（旧稿）,02_Earlier_Concepts/Client/04_Experts.png
+15,早期参考,客户端,会话分享与通知（旧稿）,02_Earlier_Concepts/Client/05_Sharing_Notifications.png
+16,早期参考,客户端,自动化任务（旧稿）,02_Earlier_Concepts/Client/06_Scheduled_Tasks.png
+17,早期参考,客户端,账号与权限（旧稿）,02_Earlier_Concepts/Client/07_Account_Permissions.png
+18,早期参考,管理后台,员工与激活码（旧稿）,02_Earlier_Concepts/Admin/08_Employee_Activation.png
+19,早期参考,管理后台,模型管理（旧稿）,02_Earlier_Concepts/Admin/09_Model_Management.png
+20,早期参考,管理后台,系统管理综合展示（旧稿）,02_Earlier_Concepts/Admin/10_Admin_Operations.png

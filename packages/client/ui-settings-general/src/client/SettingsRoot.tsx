@@ -21,6 +21,7 @@ import {
 import type { ConnectionIndicatorState } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { SettingsRootComponentProps, SettingsSectionRow } from './shell-contract.ts'
 import css from './SettingsRoot.module.css'
+import { CurrentVersionRow } from './CurrentVersionRow.tsx'
 import { DesktopUpdateIndicator } from './DesktopUpdateIndicator.tsx'
 
 const RECOVERY_CONFIRMATION_MS = 2_000
@@ -39,6 +40,7 @@ function navIcon(id: string) {
 }
 
 type PanelProps = {
+  t: SettingsRootComponentProps['t']
   rows: readonly SettingsSectionRow[]
   renderSlot: SettingsRootComponentProps['renderSlot']
   activeId: string | undefined
@@ -51,7 +53,7 @@ type PanelProps = {
  * header button, a mask click, and document-level Escape (mounted only while
  * open, so the listener lifetime is the panel's).
  */
-function SettingsPanel({ rows, renderSlot, activeId, onSelect, onClose }: PanelProps) {
+function SettingsPanel({ rows, renderSlot, activeId, onSelect, onClose, t }: PanelProps) {
   // Entries can unmount underneath the requested id, so the render-time
   // projection falls back to the first row when the id is gone.
   const active = rows.find(r => r.id === activeId)?.id ?? rows[0]?.id
@@ -86,6 +88,7 @@ function SettingsPanel({ rows, renderSlot, activeId, onSelect, onClose }: PanelP
               </button>
             ))}
           </div>
+          <div className={css.versionFooter}><CurrentVersionRow t={t} /></div>
         </nav>
         <div className={css.content}>
           <div className={css.header}>
@@ -245,6 +248,7 @@ export function SettingsRoot(props: SettingsRootComponentProps) {
       </div>
       {open && (
         <SettingsPanel
+          t={t}
           rows={rows}
           renderSlot={renderSlot}
           activeId={activeId}

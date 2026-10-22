@@ -1,0 +1,168 @@
+%% 1. 激活码登录
+sequenceDiagram
+    actor U as 员工
+    participant LoginPage
+    participant AuthService
+    participant ApiClient
+    participant Backend as LFClaw后端
+    participant AuthStore
+    participant Store as localStorage/安全存储
+
+    U->>LoginPage: 输入激活码并提交
+    LoginPage->>AuthService: login(code)
+    AuthService->>ApiClient: POST /auth/activate
+    ApiClient->>Backend: 校验激活码、部门、账号状态
+    Backend-->>ApiClient: { token, employee, expiresAt }
+    ApiClient-->>AuthService: AuthResult
+    AuthService->>AuthStore: setToken / setEmployee / setStatus(active)
+    AuthStore->>Store: 持久化 token
+    AuthService-->>LoginPage: 登录成功
+    LoginPage->>Router: navigate('/home')
+
+%% 2. 模型切换
+sequenceDiagram
+    actor U as 员工
+    participant ChatInput
+    participant ModelService
+    participant ApiClient
+    participant Backend as LFClaw后端/授权中心
+    participant Gateway as 模型网关
+    participant ChatStore
+
+    U->>ChatInput: 点击模型下拉
+    ChatInput->>ModelService: getAuthorizedModels()
+    ModelService->>ApiClient: GET /models?authorized=true
+    ApiClient->>Backend: 查询员工有效授权模型
+    Backend-->>ApiClient: Model[]（含默认模型标记）
+    ApiClient-->>ModelService: Model[]
+    ModelService->>ChatStore: setModels / setSelectedModel
+    U->>ChatInput: 选择模型
+    ChatInput->>ChatStore: setSelectedModel(id)
+    U->>ChatInput: 输入内容并发送
+    ChatInput->>ChatService: sendMessage(modelId, content, attachments)
+    ChatService->>ApiClient: POST /chat/completions
+    ApiClient->>Gateway: 转发请求（含 Bearer Token）
+    Gateway->>Backend: 校验员工授权
+    Gateway->>Provider: 使用服务端 API Key 调用 Base URL
+    Provider-->>Gateway: 流式响应
+    Gateway-->>ApiClient: SSE / chunked stream
+    ApiClient-->>ChatService: 流式 Message
+    ChatService->>ChatStore: appendMessage
+
+%% 3. 技能 / 连接器 / 专家使用
+sequenceDiagram
+    actor U as 员工
+    participant Page as SkillsPage/ConnectorsPage/ExpertsPage
+    participant ResourceService
+    participant ApiClient
+    participant Backend as LFClaw后端/DSH Runtime
+    participant ChatService
+
+    U->>Page: 进入页面，切换企业/个人 Tab
+    Page->>ResourceService: fetchList(type, source)
+    ResourceService->>ApiClient: GET /{type}?source={source}
+    ApiClient->>Backend: 查询员工有效资源
+    Backend-->>ApiClient: Resource[]（含来源标签）
+    ApiClient-->>ResourceService: Resource[]
+    ResourceService->>Page: 渲染资源卡片
+    U->>Page: 点击“使用 / 试用”
+    Page->>ChatService: invokeResource(type, id, context)
+    ChatService->>ApiClient: POST /chat/invoke
+    ApiClient->>Backend: 路由到 DSH Runtime / 模型网关
+    Backend-->>ApiClient: 执行结果
+    ApiClient-->>ChatService: Message
+    ChatService->>Page: 跳转首页并展示结果
+
+%% 4. 会话分享领取
+sequenceDiagram
+    actor U as 接收人
+    participant SharesPage
+    participant ShareService
+    participant ApiClient
+    participant Backend as LFClaw后端
+    participant FileService
+    participant ChatService
+    participant ChatStore
+
+    U->>SharesPage: 打开“收到的分享”
+    SharesPage->>ShareService: fetchReceived()
+    ShareService->>ApiClient: GET /shares/received
+    ApiClient->>Backend: 查询分享列表
+    Backend-->>ApiClient: ConversationShare[]
+    ApiClient-->>ShareService: shares
+    ShareService->>SharesPage: 渲染
+    U->>SharesPage: 点击“继续对话”
+    SharesPage->>ShareService: claimShare(shareId)
+    ShareService->>ApiClient: POST /shares/{id}/claim
+    ApiClient->>Backend: 校验未过期 / 权限 / 50MB 容量
+    Backend-->>ApiClient: 返回会话内容 + 附件元数据
+    ApiClient-->>ShareService: payload
+    ShareService->>FileService: 下载附件到本地工作目录
+    ShareService->>ChatService: createSessionFromShare(payload)
+    ChatService->>ChatStore: 创建独立 DSH 会话
+    ChatStore-->>SharesPage: 新会话
+    SharesPage->>ChatPage: navigate('/home')
+
+%% 5. 定时任务创建
+sequenceDiagram
+    actor U as 员工
+    participant TasksPage
+    participant TaskForm
+    participant TaskService
+    participant ApiClient
+    participant Backend as LFClaw后端
+    participant Scheduler as DSH本地调度器
+    participant NotificationService
+
+    U->>TasksPage: 点击“新建任务”
+    TasksPage->>TaskForm: 打开抽屉/弹窗
+    U->>TaskForm: 填写名称、Cron、执行指令
+    TaskForm->>TaskService: create(task)
+    TaskService->>ApiClient: POST /tasks
+    ApiClient->>Backend: 保存任务元数据快照（后台只读）
+    Backend-->>ApiClient: AutomationTask
+    ApiClient-->>TaskService: task
+    TaskService->>Scheduler: register(task)
+    TaskService->>TasksPage: 刷新列表
+    Scheduler->>TaskService: trigger(taskId)
+    TaskService->>ChatService: executeInstruction
+    ChatService->>ApiClient: POST /chat/invoke
+    alt 执行成功
+        ChatService-->>TaskService: result
+        TaskService->>TaskStore: updateLastResult
+    else 执行失败
+        TaskService->>NotificationService: create(type='task')
+        NotificationService->>Backend: POST /notifications
+    end
+
+%% 6. 后台授权流程
+sequenceDiagram
+    actor A as 管理员
+    participant EmployeesPage
+    participant EmployeeService
+    participant ScopeEditor
+    participant AdminService
+    participant ApiClient
+    participant Backend as LFClaw后端
+    participant PushService
+    participant Client as 在线客户端
+
+    A->>EmployeesPage: 选择员工，打开详情抽屉
+    EmployeesPage->>EmployeeService: getEmployee(id)
+    EmployeeService->>ApiClient: GET /admin/employees/{id}
+    ApiClient->>Backend: 查询员工及有效授权来源
+    Backend-->>ApiClient: 员工 + 授权明细
+    ApiClient-->>EmployeeService: employee
+    EmployeeService->>EmployeesPage: 展示抽屉
+    A->>ScopeEditor: 勾选模型 / 技能 / 连接器 / 专家
+    ScopeEditor->>AdminService: grant({employeeId, resourceType, resourceId, scope})
+    AdminService->>ApiClient: POST /admin/authorizations
+    ApiClient->>Backend: 更新授权表
+    Backend->>Backend: 重新计算有效授权
+    Backend->>PushService: 通知权限变更
+    PushService->>Client: permissionChanged 事件
+    Client->>ResourceService: refreshList(type)
+    ResourceService->>ApiClient: GET /{type}
+    ApiClient->>Backend: 按最新授权返回
+    Backend-->>ApiClient: 更新后列表
+    Client->>UI: 刷新可用资源

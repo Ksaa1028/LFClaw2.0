@@ -47,7 +47,7 @@ Hovering over `/name` highlights the entire reference. Clicking a known skill op
 <details>
 <summary>Implementation internals — click to expand</summary>
 
-The source implements no adjudication hooks and no reference codec: the pick lands literal text and the prompt ships the same literal, so determinism lives host-side ([slash pipeline note](../../../.agents/notes/archived/architecture/2026-07-25-web-input-machine-and-slash-pipeline.md)).
+The source implements no adjudication hooks. Menu picks land literal text; named chips from the skill center serialize through the source codec to the exact same slash invocation, so determinism lives host-side ([slash pipeline note](../../../.agents/notes/archived/architecture/2026-07-25-web-input-machine-and-slash-pipeline.md)).
 
 ### Candidate flow
 

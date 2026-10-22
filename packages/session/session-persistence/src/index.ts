@@ -143,6 +143,15 @@ export abstract class SessionPersistence extends Service {
   }
 
   /**
+   * Delete one closed Session from discovery and future reads. Backends may retain raw artifacts for recovery.
+   * @param _id - Session whose owners have already released all handles.
+   * @returns resolution after the deletion is durable; unsupported backends reject.
+   */
+  delete(_id: SessionId): Promise<void> {
+    return Promise.reject(new Error('Session deletion is unavailable for this persistence backend'))
+  }
+
+  /**
    * Create a new stored session and take its write ownership.
    * @param header - the immutable header (id, version, cwd, lineage) to store.
    * @param options - optional cancellation.

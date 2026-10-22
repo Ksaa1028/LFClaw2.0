@@ -10,6 +10,8 @@ kind: "package-reference"
 
 ## 概述
 
+模型目录条目提供可选的 `contextWindow`，取自适配器当前确切路由的元数据。目录刷新可以更新容量，无需改写持久化请求记录或所选模型。
+
 `@deepseek-ai/dsh-api-session-controller` 拥有 Host 的 `ctx.sessionController` 服务，以及生成的 Client `session`、`skills` 和 `fileReferences` Remote namespace。它提供 Session 生命周期与历史、Host generation 模型目录、人工后台任务终止、工作区路径打开、用户可调用 skill（技能）发现和 Agent（智能体）范围的文件引用。当 Client 需要按 Session 寻址的操作时，请通过 API Gateway 使用它。
 
 ## 目录
@@ -71,6 +73,10 @@ Client 的首次 `follow`、重连首屏与 `loadOlder()` 至少请求 50 条以
 附件授权读取内置 Session 事件声明的内容字段与已完成的 assistant 流块，包括扁平的 V4 tool 角色消息。未知事件载荷与无关字段不能授权附件读取。
 
 本控制器通过 `ctx.plugin` 组合 `ArchivedSessionGate`：在 Agent 注册表、Session store 与 Workspace 注册表就绪后加载，随控制器一起释放。它的 `agent/pre-step` 监听器会拒绝为已归档会话或其子代理子孙——从 Session header 的血缘字段读出，从不包括 fork——提出的步骤，因此迟到的唤醒投递会让该回合以 `blocked` 收口而不发出模型请求；取消归档即为整条血缘解除门禁。已归档会话仍在跑的工作由各自的 owner 通过 Workspace 注册表的归档准入（[接缝](../../workspace/workspace/README.zh.md)）报告与停止：运行中的回合由 [Agent 注册表](../../core/agent/README.zh.md)负责，所属任务由[任务注册表接缝](../../jobs/jobs/README.zh.md)负责，子代理子孙由 [Subagent](../../subagent/subagent/README.zh.md) runtime 负责，提醒由 [Schedule](../../schedule/schedule/README.zh.md) 插件负责；本控制器自己不报告任何内容。
+
+通过 API 创建的分叉会话与普通会话一样，由控制器保管 Agent 句柄；删除前释放句柄，原会话不受影响。
+
+Host 方法 `deleteSession(id)` 只停止所选会话的活动、释放本控制器拥有的 Agent，再写入持久化删除标记并通知目录。分叉和子会话不阻止父会话删除，也不会收到子孙停止请求；在线子会话仍可能依赖已删除父会话的运行实例。其他运行组件拥有的 Agent 在所有者释放前仍阻止删除。工作区文件保持不变。该方法供 Host UI 扩展调用，不新增公开 Remote 方法。
 
 <a id="client-references"></a>
 ## Client 引用

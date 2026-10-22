@@ -1,0 +1,16 @@
+# Bilingual-pair consistency record for guide.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write docs/upgrade-guide/v0.2.1-alpha.2/personal-connector-import/guide.md
+/:
+  en: 7a9617efc36e32ee
+  zh: 4565edbab8b21de6
+/personal-connector-configuration:
+  en: 1b1bbb70daef528f
+  zh: ded4f3e0e8722f05
+/personal-connector-configuration/change:
+  en: dc4db1c54d531f47
+  zh: 4e26c0812475dd89
+/personal-connector-configuration/migration:
+  en: ef58522c16e0de6e
+  zh: 387f50cb78045ee8

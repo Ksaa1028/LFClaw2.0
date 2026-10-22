@@ -1,0 +1,28 @@
+# Bilingual-pair consistency record for lfclaw-release-deployment.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write docs/cookbook/lfclaw-release-deployment.md
+/lfclaw-release-deployment:
+  en: c5cd52714abefab4
+  zh: 4a7a0763248f0bf7
+/lfclaw-release-deployment/lfclaw-deployment-requirements:
+  en: 040b323835617b55
+  zh: bb6a392b89df1b73
+/lfclaw-release-deployment/admin-server-directories:
+  en: a753732ca6b1c920
+  zh: 41edf219cb0666df
+/lfclaw-release-deployment/release-input:
+  en: cc3ce23cdcf3c09f
+  zh: 7ea30bd6921f757e
+/lfclaw-release-deployment/directory-ownership:
+  en: 88bd357191a3ffff
+  zh: a2cba01b8212f050
+/lfclaw-release-deployment/publication-order:
+  en: 3a91062f0efc0d8f
+  zh: f358edf08fa32c2d
+/lfclaw-release-deployment/verification-and-rollback:
+  en: 705008cb187bdefb
+  zh: 4c0f79afa60fd69f
+/lfclaw-release-deployment/current-implementation-limit:
+  en: 6f6e0a30c9702aaa
+  zh: ff7358a8068eec56

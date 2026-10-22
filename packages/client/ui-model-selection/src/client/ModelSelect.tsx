@@ -2,8 +2,9 @@
  * ModelSelect: the composer's named model seat (`conversation.input.model`).
  * Two-level selection per figma 496:26454's MenuDropdown: the root menu is
  * the Model / Effort row pair (label + current value + a right chevron),
- * each drilling into its own list — the provider-grouped model list over
- * the shared directory, and the effort levels. The trigger (313:14108's
+ * each drilling into its own list. Models without reasoning options open
+ * the model list directly. The provider-grouped model list uses
+ * the shared directory. The trigger (313:14108's
  * ToggleButton) shows both: model name + effort in the caption tone.
  * Model catalogs above four entries show search, which retains focus while
  * ↑/↓ cycle the highlighted result; Enter and Tab accept it. Smaller model
@@ -246,8 +247,8 @@ export function ModelSelect(
     triggerRef.current?.focus()
     setQuery('')
     setHighlightedIndex(null)
-    if (currentChoice === undefined) paneFocus.current = 'drill'
-    setPane(currentChoice === undefined ? 'model' : 'root')
+    if (reasoning === undefined) paneFocus.current = 'drill'
+    setPane(reasoning === undefined ? 'model' : 'root')
     setOpen(true)
     reload()
   }
@@ -299,7 +300,7 @@ export function ModelSelect(
     if (event.key === 'Escape' && open) {
       event.preventDefault()
       // Escape backs out of a drilled pane first, then closes.
-      if (pane !== 'root' && currentChoice !== undefined) back(pane)
+      if (pane !== 'root' && reasoning !== undefined) back(pane)
       else close(true)
       return
     }
@@ -327,7 +328,7 @@ export function ModelSelect(
     if (event.key === 'Tab') {
       if (event.shiftKey) {
         event.preventDefault()
-        if (pane !== 'root' && currentChoice !== undefined) back(pane)
+        if (pane !== 'root' && reasoning !== undefined) back(pane)
         else close(true)
         return
       }

@@ -1,0 +1,22 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`groups available enterprise and personal connectors and keeps selection behavior 1`] = `
+[
+  {
+    "group": {
+      "label": "Enterprise Connectors",
+      "name": "enterprise",
+    },
+    "id": "e1",
+    "label": "企业数据",
+  },
+  {
+    "group": {
+      "label": "My Connectors",
+      "name": "personal",
+    },
+    "id": "personal:p1",
+    "label": "我的文档",
+  },
+]
+`;

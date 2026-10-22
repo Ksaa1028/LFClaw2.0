@@ -138,3 +138,5 @@ These limits define the theme extension surface and the color authority; they ar
 None.
 
 </details>
+
+LFClaw UI images marked with `data-lfclaw-logo="auto"` render black in light mode and white in dark mode. The `inverse` variant stays white on permanently dark surfaces. Unmarked startup and brand artwork retains its gold colors.

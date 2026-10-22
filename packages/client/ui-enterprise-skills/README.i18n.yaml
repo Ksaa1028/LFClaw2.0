@@ -1,0 +1,43 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write packages/client/ui-enterprise-skills/README.md
+/:
+  en: 8b1ded270ea71908
+  zh: f767a61cfeb95300
+/deepseek-ai-dsh-client-ui-enterprise-skills:
+  en: 9c40bbb37d480341
+  zh: f9b4387a275b4c23
+/deepseek-ai-dsh-client-ui-enterprise-skills/summary:
+  en: 718f0bd165e03b2a
+  zh: c5553c3be92b43cf
+/deepseek-ai-dsh-client-ui-enterprise-skills/table-of-contents:
+  en: 122f0d41696980b1
+  zh: 0729dd47cc425563
+/deepseek-ai-dsh-client-ui-enterprise-skills/use-this-package:
+  en: 284e8c2e757b1f6c
+  zh: d05b15033694ec2e
+/deepseek-ai-dsh-client-ui-enterprise-skills/understand-the-implementation:
+  en: aff39a938b063fe2
+  zh: e1946d898de23032
+/deepseek-ai-dsh-client-ui-enterprise-skills/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-client-ui-enterprise-skills/model-experience/skills-and-personal-editing:
+  en: 42efe98964dfed18
+  zh: 6d56672d07a0ea15
+/deepseek-ai-dsh-client-ui-enterprise-skills/model-experience/skills-and-personal-editing/what-the-model-sees:
+  en: a67169bf40436810
+  zh: bc55386f94917f54
+/deepseek-ai-dsh-client-ui-enterprise-skills/model-experience/skills-and-personal-editing/token-effect:
+  en: efe7e6f6496f8796
+  zh: 6408fdea7bd47247
+/deepseek-ai-dsh-client-ui-enterprise-skills/model-experience/skills-and-personal-editing/kv-cache-effect:
+  en: c1546d42b54405b9
+  zh: d1b3dfb03f187620
+/deepseek-ai-dsh-client-ui-enterprise-skills/known-limitations-and-deferred-work:
+  en: 1289bfe147160cd4
+  zh: ad107c0744fbf3bc
+/deepseek-ai-dsh-client-ui-enterprise-skills/known-limitations-and-deferred-work/dev-note:
+  en: a197c7874c089303
+  zh: 50860ef20021da5f

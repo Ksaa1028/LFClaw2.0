@@ -28,7 +28,10 @@ interface MainSelection {
 }
 
 /** Optional content preparation for the resolved target Session. */
-export type StartSessionOptions = DraftInitializationOptions
+export interface StartSessionOptions extends DraftInitializationOptions {
+  /** False creates a fresh Session while preserving all existing blank-session drafts. */
+  readonly reuseBlank?: boolean
+}
 
 /** Workspace archive and directory operations consumed by Client UI domains. */
 export interface UiWorkspace {
@@ -273,13 +276,16 @@ class UiWorkspaceService extends Service implements UiWorkspace {
       this.clearMain()
       return
     }
+    const beforeOpen = initializeDraft ? (id: SessionId) => {
+      const binding = this.sessions.binding(id)
+      if (binding === undefined) this.draftPreparationFailed()
+      this.prepareDraft(binding, draftOptions)
+    } : undefined
     const opening = draftOptions === undefined
       ? this.openWorkspaceSession(target, undefined, false)
-      : this.openWorkspace(target, initializeDraft ? (id) => {
-        const binding = this.sessions.binding(id)
-        if (binding === undefined) this.draftPreparationFailed()
-        this.prepareDraft(binding, draftOptions)
-      } : undefined)
+      : draftOptions.reuseBlank === false
+        ? this.openWorkspaceSession(target, beforeOpen, false)
+        : this.openWorkspace(target, beforeOpen)
     void opening.catch(
       (reason: unknown) => { console.warn('new session failed:', reason) },
     )

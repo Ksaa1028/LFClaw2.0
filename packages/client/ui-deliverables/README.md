@@ -9,7 +9,7 @@ English | [中文](README.zh.md)
 
 ## Summary
 
-This package renders the changed-files card a finished turn ends with — the files the turn changed, with the Host's line counts, each opening the turn's review tab on that file — plus cards for explicitly delivered files, and links matching inline-code references in the closing prose so a mentioned file opens in the right Sidebar. Listed and linked paths come from the recorded summary, successful mutations, and explicit deliveries, never from the prose. Only the shipped Web patch loads this package; removing its cordis.yml entry removes the guidance, cards, and prose links together.
+This package renders the changed-files card a finished turn ends with — the files the turn changed, with the Host's line counts, each opening the turn's review tab on that file — plus cards for explicitly delivered files, and links matching inline-code references in the closing prose so a mentioned file opens in the right Sidebar. The Deliverables page in the left sidebar searches explicitly delivered files across Sessions. Listed and linked paths come from recorded events and successful mutations, never from the prose. Only the shipped Web patch loads this package; removing its cordis.yml entry removes these surfaces together.
 
 ## Table of Contents
 
@@ -25,9 +25,15 @@ This package renders the changed-files card a finished turn ends with — the fi
 <a id="use-this-package"></a>
 ## Use this package
 
+The final-file catalog keeps its heading and search visible while results scroll within the page. Its ten-file pagination controls remain below the scrolling list.
+
 Mount this plugin alongside `ui-conversation` and the Host [workspace-changes](../../deliverables/workspace-changes/README.md) plugin; a finished turn then ends with the changed-files card between the closing message's body and its action footer. Without a served summary — a turn that changed no file, the plugin composed out, or a Host restarted since the turn ran — the card is absent and only deliveries and prose links remain; outside a git repository the summary lists file-tool edits only.
 
 Changed-file and delivery entry cards and hover previews follow the [R16 preview-card rule](../../../docs/ui-radius.md#radius-scale); their file-icon tiles use the same rule’s R10 exception. Each retains the same contour on hover.
+
+### Deliverables page
+
+Open **Deliverables** in the left sidebar to find final files declared through `present` across Sessions. Search matches the path, description, or workspace root; results show the original declaration and its Session, newest first, with 10 results per page and previous/next controls. The Host scans the Session corpus once with point observations, avoiding a persistence listing for each cold Session, and reuses the index for later searches, pages, and visits; a new delivery invalidates it. The first visit after Host startup still scans the full corpus. Open the source conversation from its title, preview the current file by switching to its Session and opening the right Sidebar, or use the Host desktop to open it. Refresh rebuilds the index; each displayed page checks its files again. Remove asks for confirmation and durably excludes only that declaration from this catalog; the Session event, delivery card, and original file remain. A missing original file stays listed until removed, with its file actions disabled; a failed file check or unreadable Session is reported without hiding readable results. Fork-inherited declarations appear only under their original Session.
 
 <a id="explicit-deliveries"></a>
 ### Explicit deliveries
@@ -114,6 +120,7 @@ These limits define the current deliverables vocabulary. They are current packag
 - **Mention matching uses exact paths, unique argument aliases, or unique basenames only** — a suffix mention stays inert; widening the matcher is deferred until a real closing-message shape needs it.
 - **Terminal-created files require explicit delivery** — the card lists them once git records the change, but delivery cards and inline-code references require `present`; explicit Markdown links can reference existing files directly.
 - **Declarations do not preserve file contents** — reopening or transferring a Session requires source files accessible through the viewed Session’s filesystem. Missing files, directories, and final symbolic links return 404.
+- **The catalog reads Session logs when opened or searched** — it does not maintain a separate durable file index. An unreadable Session leaves an explicit partial-results notice; only explicitly presented files appear, and a file's current bytes may differ from the version originally delivered.
 - **Native opening needs a Host desktop** — without one the review tab offers no native open; the comparison itself needs only the Host that recorded the turn.
 - **Comparison highlighting is hunk-local** — each rendered old and new hunk side is tokenized independently because omitted source lines are unavailable; unknown suffixes remain plain, and the tab draws at most 5,000 lines before saying so.
 - **Comparisons carry whole file text** — the comparison route serves a listed file's complete text wherever the Host recorded it, including ignored files and files outside the workspace root the Sidebar previews are confined to.

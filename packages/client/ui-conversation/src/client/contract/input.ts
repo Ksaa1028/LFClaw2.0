@@ -11,7 +11,7 @@ import type { SessionBinding } from '@deepseek-ai/dsh-api-session-controller/cli
 import type { InboxState } from '@deepseek-ai/dsh-agent/types'
 import type { ObservableSnapshot, SnapshotStore } from '@deepseek-ai/dsh-client-store'
 import type { Branded } from '@deepseek-ai/dsh-brand'
-import type { ArbitrateKey, ArbitrateOutcome, Occurrence, ReferenceInsert, TokenSpan } from './draft-editor.ts'
+import type { ArbitrateKey, ArbitrateOutcome, DraftInput, Occurrence, ReferenceInsert, TokenSpan } from './draft-editor.ts'
 import type { InputSubmitMode, MessageSubmission } from './composer-submission.ts'
 
 /** Attachment payload passed to a claimed command submission. */
@@ -222,9 +222,9 @@ export interface SessionInputResolver {
   requestDraftInitialization(binding: SessionBinding, options: DraftInitializationOptions): DraftInitializationResult
 }
 
-/** Initial text for a target Session; attachments remain under their existing owner. */
+/** Initial text or reference document for a target Session; attachments retain their owner. */
 export interface DraftInitializationOptions {
-  readonly prompt?: string
+  readonly prompt?: DraftInput
   readonly clearPreviousDraft?: boolean
 }
 
@@ -286,6 +286,8 @@ export interface InputState {
   readonly occurrences: readonly Occurrence[]
   /** Messages still waiting for their own turn. */
   readonly queue: InboxState['next-turn']
+  /** Session-local selected skill labels, keyed by serialized prompt then invocation name; display only, never authorization. */
+  readonly submittedSkillLabels?: Readonly<Record<string, Readonly<Record<string, string>>>>
 }
 
 /**

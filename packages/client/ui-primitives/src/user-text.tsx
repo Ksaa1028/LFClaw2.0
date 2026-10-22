@@ -14,7 +14,7 @@
  * text end, so slash paths (`/nfs-hg/xxx`, `/plan.md`) and punctuation-glued
  * tokens (`/plan。`) stay plain even for a loaded name.
  */
-import type { ReactNode } from 'react'
+import { Fragment, type ReactNode } from 'react'
 import clsx from 'clsx'
 import { ReferenceIconRegular } from './ReferenceIcon.tsx'
 import css from './user-text.module.css'
@@ -53,6 +53,7 @@ export interface UserTextReferences {
  * (unsent queue rows pass none).
  * @param slashKind - the chip kind those tokens render as.
  * @param references - optional file and skill preview actions; session and command tokens stay labels.
+ * @param slashLabels - recorded display names keyed by the loaded skill's invocation name.
  * @returns inline nodes covering the whole text.
  */
 export function projectUserText(
@@ -61,7 +62,53 @@ export function projectUserText(
   slashNames: readonly string[] = [],
   slashKind: 'skill' | 'command' = 'skill',
   references?: UserTextReferences,
+  slashLabels: Readonly<Record<string, string>> = {},
 ): ReactNode {
+  const expertPattern = /<lfclaw-expert>([^<]*)<\/lfclaw-expert>/gu
+  const expertParts: ReactNode[] = []
+  let expertCursor = 0
+  for (const match of text.matchAll(expertPattern)) {
+    let value: unknown
+    try {
+      value = JSON.parse(match[1]!)
+    } catch (error) {
+      continue /* Malformed text stays visible without folding. */
+    }
+    if (
+      !value ||
+      typeof value !== 'object' ||
+      !('name' in value) ||
+      typeof value.name !== 'string' ||
+      !value.name.trim() ||
+      !('configuration' in value) ||
+      typeof value.configuration !== 'string'
+    )
+      continue
+    const prefix = `@${value.name}\n`
+    const start = text.slice(0, match.index).endsWith(prefix) ? match.index - prefix.length : match.index
+    if (start > expertCursor)
+      expertParts.push(
+        <Fragment key={`before-${start}`}>
+          {projectUserText(text.slice(expertCursor, start), sessionLabels, slashNames, slashKind, references, slashLabels)}
+        </Fragment>,
+      )
+    expertParts.push(
+      <details key={`expert-${start}`} data-ref-chip="expert">
+        <summary className={css.refChip}>@{value.name}</summary>
+        <pre className={css.expertConfiguration}>{value.configuration}</pre>
+      </details>,
+    )
+    expertCursor = match.index + match[0].length
+  }
+  if (expertParts.length) {
+    if (expertCursor < text.length)
+      expertParts.push(
+        <Fragment key="expert-tail">
+          {projectUserText(text.slice(expertCursor), sessionLabels, slashNames, slashKind, references, slashLabels)}
+        </Fragment>,
+      )
+    return <>{expertParts}</>
+  }
   const ranges: DecorationRange[] = []
   SESSION_WIRE_RE.lastIndex = 0
   let wire: RegExpExecArray | null
@@ -89,65 +136,89 @@ export function projectUserText(
   while ((m = re.exec(text)) !== null) {
     const tokenStart = m.index + (m[1] as string).length // (^|\s) captures '' at line start
     const rawLabel = m[2] as string // non-optional alternation capture
-    const label = rawLabel.startsWith('@"')
-      ? rawLabel
-      : rawLabel.replace(TRAILING_PUNCTUATION_RE, '')
+    const label = rawLabel.startsWith('@"') ? rawLabel : rawLabel.replace(TRAILING_PUNCTUATION_RE, '')
     if (label.length <= 1) continue
     if (label.startsWith('/') && !slashNames.includes(label.slice(1))) continue
     ranges.push({ start: tokenStart, end: tokenStart + label.length, label, kind: 'plain' })
   }
-  const rankOf = (range: DecorationRange): number => range.kind === 'session' ? 0 : 1
+  const rankOf = (range: DecorationRange): number => (range.kind === 'session' ? 0 : 1)
   ranges.sort((a, b) => a.start - b.start || rankOf(a) - rankOf(b) || b.end - a.end)
   const parts: ReactNode[] = []
   let cursor = 0
   const pushPlain = (from: number, to: number): void => {
-    parts.push(<span key={`t${from}`} className={css.plainRun}>{text.slice(from, to)}</span>)
+    parts.push(
+      <span key={`t${from}`} className={css.plainRun}>
+        {text.slice(from, to)}
+      </span>,
+    )
   }
   for (const range of ranges) {
     if (range.start < cursor) continue
     const { start: tokenStart, end, label, kind } = range
     if (tokenStart > cursor) pushPlain(cursor, tokenStart)
-    const referenceKind = kind === 'session'
-      ? 'session'
-      : label.startsWith('@')
-        ? label.replace(/^@"|"$/gu, '').endsWith('/') ? 'folder' : 'file'
-        : undefined
-    const displayLabel = range.display
-      ?? (referenceKind === undefined
-        ? label
-        : referenceKind === 'session'
-          ? label.slice(1)
-          : label.slice(1).replace(/^"|"$/gu, '').split(/[\\/]/u).filter(Boolean).at(-1) ?? label.slice(1))
-    const contents = <>
-      {referenceKind !== undefined && (
-        <ReferenceIconRegular kind={referenceKind} size={16} className={css.refIcon} />
-      )}
-      {displayLabel}
-    </>
-    const open = references === undefined ? undefined
-      : referenceKind === 'file'
-        ? () => { references.openFile(label.slice(1).replace(/^"|"$/gu, '')) }
-        : referenceKind === undefined && slashKind === 'skill'
-          ? () => { references.openSkill(label.slice(1)) }
+    const referenceKind =
+      kind === 'session'
+        ? 'session'
+        : label.startsWith('@')
+          ? label.replace(/^@"|"$/gu, '').endsWith('/')
+            ? 'folder'
+            : 'file'
           : undefined
+    const skillName = referenceKind === undefined && slashKind === 'skill' ? label.slice(1) : undefined
+    const skillDisplayName = skillName === undefined ? undefined : slashLabels[skillName]
+    const displayLabel =
+      skillDisplayName === undefined
+        ? (range.display ??
+          (referenceKind === undefined
+            ? label
+            : referenceKind === 'session'
+              ? label.slice(1)
+              : (label.slice(1).replace(/^"|"$/gu, '').split(/[\\/]/u).filter(Boolean).at(-1) ?? label.slice(1))))
+        : `@${skillDisplayName}`
+    const contents = (
+      <>
+        {referenceKind !== undefined && <ReferenceIconRegular kind={referenceKind} size={16} className={css.refIcon} />}
+        {displayLabel}
+      </>
+    )
+    const open =
+      references === undefined
+        ? undefined
+        : referenceKind === 'file'
+          ? () => {
+            references.openFile(label.slice(1).replace(/^"|"$/gu, ''))
+          }
+          : referenceKind === undefined && slashKind === 'skill'
+            ? () => {
+              references.openSkill(label.slice(1))
+            }
+            : undefined
     const className = clsx(css.refChip, referenceKind === undefined && css.slashChip)
-    parts.push(open === undefined
-      ? <span key={tokenStart} className={className} data-ref-chip={referenceKind ?? slashKind} title={label}>
-        {contents}
-      </span>
-      : <button
-        key={tokenStart}
-        type="button"
-        className={clsx(className, markdownCss.fileMention)}
-        data-ref-chip={referenceKind ?? slashKind}
-        title={label}
-        onClick={(event) => {
-          if (event.detail > 1 || (event.detail !== 0 && event.currentTarget.ownerDocument.getSelection()?.isCollapsed === false)) return
-          open()
-        }}
-      >
-        {contents}
-      </button>)
+    parts.push(
+      open === undefined ? (
+        <span key={tokenStart} className={className} data-ref-chip={referenceKind ?? slashKind} title={skillDisplayName ?? label}>
+          {contents}
+        </span>
+      ) : (
+        <button
+          key={tokenStart}
+          type="button"
+          className={clsx(className, markdownCss.fileMention)}
+          data-ref-chip={referenceKind ?? slashKind}
+          title={skillDisplayName ?? label}
+          onClick={(event) => {
+            if (
+              event.detail > 1 ||
+              (event.detail !== 0 && event.currentTarget.ownerDocument.getSelection()?.isCollapsed === false)
+            )
+              return
+            open()
+          }}
+        >
+          {contents}
+        </button>
+      ),
+    )
     cursor = end
   }
   if (parts.length === 0) return <span className={css.plainRun}>{text}</span>

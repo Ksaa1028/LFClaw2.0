@@ -9,9 +9,10 @@ import type { Context } from '@deepseek-ai/cordis'
 import type {} from '@deepseek-ai/dsh-system-prompt'
 import type {} from '@deepseek-ai/dsh-workspace-changes/types'
 import { registerPresentOpen } from './present-open.ts'
+import { registerPresentCatalog } from './catalog.ts'
 
 /** Services required for file-reference guidance, change summaries, and authenticated native opens. */
-export const inject = ['systemPrompt', 'connection', 'sessionQuery', 'sessionController', 'workspaceFiles', 'fs', 'sandboxPolicy', 'workspaceChanges']
+export const inject = ['systemPrompt', 'connection', 'sessionQuery', 'sessionController', 'workspaceFiles', 'fs', 'sandboxPolicy', 'workspaceChanges', 'storageDomain']
 
 /** Static Web guidance for primary outputs and existing-file references. */
 const FILE_REFERENCE_PROMPT = 'Prefer showing the primary results within your final response alongside a brief explanation. '
@@ -26,8 +27,9 @@ const FILE_REFERENCE_PROMPT = 'Prefer showing the primary results within your fi
  * Register Web file-reference guidance and native opens for declared files.
  * @param ctx - host context carrying the system-prompt registry.
  */
-export function apply(ctx: Context): void {
+export async function apply(ctx: Context): Promise<void> {
   registerPresentOpen(ctx)
+  await registerPresentCatalog(ctx)
   ctx.systemPrompt.section({
     name: 'ui:deliverable-file-references',
     order: ctx.systemPrompt.getSectionOrder('DELIVERABLE_FILE_REFERENCES'),

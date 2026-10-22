@@ -1,8 +1,8 @@
 /** Composer context-occupancy meter: a ring and percentage below the card fed by the
  * `contextPressure` projection, with a click-open panel of the heuristic
  * `contextBreakdown` composition (system prompt, tools, conversation).
- * Renders nothing until a provider reports both pressure and a route
- * capacity. */
+ * Uses live selected-model capacity when supplied, retaining recorded token
+ * usage without rewriting Session history. */
 
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
@@ -49,17 +49,21 @@ function formatTokens(value: number, t: ComposerBarProps['t']): string {
 
 export interface ContextMeterProps {
   useProjection: UseProjection
+  /** Live selected-model capacity; null hides unavailable routes, absent uses recorded capacity. */
+  contextWindow?: number | null
   /** The owning bar's locale seat, passed down as a plain prop. */
   t: ComposerBarProps['t']
 }
 
-export function ContextMeter({ useProjection, t }: ContextMeterProps) {
+export function ContextMeter({ useProjection, t, contextWindow }: ContextMeterProps) {
   const pressure = useProjection('contextPressure')
   const breakdown = useProjection('contextBreakdown')
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLSpanElement | null>(null)
   const panelRef = useRef<HTMLDivElement | null>(null)
-  const context = contextOccupancy(pressure)
+  const context = contextWindow === null ? null : contextOccupancy(
+    contextWindow === undefined ? pressure : { ...pressure, contextWindow },
+  )
   const available = context !== null
   const position = useAnchoredPosition({
     open: open && available,

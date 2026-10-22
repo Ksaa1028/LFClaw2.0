@@ -527,6 +527,124 @@ export interface Config {
 ```
 <!-- END GENERATED config-catalog:@deepseek-ai/dsh-client-shortcuts -->
 
+<!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-client-ui-activation -->
+<a id="deepseek-aidsh-client-ui-activation"></a>
+
+## `@deepseek-ai/dsh-client-ui-activation`
+
+- `inject`: `connection` · `credentials` · `llm` · `agentDefaultModel` · `agents`
+- `source`: [`packages/client/ui-activation/src/index.ts:20`](../packages/client/ui-activation/src/index.ts)
+
+```ts config-catalog
+/** 企业服务地址与请求超时，均由部署配置提供。 */
+export interface Config {
+  /** 每个人工请求允许的自动输出续接次数，0 关闭续接。 */
+  maxAutoContinuations: number
+  /** 连续空输出或重复输出达到此次数时停止自动续接。 */
+  maxNoProgressContinuations: number
+  /** 企业模型请求失败时的最多重试次数。 */
+  modelMaxRetries: number
+  /** 企业 API 根地址，员工令牌仅发送到该地址。 */
+  serverUrl: string
+  /** 明确允许公网 HTTP 部署；流量不加密。 */
+  allowInsecureHttp: boolean
+  /** 企业 API 请求超时，单位毫秒。 */
+  timeoutMs: number
+  /** 旧服务器未下发模型容量时使用的上下文窗口。 */
+  contextWindow: number
+  /** 旧服务器未下发模型容量时使用的单次输出上限。 */
+  maxTokens: number
+  /** 企业授权目录的后台刷新间隔，单位毫秒。 */
+  refreshIntervalMs: number
+}
+```
+<!-- END GENERATED config-catalog:@deepseek-ai/dsh-client-ui-activation -->
+
+<!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-client-ui-enterprise-connectors -->
+<a id="deepseek-aidsh-client-ui-enterprise-connectors"></a>
+
+## `@deepseek-ai/dsh-client-ui-enterprise-connectors`
+
+- `inject`: `connection` · `enterpriseConnection` · `tools`
+- `source`: [`packages/client/ui-enterprise-connectors/src/index.ts:17`](../packages/client/ui-enterprise-connectors/src/index.ts)
+
+```ts config-catalog
+/** Enterprise synchronization and personal connector configuration. */
+export interface Config extends Partial<ToolCatalogConfig> {
+  /** Maximum browser authorization duration; older direct callers use requestTimeoutMs. */
+  oauthFlowTtlMs?: number
+  /** Retry delay after authorization synchronization fails, in milliseconds. */
+  refreshIntervalMs: number
+  /** Private directory containing employee-specific personal connector settings. */
+  dataDirectory: string
+  /** Personal MCP connection and operation timeout, in milliseconds. */
+  requestTimeoutMs: number
+  /** Maximum personal connector configuration request size, in bytes. */
+  maxConfigBytes: number
+}
+
+/** Deployment limits for inline declarations and discovery responses. */
+export interface ToolCatalogConfig {
+  /** Maximum schema characters included directly in model tool declarations. */
+  inlineToolSchemaChars: number
+  /** Maximum number of tools returned by one catalog page. */
+  toolCatalogPageSize: number
+  /** Maximum characters returned for one full tool definition. */
+  toolDefinitionPageChars: number
+  /** Maximum characters included in each catalog tool summary. */
+  toolSummaryChars: number
+}
+```
+<!-- END GENERATED config-catalog:@deepseek-ai/dsh-client-ui-enterprise-connectors -->
+
+<!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-client-ui-enterprise-skills -->
+<a id="deepseek-aidsh-client-ui-enterprise-skills"></a>
+
+## `@deepseek-ai/dsh-client-ui-enterprise-skills`
+
+- `inject`: `connection` · `enterpriseConnection` · `skills` · `tools`
+- `source`: [`packages/client/ui-enterprise-skills/src/index.ts:20`](../packages/client/ui-enterprise-skills/src/index.ts)
+
+```ts config-catalog
+/** 本机存储位置与导入限制。 */
+export interface Config extends Limits {
+  /** Directory for installed personal skills and local metadata. */
+  dataDirectory: string
+  /** Minimum time between enterprise skill refreshes, in milliseconds. */
+  refreshIntervalMs: number
+}
+
+/** 导入限制由部署配置提供。 */
+export interface Limits {
+  /** Maximum accepted compressed archive size in bytes. */
+  maxArchiveBytes: number
+  /** Maximum total uncompressed file size in bytes. */
+  maxUnpackedBytes: number
+  /** Maximum number of files accepted in one skill archive. */
+  maxFiles: number
+}
+```
+<!-- END GENERATED config-catalog:@deepseek-ai/dsh-client-ui-enterprise-skills -->
+
+<!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-client-ui-lfclaw -->
+<a id="deepseek-aidsh-client-ui-lfclaw"></a>
+
+## `@deepseek-ai/dsh-client-ui-lfclaw`
+
+- `inject`: `connection` · `enterpriseConnection` · `skills` · `tools`
+- `source`: [`packages/client/ui-lfclaw/src/index.ts:16`](../packages/client/ui-lfclaw/src/index.ts)
+
+```ts config-catalog
+/** Persistent directory for received share output files. */
+export interface Config {
+  /** Persistent local directory containing output files from claimed shares. */
+  sharedSessionDirectory: string
+  /** Maximum age in milliseconds of the Host directory snapshot used for expert lists. */
+  expertCatalogMaxAgeMs: number
+}
+```
+<!-- END GENERATED config-catalog:@deepseek-ai/dsh-client-ui-lfclaw -->
+
 <!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-client-ui-plugin-manager -->
 <a id="deepseek-aidsh-client-ui-plugin-manager"></a>
 
@@ -1192,6 +1310,8 @@ export interface Config {
 ```ts config-catalog
 /** Local runtime, inference, and retention settings. */
 export interface Config {
+  /** Prepare resources on activation; failures remain visible for explicit retry. */
+  autoPrepare: boolean
   /** Unique registration id; consumers select this exact id. */
   providerId: string
   /** Absolute directory for verified ONNX models. */
@@ -2999,7 +3119,7 @@ export interface Config {
 
 ## `@deepseek-ai/dsh-skill`
 
-- `source`: [`packages/skill/skill/src/index.ts:278`](../packages/skill/skill/src/index.ts)
+- `source`: [`packages/skill/skill/src/index.ts:282`](../packages/skill/skill/src/index.ts)
 
 ```ts config-catalog
 /** Skill registry configuration. */
@@ -4515,7 +4635,7 @@ These load from a `cordis.yml` entry with no `config:` block; they declare no co
 | `@deepseek-ai/dsh-client-ui-commands` | — | [`packages/client/ui-commands/src/index.ts`](../packages/client/ui-commands/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-conversation` | — | [`packages/client/ui-conversation/src/index.ts`](../packages/client/ui-conversation/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-cordis` | — | [`packages/extensions/ui-cordis/src/index.ts`](../packages/extensions/ui-cordis/src/index.ts) |
-| `@deepseek-ai/dsh-client-ui-deliverables` | `systemPrompt` · `connection` · `sessionQuery` · `sessionController` · `workspaceFiles` · `fs` · `sandboxPolicy` · `workspaceChanges` | [`packages/client/ui-deliverables/src/index.ts`](../packages/client/ui-deliverables/src/index.ts) |
+| `@deepseek-ai/dsh-client-ui-deliverables` | `systemPrompt` · `connection` · `sessionQuery` · `sessionController` · `workspaceFiles` · `fs` · `sandboxPolicy` · `workspaceChanges` · `storageDomain` | [`packages/client/ui-deliverables/src/index.ts`](../packages/client/ui-deliverables/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-directory-picker-browse` | — | [`packages/client/ui-directory-picker-browse/src/index.ts`](../packages/client/ui-directory-picker-browse/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-directory-picker-native` | — | [`packages/client/ui-directory-picker-native/src/index.ts`](../packages/client/ui-directory-picker-native/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-goal` | — | [`packages/client/ui-goal/src/index.ts`](../packages/client/ui-goal/src/index.ts) |
@@ -4531,6 +4651,7 @@ These load from a `cordis.yml` entry with no `config:` block; they declare no co
 | `@deepseek-ai/dsh-client-ui-renderer` | — | [`packages/client/ui-renderer/src/index.ts`](../packages/client/ui-renderer/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-schedule` | — | [`packages/client/ui-schedule/src/index.ts`](../packages/client/ui-schedule/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-session` | — | [`packages/client/ui-session/src/index.ts`](../packages/client/ui-session/src/index.ts) |
+| `@deepseek-ai/dsh-client-ui-session-actions` | `connection` · `sessionController` | [`packages/client/ui-session-actions/src/index.ts`](../packages/client/ui-session-actions/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-settings` | — | [`packages/client/ui-settings/src/index.ts`](../packages/client/ui-settings/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-settings-agent-loop` | — | [`packages/client/ui-settings-agent-loop/src/index.ts`](../packages/client/ui-settings-agent-loop/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-settings-general` | — | [`packages/client/ui-settings-general/src/index.ts`](../packages/client/ui-settings-general/src/index.ts) |

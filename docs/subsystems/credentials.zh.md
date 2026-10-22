@@ -366,6 +366,24 @@ abstract getDeviceIdentity(): Promise<{ deviceId?: string; userId?: AccountUserI
 
 Source: [`packages/credentials/deepseek-account/src/index.ts`](../../packages/credentials/deepseek-account/src/index.ts)
 
+<a id="ctxenterpriseconnection--enterpriseconnection"></a>
+
+### `ctx.enterpriseConnection` — `EnterpriseConnection`
+
+仅使用当前激活服务器的员工令牌访问企业接口。
+
+```ts cordis-catalog
+/**
+ * 调用当前员工的企业接口，禁止重定向携带凭据。
+ * @param path - 企业 API 下的相对路径，由 Host 调用方提供。
+ * @param init - 请求参数；catalogMaxAgeMs 仅允许展示目录复用近期响应，实际授权与执行不使用该选项。
+ * @returns 企业接口响应；调用方负责解析数据和处理非成功状态。
+ */
+async request(path: string, init: RequestInit & { catalogMaxAgeMs?: number } = {}): Promise<Response>
+```
+
+Source: [`packages/client/ui-activation/src/connection.ts`](../../packages/client/ui-activation/src/connection.ts)
+
 <a id="authorization-events"></a>
 
 ### `authorization/*` events

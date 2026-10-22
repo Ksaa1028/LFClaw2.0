@@ -25,6 +25,8 @@ This package lets applications persist and resume session event logs through a b
 <a id="use-this-package"></a>
 ## Use this package
 
+`delete(id)` logically deletes a closed session: the backend no longer lists or reads it, while raw storage files may remain for operational recovery. Callers must first release every handle. Unsupported backends must reject the operation.
+
 Mount one persistence backend to make sessions durable. The backend registers itself as `ctx.sessionPersistence` and routes every published session's live events into that session's active write handle; agent-loop — the production publication point for sessions — acquires each session's write handle before publication, so nothing else in the composition changes.
 
 ### Choosing a backend

@@ -180,6 +180,8 @@ These pages place the atoms in the client stack and the design system.
 
 -----
 
+`projectUserText` accepts optional recorded labels for resolved slash skills. The user bubble shows those labels while preview actions retain the original invocation key.
+
 <a id="model-experience"></a>
 ## Model Experience
 
@@ -216,3 +218,5 @@ These limits define how the atoms behave at the edges; they are current package 
 None.
 
 </details>
+
+LFClaw expert reference envelopes in sent user text render as collapsed disclosures with the expert name. Expanding shows the recorded working configuration; the task remains outside the disclosure. Invalid envelopes remain plain text, and model content is unchanged by projection.

@@ -180,6 +180,8 @@ kind: "package-library"
 
 -----
 
+`projectUserText` 可接收已解析斜杠技能的记录名称。用户气泡展示该名称，预览操作仍使用原调用标识。
+
 <a id="model-experience"></a>
 ## 模型体验
 
@@ -216,3 +218,5 @@ kind: "package-library"
 无。
 
 </details>
+
+已发送消息中的 LFClaw 专家引用默认折叠为名称，展开可查看已记录的工作配置，任务正文保留在折叠区域之外。无效标记原样显示；展示投影不修改模型内容。

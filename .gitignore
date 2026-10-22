@@ -47,3 +47,6 @@ worktrees/
 .agents/worktrees/
 .typert-*/
 native/system/test/bin/
+
+# 钉钉智能语料包含本地凭据，不纳入版本管理。
+/LFClaw/09-资源/技能/钉钉智能语料/*.zip

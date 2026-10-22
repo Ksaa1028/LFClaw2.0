@@ -136,6 +136,8 @@ export interface ModelReasoning {
 export interface ModelCatalogModel {
   readonly id: string
   readonly name: string
+  /** Current route capacity; absent when the provider does not disclose it. */
+  readonly contextWindow?: number
   readonly description?: string
   readonly reasoning?: ModelReasoning
 }

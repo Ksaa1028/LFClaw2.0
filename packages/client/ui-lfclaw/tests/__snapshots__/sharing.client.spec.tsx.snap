@@ -1,0 +1,74 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`renders the empty inbox and its message controls 1`] = `
+<div>
+  <section
+    class="_page_5e26da"
+  >
+    <header
+      class="_header_5e26da"
+    >
+      <div>
+        <h1>
+          消息通知
+        </h1>
+        <p>
+          查看企业公告，领取同事分享的会话
+        </p>
+      </div>
+      <div
+        class="_actions_5e26da"
+      >
+        <button
+          class="_button_4d2f85 _outline_4d2f85 _md_4d2f85"
+          type="button"
+        >
+          刷新
+        </button>
+      </div>
+    </header>
+    <nav
+      aria-label="消息通知"
+      class="_tabs_5e26da"
+      role="tablist"
+    >
+      <button
+        aria-controls="lfclaw-inbox-panel"
+        aria-selected="false"
+        id="lfclaw-announcement-tab"
+        role="tab"
+        type="button"
+      >
+        企业公告
+      </button>
+      <button
+        aria-controls="lfclaw-inbox-panel"
+        aria-selected="true"
+        id="lfclaw-share-tab"
+        role="tab"
+        type="button"
+      >
+        同事分享
+      </button>
+    </nav>
+    <div
+      aria-labelledby="lfclaw-share-tab"
+      class="_scrollBody_5e26da"
+      id="lfclaw-inbox-panel"
+      role="tabpanel"
+    >
+      <p
+        class="_summary_5e26da"
+      >
+        0 条未读
+      </p>
+      <p>
+        暂无同事分享
+      </p>
+      <div
+        class="_list_5e26da"
+      />
+    </div>
+  </section>
+</div>
+`;

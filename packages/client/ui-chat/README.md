@@ -71,6 +71,8 @@ Preference menus restore focus to their trigger without scrolling before publish
 
 Artifact extensions can subscribe to one Turn and Node kind through `ChatNodeStore.turnDataSource`. The source includes hidden Nodes and exposes their business data in anchor order. Membership updates incrementally; only observed collections materialize ordered arrays, and unrelated Turns or kinds do not notify them.
 
+Each reply displays its recorded model ID beside the timestamp, using the upstream response model when available and otherwise the recorded request model. Model selection changes do not alter historical labels. Footers with a recorded model ID remain visible on historical Turns.
+
 The completed-turn action footer follows the recorded Turn end. Its action row starts 20px below preceding prose or extension content. Actions remain visible only on the latest Turn when its final visible content is a reply; other endings and historical Turns reveal actions on hover or keyboard focus. Devices without hover keep actions visible.
 
 -----
@@ -101,7 +103,7 @@ Live tool deltas share reasoning's frame-batched publication; durable calls and 
 
 The process group uses a stable `div` layout box, a scroll body, and an uncapped content box that reports growth inside the body. Business styles must adapt spacing within and across groups, including hidden or empty members and the answer-spacing exception. The `conversation.chat.flow` slot adds a `display: contents` DOM anchor; row selectors match that anchor directly, without repeating its column ancestry. The running status shares the rows' parent, so its divider uses the same visible-sibling rules. The anchor contributes no spacing of its own. CSS variables do not belong in the Group Definition.
 
-Running group titles, reasoning previews, tool and command rows, the active retry line, and the bottom running status use the shared [TextShimmer](../ui-primitives/README.md#component-catalog). Each row’s text shares one left-to-right highlight, including collapsed group titles; icons and hover chevrons retain their base appearance. Tool and process rows sit 6px apart. An expanded group title has 8px before its content, Assistant responses have 12px from adjacent process rows, and completed-Turn duration/status controls have 16px around them. Hidden and empty rows, including retained empty slot anchors, add no gap. The running “Deep diving” text retains its blue base while its theme-specific highlight sweeps across it.
+Running group titles, reasoning previews, tool and command rows, the active retry line, and the bottom running status use the shared [TextShimmer](../ui-primitives/README.md#component-catalog). Each row’s text shares one left-to-right highlight, including collapsed group titles; icons and hover chevrons retain their base appearance. Tool and process rows sit 6px apart. An expanded group title has 8px before its content, Assistant responses have 12px from adjacent process rows, and completed-Turn duration/status controls have 16px around them. Hidden and empty rows, including retained empty slot anchors, add no gap. The running “Thinking” text retains its blue base while its theme-specific highlight sweeps across it.
 
 The running status shows a whale whose APNG mask inherits the text color. CSS selects the static SVG when reduced motion or forced colors are active, or alpha masks are unsupported. The build embeds the image in the plugin stylesheet; React does not pass image data through DOM styles.
 
@@ -163,6 +165,10 @@ Active-Turn highlighting is approximate: `readVisibleTurn` binary-searches the f
 </details>
 
 -----
+
+Sent skill tokens use the display name recorded with their skill injection while retaining the logged invocation key for loading and previews. Older LFClaw skill events recover a readable name from their invocation slug.
+
+Before skill injection arrives, local submission echoes and admitted messages use the selected labels from the Session input state. A label identifies the requested skill without claiming that loading succeeded; durable invocation labels take precedence when available. Unselected slash text stays plain until a matching invocation is logged.
 
 <a id="model-experience"></a>
 ## Model Experience

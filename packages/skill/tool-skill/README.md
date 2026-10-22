@@ -104,6 +104,8 @@ Read these pages when the package-level contract is not enough. They move from t
 
 -----
 
+When a loaded skill supplies a display name, the explicit `/name` injection records it alongside the unique invocation key. The model-facing skill body and invocation lookup remain unchanged.
+
 <a id="model-experience"></a>
 ## Model Experience
 

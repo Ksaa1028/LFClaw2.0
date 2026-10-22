@@ -1,6 +1,6 @@
 {
-  "name": "DeepSeek Harness",
-  "short_name": "DSH",
+  "name": "LFClaw",
+  "short_name": "LFClaw",
   "start_url": "./",
   "scope": "./",
   "display": "fullscreen",

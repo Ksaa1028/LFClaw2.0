@@ -67,7 +67,7 @@ export function contextProducer(source: unknown): ContextProducerView {
     case 'agent-instructions':
       return { role: 'inject', label: joined(collect(record, 'changes', 'path')) ?? kind }
     case 'skill-invocation':
-      return { role: 'inject', label: readString(record, 'name') ?? kind }
+      return { role: 'inject', label: readString(record, 'displayName') ?? readString(record, 'name') ?? kind }
     default:
       // MessageSourceMap is merge-extensible; keep an unknown producer
       // visible by its durable kind.
@@ -95,6 +95,17 @@ export function skillInvocationName(source: unknown): string | null {
   const record = asRecord(source)
   if (record === null || readString(record, 'kind') !== 'skill-invocation') return null
   return readString(record, 'name')
+}
+
+/**
+ * Read the optional transcript label recorded with a loaded skill.
+ * @param source - logged context source metadata.
+ * @returns the display name when the source records one.
+ */
+export function skillInvocationDisplayName(source: unknown): string | null {
+  const record = asRecord(source)
+  if (record === null || readString(record, 'kind') !== 'skill-invocation') return null
+  return readString(record, 'displayName')
 }
 
 /**

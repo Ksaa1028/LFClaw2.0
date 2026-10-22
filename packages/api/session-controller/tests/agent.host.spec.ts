@@ -77,10 +77,8 @@ function unpublishedAgent(ctx: Context, meta: SessionHeader): Agent {
 
 describe('ApiSession identity failures', () => {
   it('describes cwd conflicts with and without a recorded cwd', () => {
-    expect(new ApiSessionCwdConflict(SessionId('missing-cwd'), '/wanted', undefined).message)
-      .toContain('records no cwd')
-    expect(new ApiSessionCwdConflict(SessionId('wrong-cwd'), '/wanted', '/existing').message)
-      .toContain('belongs to "/existing"')
+    expect(new ApiSessionCwdConflict(SessionId('missing-cwd'), '/wanted', undefined).message).toContain('records no cwd')
+    expect(new ApiSessionCwdConflict(SessionId('wrong-cwd'), '/wanted', '/existing').message).toContain('belongs to "/existing"')
   })
 
   it('maps absent and cwd-less point observations to not found', async () => {
@@ -88,8 +86,7 @@ describe('ApiSession identity failures', () => {
     roots.push(ctx)
     await ctx.plugin(SessionStore)
     installSessionReadTestServices(ctx)
-    await expect(inspectApiSession(ctx, SessionId('missing')))
-      .rejects.toBeInstanceOf(ApiSessionNotFound)
+    await expect(inspectApiSession(ctx, SessionId('missing'))).rejects.toBeInstanceOf(ApiSessionNotFound)
 
     const inspect = vi.fn(() => Promise.resolve(undefined))
     const stat = vi.fn(() => Promise.resolve(undefined))
@@ -134,7 +131,11 @@ describe('ApiSession identity failures', () => {
     })
     const signal = new AbortController().signal
 
-    await expect(inspectApiSession(ctx, meta.id, signal)).resolves.toEqual({ meta, inheritedEventCount: SessionLogOffset(0), events: [] })
+    await expect(inspectApiSession(ctx, meta.id, signal)).resolves.toEqual({
+      meta,
+      inheritedEventCount: SessionLogOffset(0),
+      events: [],
+    })
     expect(inspect).toHaveBeenCalledWith(meta.id, signal)
   })
 })
@@ -281,9 +282,7 @@ describe('ApiSession Agent lookup and recovery', () => {
       [Symbol.dispose]: vi.fn(),
     } as unknown as SessionObservation
 
-    expect(() => agents.presetForObservation(observed)).toThrow(
-      'Agent activation requires a projected Session observation',
-    )
+    expect(() => agents.presetForObservation(observed)).toThrow('Agent activation requires a projected Session observation')
   })
 })
 
@@ -316,7 +315,9 @@ describe('ApiSession model selection', () => {
       reasoningEffort: 'high' as never,
     })
     expect(selection.current).toMatchObject({
-      provider: 'selected-provider', model: 'selected-model', reasoningEffort: 'high',
+      provider: 'selected-provider',
+      model: 'selected-model',
+      reasoningEffort: 'high',
     })
     expect(agents.consumeSelection(pending, 'other-provider', 'selected-model', 'high')).toBe(false)
     expect(agents.consumeSelection(pending, 'selected-provider', 'other-model', 'high')).toBe(false)
@@ -337,7 +338,9 @@ describe('ApiSession create or adoption', () => {
     const meta = header('concurrent-create', cwd)
     const created = unpublishedAgent(ctx, meta)
     let release!: () => void
-    const gate = new Promise<void>((resolve) => { release = resolve })
+    const gate = new Promise<void>((resolve) => {
+      release = resolve
+    })
     const create = vi.spyOn(ctx.agents, 'create').mockImplementation(async () => {
       await gate
       return { agent: created, dispose: () => Promise.resolve() }
@@ -361,8 +364,7 @@ describe('ApiSession create or adoption', () => {
       await ordinary.ctx.agents.register(winner)
       throw new Error('raced creation')
     })
-    await expect(ordinary.agents.ensureSession(ordinaryMeta.id, cwd, false))
-      .resolves.toBe(winner)
+    await expect(ordinary.agents.ensureSession(ordinaryMeta.id, cwd, false)).resolves.toBe(winner)
 
     const child = await harness()
     const childCwd = mkdtempSync(join(tmpdir(), 'dsh-session-controller-child-'))
@@ -374,8 +376,7 @@ describe('ApiSession create or adoption', () => {
       })
       throw new Error('raced child creation')
     })
-    await expect(child.agents.ensureSession(childId, childCwd, false))
-      .rejects.toBeInstanceOf(ApiSessionSubagentOwnership)
+    await expect(child.agents.ensureSession(childId, childCwd, false)).rejects.toBeInstanceOf(ApiSessionSubagentOwnership)
   })
 
   it('validates ownership and cwd on the Agent returned by creation', async () => {
@@ -392,8 +393,7 @@ describe('ApiSession create or adoption', () => {
       agent: childAgent,
       dispose: () => Promise.resolve(),
     })
-    await expect(child.agents.ensureSession(childMeta.id, childCwd, false))
-      .rejects.toBeInstanceOf(ApiSessionSubagentOwnership)
+    await expect(child.agents.ensureSession(childMeta.id, childCwd, false)).rejects.toBeInstanceOf(ApiSessionSubagentOwnership)
 
     const wrong = await harness()
     const requestedCwd = mkdtempSync(join(tmpdir(), 'dsh-session-controller-wrong-cwd-'))
@@ -403,19 +403,20 @@ describe('ApiSession create or adoption', () => {
       agent: wrongAgent,
       dispose: () => Promise.resolve(),
     })
-    await expect(wrong.agents.ensureSession(wrongAgent.id, requestedCwd, false))
-      .rejects.toBeInstanceOf(ApiSessionCwdConflict)
+    await expect(wrong.agents.ensureSession(wrongAgent.id, requestedCwd, false)).rejects.toBeInstanceOf(ApiSessionCwdConflict)
   })
 
   it('resumes a matching persisted identity and preserves its selected preset', async () => {
     const { ctx, agents } = await harness()
     const meta = { ...header('stored'), agentPreset: 'minimal' }
-    const events = [{
-      type: 'agent-preset/selected',
-      seq: 0,
-      time: 1,
-      data: { agentPreset: 'minimal' },
-    }] as SessionEvent[]
+    const events = [
+      {
+        type: 'agent-preset/selected',
+        seq: 0,
+        time: 1,
+        data: { agentPreset: 'minimal' },
+      },
+    ] as SessionEvent[]
     providePersistence(ctx, {
       list: () => Promise.resolve([meta]),
       inspect: () => Promise.resolve({ meta, events }),
@@ -471,8 +472,7 @@ describe('ApiSession create or adoption', () => {
       list: () => Promise.resolve([stored]),
       inspect: () => Promise.resolve({ meta: stored, events: [] }),
     })
-    await expect(conflict.agents.ensureSession(stored.id, '/requested', true))
-      .rejects.toBeInstanceOf(ApiSessionCwdConflict)
+    await expect(conflict.agents.ensureSession(stored.id, '/requested', true)).rejects.toBeInstanceOf(ApiSessionCwdConflict)
   })
 
   it('surfaces directory creation failure', async () => {
@@ -481,7 +481,50 @@ describe('ApiSession create or adoption', () => {
     tempDirs.push(parent)
     const file = join(parent, 'file')
     writeFileSync(file, 'not a directory')
-    await expect(agents.ensureSession(SessionId('mkdir-failure'), join(file, 'child'), false))
-      .rejects.toThrow('failed to ensure project directory')
+    await expect(agents.ensureSession(SessionId('mkdir-failure'), join(file, 'child'), false)).rejects.toThrow(
+      'failed to ensure project directory',
+    )
   })
+})
+
+it('删除先等待 API 自己持有的 Agent 退出，再执行持久化操作', async () => {
+  const { ctx, agents } = await harness()
+  const cwd = mkdtempSync(join(tmpdir(), 'dsh-delete-owned-'))
+  tempDirs.push(cwd)
+  const target = unpublishedAgent(ctx, header('delete-owned', cwd))
+  const order: string[] = []
+  const dispose = vi.fn(async () => {
+    order.push('disposed')
+  })
+  vi.spyOn(ctx.agents, 'create').mockResolvedValue({ agent: target, dispose })
+  await agents.ensureSession(target.id, cwd, false)
+  await agents.deleteSession(target.id, async () => {
+    order.push('deleted')
+  })
+  expect(order).toEqual(['disposed', 'deleted'])
+  expect(dispose).toHaveBeenCalledOnce()
+})
+
+it('不能越过其他组件的 Agent 所有权；删除期间拒绝恢复', async () => {
+  const { ctx, agents } = await harness()
+  const target = agent(ctx, header('foreign-delete'))
+  await ctx.agents.register(target)
+  const remove = vi.fn(async () => {})
+  await expect(agents.deleteSession(target.id, remove)).rejects.toThrow('其他运行组件')
+  expect(remove).not.toHaveBeenCalled()
+  const id = SessionId('deleting-cold')
+  let release: (() => void) | undefined
+  const pending = agents.deleteSession(
+    id,
+    () =>
+      new Promise<void>((resolve) => {
+        release = resolve
+      }),
+  )
+  await vi.waitFor(() => {
+    expect(release).toBeDefined()
+  })
+  expect(await agents.resolveAgent(id)).toMatchObject({ error: { code: 'session/agent-busy' } })
+  release?.()
+  await pending
 })

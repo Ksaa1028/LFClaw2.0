@@ -168,6 +168,8 @@ type SkillResourceBase =
 interface SkillDefinition extends SkillSummary {
   /** Markdown instruction body after any provider-specific metadata removal. */
   readonly content: string
+  /** Human-facing name recorded with an explicit invocation; absent for ordinary skills. */
+  readonly displayName?: string
   /** Parsed optional metadata object from frontmatter. */
   readonly metadata?: Readonly<Record<string, unknown>>
 }

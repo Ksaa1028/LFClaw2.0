@@ -1041,6 +1041,19 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
     ],
   },
   {
+    key: 'enterpriseConnection',
+    summary: '仅使用当前激活服务器的员工令牌访问企业接口。',
+    description: '仅使用当前激活服务器的员工令牌访问企业接口。',
+    methods: [
+      {
+        signature: 'async request(path: string, init: RequestInit & { catalogMaxAgeMs?: number } = {}): Promise<Response>',
+        description: '调用当前员工的企业接口，禁止重定向携带凭据。',
+        parameters: [{ name: 'path', description: '企业 API 下的相对路径，由 Host 调用方提供。' }, { name: 'init', description: '请求参数；catalogMaxAgeMs 仅允许展示目录复用近期响应，实际授权与执行不使用该选项。' }],
+        returns: '企业接口响应；调用方负责解析数据和处理非成功状态。',
+      },
+    ],
+  },
+  {
     key: 'fileReferences',
     summary: 'Host capability for cancellable file-reference discovery.',
     description: 'Host capability for cancellable file-reference discovery.',
@@ -1957,6 +1970,12 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         returns: 'the live Agent or the stable Session-domain failure.',
       },
       {
+        signature: 'async deleteSession(sessionId: SessionId): Promise<void>',
+        description: 'Delete the selected Session without requesting descendant stops or changing their persistence.',
+        parameters: [{ name: 'sessionId', description: 'Session explicitly selected for deletion.' }],
+        returns: 'resolution after durable deletion and list notification.',
+      },
+      {
         signature: 'inspect( sessionId: SessionId, signal?: AbortSignal, ): Promise<SessionInspection>',
         description: 'Inspect one attached or persisted Session without activating its Agent.',
         parameters: [{ name: 'sessionId', description: 'durable Session identity.' }, { name: 'signal', description: 'optional caller cancellation for persistence reads.' }],
@@ -2121,6 +2140,12 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         signature: 'readonly identity: symbol = Symbol(\'sessionPersistence\')',
         description: 'Process-local instance identity, stable through Context proxies and distinct after service replacement.',
         parameters: [],
+      },
+      {
+        signature: 'delete(_id: SessionId): Promise<void>',
+        description: 'Delete one closed Session from discovery and future reads. Backends may retain raw artifacts for recovery.',
+        parameters: [{ name: '_id', description: 'Session whose owners have already released all handles.' }],
+        returns: 'resolution after the deletion is durable; unsupported backends reject.',
       },
       {
         signature: 'abstract create(header: SessionHeader, options?: SessionPersistenceCreateOptions): Promise<SessionHandle>',
@@ -4525,8 +4550,8 @@ export const EVENT_API: readonly EventApiEntry[] = [
     name: 'workspace/session-stop',
     mode: 'parallel',
     signature: '\'workspace/session-stop\'(request: SessionActivityRequest): Promise<void> | void',
-    summary: 'Stop a session\'s running work because the caller archived it with `stopActivity`; the archive set is durable when this dispatches.',
-    description: 'Stop a session\'s running work because the caller archived it with `stopActivity`; the archive set is durable when this dispatches. Each provider stops its own families — cancelling a turn, its subagent descendants, owned jobs, or active schedules — through the same cancel paths the user\'s own stop actions use, so the session log ends every open turn regularly and a later unarchive can continue the conversation. Listeners issue their stop requests without waiting for running work to settle; a listener may await its own durability barrier. A rejection is logged by the registry and does not undo the archive.',
+    summary: 'Stop a session\'s running work because the caller archived or is deleting it.',
+    description: 'Stop a session\'s running work because the caller archived or is deleting it. The archive set is durable for archive dispatches. Each provider stops its own families — cancelling a turn, its subagent descendants unless excluded, owned jobs, or active schedules — through the same cancel paths the user\'s own stop actions use, so the session log ends every open turn regularly and a later unarchive can continue the conversation. Listeners issue their stop requests without waiting for running work to settle; a listener may await its own durability barrier. A rejection is logged by the registry and does not undo the archive.',
     parameters: [{ name: 'request', description: 'the session being archived.' }],
   },
 ]
@@ -6015,7 +6040,7 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   },
   {
     name: 'ModelCatalogModel',
-    declaration: 'export interface ModelCatalogModel {\n    readonly id: string;\n    readonly name: string;\n    readonly description?: string;\n    readonly reasoning?: ModelReasoning;\n}',
+    declaration: 'export interface ModelCatalogModel {\n    readonly id: string;\n    readonly name: string;\n    readonly contextWindow?: number;\n    readonly description?: string;\n    readonly reasoning?: ModelReasoning;\n}',
   },
   {
     name: 'ModelMessageSource',
@@ -6723,7 +6748,7 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   },
   {
     name: 'SessionActivityRequest',
-    declaration: 'export interface SessionActivityRequest {\n    readonly sessionId: SessionId;\n}',
+    declaration: 'export interface SessionActivityRequest {\n    readonly sessionId: SessionId;\n    readonly includeDescendants?: boolean;\n}',
   },
   {
     name: 'SessionAddress',
@@ -7351,7 +7376,7 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   },
   {
     name: 'SkillDefinition',
-    declaration: 'export interface SkillDefinition extends SkillSummary {\n    readonly content: string;\n    readonly metadata?: Readonly<Record<string, unknown>>;\n}',
+    declaration: 'export interface SkillDefinition extends SkillSummary {\n    readonly content: string;\n    readonly displayName?: string;\n    readonly metadata?: Readonly<Record<string, unknown>>;\n}',
   },
   {
     name: 'SkillEntry',

@@ -163,6 +163,14 @@ const SERVICE_ROLES: ServiceRole[] = [
     note: 'Owns browser authentication and shared HTTP request dispatch; API adapters register endpoints and streams.',
   },
   {
+    key: 'enterpriseConnection',
+    pkg: 'client-ui-activation',
+    title: 'Authenticated enterprise API requests',
+    mode: 'service',
+    consumers: ['client-ui-enterprise-connectors', 'client-ui-enterprise-skills'],
+    note: 'Uses the active employee credential in the Host to call the configured enterprise server.',
+  },
+  {
     key: 'worktrees',
     pkg: 'experimental-worktree',
     title: 'Git worktree creation',

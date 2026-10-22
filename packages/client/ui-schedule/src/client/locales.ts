@@ -24,7 +24,7 @@ export const zh = {
   'frequency.once': '单次',
   'frequency.every': '{value}{unit}一次',
   ...frequencyZh,
-  'mark.aria': '{count} 个自动化任务',
+  'mark.aria': '{count} 个定时任务',
   'hover.more': '另有 {count} 个任务',
 } as const
 

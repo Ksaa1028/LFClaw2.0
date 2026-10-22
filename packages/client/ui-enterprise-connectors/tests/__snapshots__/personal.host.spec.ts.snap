@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`saves personal MCPs, masks credentials, registers callable tools, and rejects stale or other-account executions 1`] = `
+{
+  "description": "My service：Look up fixture data",
+  "result": {
+    "content": [
+      {
+        "text": "fixture result",
+        "type": "text",
+      },
+    ],
+  },
+}
+`;

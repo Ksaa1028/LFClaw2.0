@@ -63,15 +63,24 @@ if ($TestProgress -or $CompileProgressOnly) {
 }
 Add-Type -AssemblyName System.Drawing
 foreach ($asset in @('brand', 'brand-2x', 'brand-dark', 'brand-dark-2x', 'uninstaller-sidebar')) {
-    $image = [Drawing.Image]::FromFile((Join-Path $installerRoot "assets/$asset.png"))
+    $sidebar = $asset -eq 'uninstaller-sidebar'
+    $imagePath = if ($sidebar) { Join-Path $PSScriptRoot '../resources/icon-windows.png' } else { Join-Path $installerRoot "assets/$asset.png" }
+    $image = [Drawing.Image]::FromFile($imagePath)
     try {
-        $bitmap = [Drawing.Bitmap]::new($image.Width, $image.Height, [Drawing.Imaging.PixelFormat]::Format24bppRgb)
+        $width = if ($sidebar) { 164 } else { $image.Width }
+        $height = if ($sidebar) { 314 } else { $image.Height }
+        $bitmap = [Drawing.Bitmap]::new($width, $height, [Drawing.Imaging.PixelFormat]::Format24bppRgb)
         try {
             $graphics = [Drawing.Graphics]::FromImage($bitmap)
             try {
                 $background = if ($asset -like '*dark*') { [Drawing.Color]::FromArgb(21, 21, 23) } else { [Drawing.Color]::White }
                 $graphics.Clear($background)
-                $graphics.DrawImage($image, 0, 0, $image.Width, $image.Height)
+                if ($sidebar) {
+                    $graphics.InterpolationMode = [Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+                    $graphics.DrawImage($image, 18, 93, 128, 128)
+                } else {
+                    $graphics.DrawImage($image, 0, 0, $image.Width, $image.Height)
+                }
             } finally { $graphics.Dispose() }
             $bitmap.Save((Join-Path $output "$asset.bmp"), [Drawing.Imaging.ImageFormat]::Bmp)
         } finally { $bitmap.Dispose() }

@@ -1,0 +1,31 @@
+{
+  "name": "@deepseek-ai/lfclaw-admin-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "tsx --test tests/*.test.ts"
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "workspace:~",
+    "@modelcontextprotocol/sdk": "1.31.0",
+    "@types/multer": "^2.3.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "fflate": "^0.8.2",
+    "multer": "^2.4.0",
+    "pinyin-pro": "3.15.2",
+    "yaml": "2.9.0",
+    "@deepseek-ai/dsh-client-ui-enterprise-skills": "workspace:*"
+  },
+  "devDependencies": {
+    "@deepseek-ai/dsh-cmdline": "workspace:*",
+    "@deepseek-ai/cordis": "workspace:~",
+    "@deepseek-ai/dsh-host-webserver": "workspace:*",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "tsx": "^4.23.13",
+    "typescript": "^6.0.3"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": { "rootDir": "src", "outDir": "lib/types", "tsBuildInfoFile": "lib/tsconfig.host.tsbuildinfo" },
+  "files": ["src/index.ts", "src/continuation.ts", "src/continuation-types.ts", "src/enterprise.ts", "src/models.ts", "src/connection.ts"],
+  "references": [
+    { "path": "../../core/system-prompt" }, { "path": "../../core/agent" },
+    { "path": "../../llm/llm" }, { "path": "../../llm/llm-pi-ai" }, { "path": "../../llm/token-meter" }, { "path": "../../core/agent-default-model" },
+    { "path": "../../../vendor/cordis" }, { "path": "../../../vendor/schemastery" },
+    { "path": "../../credentials/credentials" }, { "path": "../connection/tsconfig.host.json" }
+  ]
+}

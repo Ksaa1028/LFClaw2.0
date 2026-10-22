@@ -9,7 +9,10 @@
     "src/index.ts",
     "src/changes.ts",
     "src/presented.ts",
-    "src/present-open.ts"
+    "src/present-open.ts",
+    "src/catalog.ts",
+    "src/catalog-removals.ts",
+    "src/catalog-route.ts"
   ],
   "references": [
     {
@@ -50,6 +53,9 @@
     },
     {
       "path": "../../sandbox/sandbox-policy"
+    },
+    {
+      "path": "../../storage/storage-domain"
     }
   ]
 }

@@ -7,6 +7,8 @@ packages:
   - native/system/packages/*
   # Product assemblies over the package tier; apps/cli owns the `dsh` bin.
   - apps/*
+  # LFClaw 管理端
+  - LFClaw/02-管理端/*
   # Private package owning repository-level benchmark dependencies.
   - benchmarks
   - website
@@ -106,6 +108,7 @@ minimumReleaseAgeExclude:
   # Desktop packaging requires this Electron fingerprint with node-addon-require-builtin 0.1.9.
   - electron@44.7.0
 patchedDependencies:
+  '@michengai/dsh-im-connect@0.1.77': LFClaw/patches/@michengai__dsh-im-connect@0.1.77.patch
   '@earendil-works/pi-ai@1.0.2': patches/@earendil-works__pi-ai@1.0.2.patch
   '@electron/osx-sign@1.3.3': patches/@electron__osx-sign@1.3.3.patch
   '@fortune-sheet/core@1.0.4': patches/@fortune-sheet__core@1.0.4.patch

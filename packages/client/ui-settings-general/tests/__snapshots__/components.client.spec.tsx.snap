@@ -1,0 +1,10 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`current version > shows the installed Desktop release instead of the repository version 1`] = `
+<div
+  class="_row_df3357"
+  data-client-version="2026.10.21-8"
+>
+  Client version: {version}
+</div>
+`;

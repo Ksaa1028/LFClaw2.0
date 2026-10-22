@@ -78,6 +78,19 @@ describe('projectUserText', () => {
       .toEqual([['skill', '/plan']])
   })
 
+  it('shows a recorded enterprise skill name without exposing its loader key', () => {
+    const key = 'enterprise-skill-creator-0f05c7'
+    const openSkill = vi.fn()
+    const host = render(<div data-host>{projectUserText(`/${key} 你是干嘛的`, [], [key], 'skill',
+      { openFile: vi.fn(), openSkill }, { [key]: '技能创建' })}</div>).container.querySelector('[data-host]')!
+    const chip = host.querySelector('[data-ref-chip="skill"]')!
+    expect(chip.textContent).toBe('@技能创建')
+    expect(chip.getAttribute('title')).toBe('技能创建')
+    expect(host.textContent).not.toContain(key)
+    fireEvent.click(chip)
+    expect(openSkill).toHaveBeenCalledWith(key)
+  })
+
   it('marks a resolved slash token as a command chip when the caller says so', () => {
     const host = project('/goal ship it\nsecond line', [], ['goal'], 'command')
     const chips = [...host.querySelectorAll('[data-ref-chip]')]
@@ -146,4 +159,29 @@ describe('projectUserText', () => {
     expect(host.querySelectorAll('[data-ref-chip]').length).toBe(0)
     expect(host.textContent).toBe('纯文本，无引用')
   })
+})
+
+it('folds logged expert configuration while leaving the task visible and configuration inspectable', () => {
+  const wire = '<lfclaw-expert>' + JSON.stringify({ name: '工作规划顾问', configuration: '完整职责\n工作流程' }) + '</lfclaw-expert>'
+  const host = project(wire + '\n请安排明天的工作')
+  const details = host.querySelector('details')!
+  expect(details.open).toBe(false)
+  expect(details.querySelector('summary')?.textContent).toBe('@工作规划顾问')
+  expect(details.querySelector('pre')?.textContent).toBe('完整职责\n工作流程')
+  expect(host.lastChild?.textContent).toContain('请安排明天的工作')
+  expect(host.textContent).not.toContain('<lfclaw-expert>')
+})
+it('leaves malformed expert envelopes visible rather than hiding user content', () => {
+  const text = '<lfclaw-expert>{"name":"顾问"}</lfclaw-expert>\n任务'
+  const host = project(text)
+  expect(host.querySelector('details')).toBeNull()
+  expect(host.textContent).toBe(text)
+})
+
+it('folds the readable expert prefix together with its envelope without duplicate labels', () => {
+  const wire = '@顾问\n<lfclaw-expert>' + JSON.stringify({ name: '顾问', configuration: '工作方法' }) + '</lfclaw-expert>\n任务'
+  const host = project(wire)
+  expect(host.querySelectorAll('summary').length).toBe(1)
+  expect(host.querySelector('summary')?.textContent).toBe('@顾问')
+  expect(host.textContent?.match(/@顾问/g)?.length).toBe(1)
 })

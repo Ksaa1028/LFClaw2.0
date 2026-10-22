@@ -11,7 +11,7 @@
           - id: persona
             name: '@deepseek-ai/dsh-persona'
             config:
-              prefix: You are a helpful software engineer assistant.
+              prefix: ''
               complete: true
               includeRuntimeContext: false
           - id: persistent-shell

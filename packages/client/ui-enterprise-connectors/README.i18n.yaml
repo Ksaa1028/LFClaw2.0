@@ -1,0 +1,40 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write packages/client/ui-enterprise-connectors/README.md
+/:
+  en: 9d4bccd6e604065b
+  zh: 29da37cfea5207b6
+/lfclaw-connector-center:
+  en: dd56c2518ed23400
+  zh: 16e526bacd1bf642
+/lfclaw-connector-center/summary:
+  en: 2649fe16e4db3ac6
+  zh: 78030f2a88a1ef13
+/lfclaw-connector-center/table-of-contents:
+  en: 536b994bc66de631
+  zh: e7eb4161a1df62e8
+/lfclaw-connector-center/connections-and-permissions:
+  en: 2e007b1ed8cc603a
+  zh: 3d9bfd7f2cb94440
+/lfclaw-connector-center/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/lfclaw-connector-center/model-experience/authorized-mcp-tools:
+  en: 40f4130ae6e83871
+  zh: 65d598e44babc8f4
+/lfclaw-connector-center/model-experience/authorized-mcp-tools/what-the-model-sees:
+  en: 05566bbc7b65ff69
+  zh: 938105e1c3ce4167
+/lfclaw-connector-center/model-experience/authorized-mcp-tools/token-effect:
+  en: b4ce44a5782d112b
+  zh: 5492c1c252254580
+/lfclaw-connector-center/model-experience/authorized-mcp-tools/kv-cache-effect:
+  en: 8e8ca84c3bb58b69
+  zh: bba1355ee7dddcfd
+/lfclaw-connector-center/known-limitations-and-deferred-work:
+  en: 5cc53ec338003bf3
+  zh: 412545bdfe4ae5bd
+/lfclaw-connector-center/known-limitations-and-deferred-work/dev-note:
+  en: 4cedae9a9b0c7b48
+  zh: b2c4280f902045d3

@@ -94,6 +94,16 @@ describe('desktop auto-update environment', () => {
     }, 'win32', 'x64')).toThrow(/DOWNLOAD_PROD_COS_BUCKET/u)
   })
 
+  it('uses a fork-owned production origin and refuses the official feed for a custom app ID', () => {
+    const fork = { DSH_DESKTOP_AUTO_UPDATE_ENV: 'production', DSH_DESKTOP_APP_ID: 'com.example.lfclaw' }
+    expect(() => resolveDesktopAutoUpdateConfig(fork, 'win32', 'x64')).toThrow(/DOWNLOAD_PROD_ORIGIN/u)
+    expect(resolveDesktopAutoUpdateConfig({ ...fork, DOWNLOAD_PROD_ORIGIN: 'https://updates.example.com/' }, 'win32', 'x64'))
+      .toMatchObject({ origin: 'https://updates.example.com',
+        publicUrl: 'https://updates.example.com/dsh-desk/feeds/win-x64/' })
+    expect(() => resolveDesktopAutoUpdateConfig({ ...fork,
+      DOWNLOAD_PROD_ORIGIN: 'https://updates.example.com/path' }, 'win32', 'x64')).toThrow(/HTTPS origin/u)
+  })
+
   it('rejects a test download URL that is not an HTTPS origin', () => {
     expect(() => resolveDesktopAutoUpdateConfig({
       DOWNLOAD_TEST_ORIGIN: 'https://desktop-updates.example.com/releases',

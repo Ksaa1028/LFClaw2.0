@@ -1,0 +1,3 @@
+- id: lfclaw-permission-session-fixture
+  config:
+    fullAccess: true

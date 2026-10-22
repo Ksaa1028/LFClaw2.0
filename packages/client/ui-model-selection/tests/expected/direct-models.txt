@@ -1,0 +1,2 @@
+qwen3.8-flash
+kimi-k2.6

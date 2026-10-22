@@ -832,6 +832,13 @@ Host service backing the generated `ctx.remote.session` namespace.
 resolveAgent(sessionId: SessionId): Promise<ApiSessionAgentResult>
 
 /**
+ * Delete the selected Session without requesting descendant stops or changing their persistence.
+ * @param sessionId - Session explicitly selected for deletion.
+ * @returns resolution after durable deletion and list notification.
+ */
+async deleteSession(sessionId: SessionId): Promise<void>
+
+/**
  * Inspect one attached or persisted Session without activating its Agent.
  * @param sessionId - durable Session identity.
  * @param signal - optional caller cancellation for persistence reads.

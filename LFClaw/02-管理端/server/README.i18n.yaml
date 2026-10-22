@@ -1,0 +1,31 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write LFClaw/02-管理端/server/README.md
+/lfclaw-enterprise-service:
+  en: 70487e0a30736773
+  zh: 333c3e4caae27a8b
+/lfclaw-enterprise-service/session-sharing-and-notifications:
+  en: 14bd5132c42a8c78
+  zh: 8918605f11fad7f9
+/lfclaw-enterprise-service/local-launch:
+  en: 88e7e32d3e8cea86
+  zh: a48abba1d570b94b
+/lfclaw-enterprise-service/permission-apis:
+  en: 11f4ba338f25af1c
+  zh: ab818951edfe8503
+/lfclaw-enterprise-service/permission-apis/general-connector-authentication:
+  en: 69b089729e797475
+  zh: 2027c955e1f2b25d
+/lfclaw-enterprise-service/permission-apis/mall-floor-permissions-and-immediate-invalidation:
+  en: b29e886b43182589
+  zh: 012c4e414b3cafc2
+/lfclaw-enterprise-service/permission-apis/resources-and-administration-apis:
+  en: e08a7cf8939d3846
+  zh: cfe51a6ce80a275b
+/lfclaw-enterprise-service/data-and-verification:
+  en: d8dc16f100390c79
+  zh: 08b8095231bbf55a
+/lfclaw-enterprise-service/expert-center:
+  en: 4357e038251916f6
+  zh: 88de655cefc4a6c4

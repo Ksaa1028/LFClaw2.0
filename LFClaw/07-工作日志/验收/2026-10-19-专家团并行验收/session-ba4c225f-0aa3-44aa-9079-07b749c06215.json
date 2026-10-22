@@ -1,0 +1,719 @@
+{
+  "id": "session-ba4c225f-0aa3-44aa-9079-07b749c06215",
+  "firstAt": "2026-10-19T01:20:08.431Z",
+  "latestAt": "2026-10-19T01:32:33.371Z",
+  "elapsedMs": 744940,
+  "turns": [
+    {
+      "time": "2026-10-19T01:27:54.057Z",
+      "reason": {
+        "kind": "completed"
+      }
+    }
+  ],
+  "calls": [
+    {
+      "seq": 16,
+      "time": "2026-10-19T01:21:26.951Z",
+      "name": "subagent",
+      "arguments": "{\"description\":\"排程顾问独立核算\",\"prompt\":\"你是「任务规划与约束复核团（优化验收）」的成员1：工作排程顾问（优化验收）。职责：独立核算容量、硬截止和可用时段；按任务原始工时排出无重叠安排；无法排入的事项明确标记缺口或待确认，不得擅自缩短工时或延期。\\n\\n这是一次假设性验收，全部为测试数据：不访问任何外部系统、不创建日历、不发送任何消息。\\n\\n【明天可用时段】09:00–11:30、14:00–16:00，合计270分钟。\\n【既定占用】15:00–15:30已有会议。另必须预留30分钟机动缓冲。\\n【任务与原始工时/截止】\\nA 周总结初稿 90分钟，明天16:00前交\\nB 下周重点 60分钟，后天12:00前交\\nC 整理文件 80分钟，本周内完成\\nD 回复3项待确认 30分钟，明天11:00前发出\\nE 学习工具 60分钟，无截止\\nF 一页会议简报 60分钟，明天14:50前交\\n【依赖】F必须先取得A的核心数据；A至少先做满45分钟，F才能开始。\\n\\n【硬性规则】不得缩短任何任务原始工时；不得挪动或放宽任何截止时间；不得假设后天或其他日子存在空闲时段（除题目明确给出的明天两个时段外，没有其他已确认时段）；同一时段不得重叠；任务必须落在可用时段内（11:30–14:00不可排）。\\n\\n【请输出，简洁结构化】\\n1. 容量核算：名义分钟、既定占用、必留缓冲、可分配工时、六项总需求、最低缺口。\\n2. 明天无重叠时间表（逐段起止时间+任务名），并验证：A总量90、F总量60、F开始点不早于A满45分钟、F结束≤14:50、D结束≤11:00、A结束≤16:00、会议与缓冲未被侵占。指出F唯一可行的连续60分钟窗口在哪里。\\n3. 保留事项（会议/缓冲/剩余余量）与待排事项（B、C、E），各自标明是否排入及缺口大小。\\n4. 两个失败预案（不得缩时、不得移截止，无法满足时须写明需上级批准或标记待确认）：预案一=10:30时A核心数据仍未就绪；预案二=09:20时D仍有一项未发出。每个预案给出具体改排时间段和风险通知触发点。\\n只输出结论，不要过程复述。\"}"
+    },
+    {
+      "seq": 17,
+      "time": "2026-10-19T01:21:26.953Z",
+      "name": "subagent",
+      "arguments": "{\"description\":\"约束顾问独立复核\",\"prompt\":\"你是「任务规划与约束复核团（优化验收）」的成员2：约束审阅顾问（优化验收）。职责：不等任何方案，独立列出用户给定的工时、时段、截止、依赖，计算最低容量缺口；找出常见不可行预案，给出可行且不改变原始工时的处理原则。\\n\\n这是一次假设性验收，全部为测试数据：不访问外部系统、不创建日历、不发送消息。不要输出排程表，只做约束审计。\\n\\n【明天可用时段】09:00–11:30、14:00–16:00，合计270分钟。15:00–15:30已有会议；另必须预留30分钟机动缓冲。\\n【任务与工时/截止】A周总结初稿90分钟（明天16:00前交）；B下周重点60分钟（后天12:00前交）；C整理文件80分钟（本周内）；D回复3项待确认30分钟（明天11:00前发出）；E学习工具60分钟（无截止）；F一页会议简报60分钟（明天14:50前交）。\\n【依赖】F必须先取得A的核心数据，A至少先做满45分钟F才能开始。\\n【禁止】缩短原始工时、挪动截止时间、假设后天或其他日子有空闲时段。\\n\\n【请输出，控制在300字以内】\\n1. 约束清单（工时/时段/截止/依赖，逐条一行）。\\n2. 最低容量缺口数值与算法（净可分配工时 vs 硬截止需求 vs 全部需求）。\\n3. 至少3个常见不可行做法（例如把某任务压到不足原始工时、把截止推后、假设后天有空、把任务排进11:30–14:00等），逐条说明为什么不可行。\\n4. 不改变原始工时的处理原则：优先级依据（截止+依赖+缓冲刚性）、哪三项必须落在明天、其余如何标为待确认。\"}"
+    },
+    {
+      "seq": 34,
+      "time": "2026-10-19T01:22:13.025Z",
+      "name": "list_agents",
+      "arguments": "{}"
+    },
+    {
+      "seq": 41,
+      "time": "2026-10-19T01:22:33.909Z",
+      "name": "list_agents",
+      "arguments": "{}"
+    },
+    {
+      "seq": 58,
+      "time": "2026-10-19T01:23:19.657Z",
+      "name": "pwsh",
+      "arguments": "{\"description\":\"Wait 45 seconds for members\",\"command\":\"Start-Sleep -Seconds 45; \\\"waited\\\"\"}"
+    }
+  ],
+  "answers": [
+    {
+      "seq": 74,
+      "time": "2026-10-19T01:27:54.052Z",
+      "text": "任务规划与约束复核团（优化验收）\n\n实际调用（并行，两份结果均已返回）：**工作排程顾问（优化验收）**＝容量核算、明天无重叠时间表与两个预案；**约束审阅顾问（优化验收）**＝不待草稿，独立核对工时/时段/截止/依赖、算最低缺口并列出常见不可行做法。两者数值一致；基线顺序取\"D先\"（可同时兼容两个检查点），团长逐项交叉核对工时、时段、截止、依赖与字数后合并定稿。\n\n**一、容量核算**：09:00–11:30=150＋14:00–16:00=120＝名义270；扣会议30、机动30 → 可分配**210**。六项原始工时380 → 总缺口**170**。明天硬截止 D30＋A90＋F60=180，仅余30（11:15–11:30、14:45–15:00两段碎片，不承接整段任务）。\n\n**二、明天时间表（无重叠、不缩时）**\n- 09:00–09:30 D 回复3项（30，11:00前发出）\n- 09:30–10:15 A①45（出核心数据，F前置）\n- 10:15–11:15 F 60（14:50前交）\n- 11:15–11:30 余量15\n- 14:00–14:45 A②45（A计90，16:00前交）\n- 14:45–15:00 余量15\n- 15:00–15:30 会议30\n- 15:30–16:00 机动30\n\n校验：F起点＝A满45分钟点；F 60分钟只能落上午（下午14:00–14:50仅50）；D≤11:00、A≤16:00；会议与机动未侵占；未排11:30–14:00、未假设后天有空、未挪截止。\n\n**三、保留与待排**：保留会议30、机动30、碎片30（均不占用）。B60＋C80＋E60＝200无已确认时段 → 净缺**170**，全部标**待确认**：请新增可确认时段或由主管裁决取舍，不以缩时/挪截止吸收。\n\n**四、失败预案**\n预案一（10:30 A核心数据未就绪）：F最迟开工＝11:30−60＝**10:30**，此刻即失效——上午已无连续60，下午14:00–14:50仅50<60，F必缺10分钟并越14:50。会议、机动不动，A②仍14:00–14:45。10:30上报，须批准选项：新增可确认时段或调整F截止/取消15:00会议；不自行缩时或改截止。预警10:00、闸门10:15。\n预案二（09:20 D仍一项未发出）：D延至09:40收尾（工时仍30＋10分钟追办），A①09:40–10:25，F 10:25–11:25，A②14:00–14:45，会议机动不变——D仍在11:00前发出。若卡在他人回复：09:40先发已确认两项，余项标原因挂待确认，10:30仍未发出即上报违约风险。\n\n**五、给主管说明**\n明天净可排210分钟，D+A+F共180已锁定，无重叠，F须整段在上午。B/C/E共200分钟无已确认时段，缺170，请批新增时段或裁决。10:30若A核心数据未就绪则F违约，需协调。"
+    }
+  ],
+  "model": {
+    "provider": "lfclaw",
+    "model": "m-1791980943965",
+    "maxTokens": 8192
+  },
+  "toolResults": [
+    {
+      "seq": 20,
+      "time": "2026-10-19T01:21:27.004Z",
+      "content": [
+        {
+          "type": "text",
+          "text": "started subagent ff77a0b7-355b-488c-8931-ebecdca29c99"
+        }
+      ]
+    },
+    {
+      "seq": 21,
+      "time": "2026-10-19T01:21:27.005Z",
+      "content": [
+        {
+          "type": "text",
+          "text": "started subagent be3a99d1-fd84-48e9-acd0-ae32db2fe3f9"
+        }
+      ]
+    },
+    {
+      "seq": 35,
+      "time": "2026-10-19T01:22:13.029Z",
+      "content": [
+        {
+          "type": "text",
+          "text": "be3a99d1-fd84-48e9-acd0-ae32db2fe3f9 [running] — 约束顾问独立复核\nff77a0b7-355b-488c-8931-ebecdca29c99 [running] — 排程顾问独立核算"
+        }
+      ]
+    },
+    {
+      "seq": 42,
+      "time": "2026-10-19T01:22:33.914Z",
+      "content": [
+        {
+          "type": "text",
+          "text": "be3a99d1-fd84-48e9-acd0-ae32db2fe3f9 [running] — 约束顾问独立复核\nff77a0b7-355b-488c-8931-ebecdca29c99 [running] — 排程顾问独立核算"
+        }
+      ]
+    },
+    {
+      "seq": 59,
+      "time": "2026-10-19T01:24:05.498Z",
+      "content": [
+        {
+          "type": "text",
+          "text": "waited\r\n[stderr]\nInvalidOperation: Cannot create type. Only core types are supported in this language mode.\r\nInvalidOperation: Cannot create type. Only core types are supported in this language mode.\r\n"
+        }
+      ]
+    }
+  ],
+  "notices": [
+    {
+      "time": "2026-10-19T01:20:08.429Z",
+      "source": {
+        "kind": "runtime-context",
+        "form": "snapshot",
+        "sections": [
+          {
+            "name": "working-directory:current",
+            "text": "Current working directory: \"D:\\\\我的文档\\\\Documents\\\\deepseek-harness\\\\default-workspace\"."
+          },
+          {
+            "name": "sandbox:policy",
+            "text": "Current DSH file policy: workspace-write. Any available operation enforced by the DSH file sandbox may modify files under the session workspace: \"D:\\\\我的文档\\\\Documents\\\\deepseek-harness\\\\default-workspace\". Some platform temporary areas may also be writable."
+          },
+          {
+            "name": "approval:policy",
+            "text": "Approval policy: ask. Operations that require approval may ask through the configured answerers; without an available answerer, the request fails closed."
+          }
+        ]
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Current runtime context. This snapshot supersedes earlier runtime-context snapshots.\n\nCurrent working directory: \"D:\\\\我的文档\\\\Documents\\\\deepseek-harness\\\\default-workspace\".\n\nCurrent DSH file policy: workspace-write. Any available operation enforced by the DSH file sandbox may modify files under the session workspace: \"D:\\\\我的文档\\\\Documents\\\\deepseek-harness\\\\default-workspace\". Some platform temporary areas may also be writable.\n\nApproval policy: ask. Operations that require approval may ask through the configured answerers; without an available answerer, the request fails closed."
+        }
+      ]
+    },
+    {
+      "time": "2026-10-19T01:20:08.429Z",
+      "source": {
+        "kind": "skill-catalog",
+        "form": "catalog",
+        "entries": [
+          {
+            "name": "bailian-cli",
+            "description": "阿里云百炼 / Aliyun Bailian / DashScope 资源管理与 `bl` CLI hub： 应用调用（bl app）、应用记忆、知识库检索、模型目录/模型列表、用量/额度/配额、免费额度、 工作空间、MCP 市场、pipeline、文件上传、console API、登录鉴权与配置、 Agent skill 安装/列表/更新/卸载（bl skill add|list|update|remove，百炼 skill registry）。 用户点名百炼 / DashScope / `bl`，或继续既有 `bl` 工作流时直接使用。 共享协议（consent / 版本预检 / 鉴权 / 错误上报）在 bailian-protocol；官方安装 `bl skill init`。 家族路由：生图/生视频/配音/语音合成/转写 → bailian-gen；精调/微调/训练/数据集 → bailian-finetune； agents.yaml 托管 Agent → bailian-managed-agent；Sandbox 实例与模版 → bailian-sandbox； 联网..."
+          },
+          {
+            "name": "bailian-docs-llm-wiki",
+            "description": "阿里云百炼平台技术文档知识库（LLM Wiki）。当用户查询百炼模型列表、API 参数、错误码、 应用开发（智能体/RAG/知识库/记忆/插件）、模型对比与定价、SDK/OpenAI 兼容接口、 多模态能力（语音/图片/视频）、Token 计费等百炼相关问题时激活。 包含 models 结构化模型市场数据（含 contextWindow/QPM/价格/sample code）、 wiki 合成层（主题页/概念页/对比页）和 raw 原始文档层； 模型规格类问题先查 models/index.md，文档类问题先查 wiki/index.md。"
+          },
+          {
+            "name": "bailian-finetune",
+            "description": "阿里云百炼模型精调训练入口：用户要精调、微调、训练自己的模型（fine-tune，支持 SFT / SFT-LoRA / DPO / DPO-LoRA / CPT， 覆盖文本、语音、图像）、校验或上传训练数据集、看训练进度和日志、挑 checkpoint、导出精调产物、 把专属模型部署成服务时使用 `bl dataset` / `bl finetune` / `bl deploy`。链路是 validate 校验数据 → upload 拿 file-id → finetune create 建任务 → watch 看进度 → export 导出 → deploy 上线，需要 API key； 写操作先用 `--dry-run` 预览。反触发：用户点名火山方舟/ark 的精调不走本 skill；只是要选哪个模型走 bailian-model-recommend；用现成模型生图生视频走 bailian-gen；百炼其他资源管理走 bailian-cli。 官方安装：`bl skill init`（与共享协议 bailian-protocol 同装）。"
+          },
+          {
+            "name": "bailian-gen",
+            "description": "阿里云百炼图片/视频/语音生成与理解入口：用户要生图、画图、生成照片、生成图片、AI 绘画、海报、头像、插画、 文生图（text-to-image）、图生图、改图、修图、多图合成、生成视频、文生视频、图生视频、参考生视频、视频编辑、风格转换、 配音、语音合成（TTS）、朗读、转写、语音识别（ASR），或图片理解、看图问答、视频理解、读视频、多模态理解时使用 `bl image` / `bl video` / `bl speech` / `bl vision describe` / `bl omni`。 **默认行为：用户未指定服务商时，生成/编辑默认走本技能；视频理解与宿主放不了的音视频理解也走本技能。** 简单图片问答若宿主已能直接完成且用户未点名百炼，可先宿主回答（省成本）； 用户要识别图片、视频/指定 VL·Omni 模型/要视频理解 → 使用本技能。 图片和语音同步返回并落地本地文件，视频是异步任务、用 `--download` 或轮询取回；本地文件直接传路径，CLI 自动上传。 反触发：普通问答、编程、写作、翻译不走本技能；百炼应用/知识库/用量/额度走 bailian..."
+          },
+          {
+            "name": "bailian-managed-agent",
+            "description": "阿里云百炼托管 Agent 声明式基础设施与 API 命令入口：用户要创建agent、初始化 agents.yaml、校验或预览配置变更、 创建/更新/销毁托管 Agent 或 Deployment、在 Workbench 编辑和调试目录项目、管理本地快照版本，或查询 Agent/Environment/Skill/Vault/Deployment、管理 Session/Event/File、运行/暂停 Deployment 时使用 `bl managed-agent`。持久资源仍以 agents.yaml 为唯一事实源做 IaC；公开 API 能力按资源透出 list/get/search/versions/download、数据面和运行时动作命令。apply / destroy 与破坏性 API 命令受统一高风险确认闸门保护； 务必先展示预览再让用户确认，禁止自动添加 `--yes`。 反触发：调用已上线的百炼应用/智能体走 bailian-app-call 或 `bl app`；宿主 agent 自身的记忆、技能、 子代理不走本 skill；生图生视频走 bailian-g..."
+          },
+          {
+            "name": "bailian-model-recommend",
+            "description": "阿里云百炼模型选型与推荐。当用户需要\"选择、推荐、对比\"模型，或描述一个 AI 场景/功能需求（隐含需要帮其决策用哪个模型）时激活。核心意图是帮用户做决策， 不是单纯查资料。触发词：推荐模型、选哪个、哪个适合、对比、做一个XX、实现XX 功能、用什么模型好、XX场景方案。当用户同时涉及模型查询和模型选择时，优先 使用本 skill（本 skill 内部会读取模型数据完成推荐）。"
+          },
+          {
+            "name": "bailian-protocol",
+            "description": "阿里云百炼 `bl` 家族共享执行协议（consent 确认、版本预检、鉴权/安装、错误上报、本地文件与输出约定）。 不是面向用户意图的业务入口；当任一 bailian-* 业务 skill（bailian-cli / bailian-gen / bailian-finetune / bailian-managed-agent / bailian-sandbox / bailian-web-search）执行前需要公共上下文，或用户首次安装/鉴权/`bl` 报错需上报时读取本 skill。 官方安装为整包：`bl skill init`（与业务 skill 同装）。"
+          },
+          {
+            "name": "bailian-sandbox",
+            "description": "阿里云百炼 Sandbox 沙箱实例与模版生命周期管理入口：用户要创建、查询、连接、暂停、恢复或释放百炼沙箱， 或查看内置基础镜像、上传模版挂载文件、创建、更新、查询、删除沙箱模版、查看模版构建状态时，使用 `bl sandbox`。 用户要访问已创建实例、打开 WebShell、连接 browser-use 浏览器自动化或 VNC 实时画面时，先获取连接信息，再连接数据面。 不用于宿主执行沙箱设置、E2B 官方云资源或通用文件传输。 agents.yaml 托管 Agent / Session / Environment 管理交给 bailian-managed-agent。 官方安装：`bl skill init`（与共享协议 bailian-protocol 同装）。"
+          },
+          {
+            "name": "bailian-train-deploy",
+            "description": "用百炼 CLI (`bl`) 走完\"数据→微调训练→导出→部署→调用\"的完整闭环，或跳过训练直接部署基座模型。支持文本模型（SFT/DPO/CPT）、音频 TTS 模型（CosyVoice）、图像生成模型（Wan2.7）和视频生成模型（Wan i2v/kf2v）微调。涵盖数据集校验/上传、创建微调任务、等待训练、导出最佳 checkpoint、创建推理部署、等待就绪、给出调用示例。当用户提到在百炼 / DashScope / 阿里云模型工作室上\"训练模型\"\"微调\"\"fine-tune\"\"finetune\"\"部署模型\"\"模型上线\"\"把微调模型跑起来/调用\"\"训练一个推理模型\"\"继续预训练\"\"LoRA/SFT/DPO 训练\"\"语音合成模型\"\"TTS 微调\"\"CosyVoice\"\"声音克隆\"\"图像生成微调\"\"文生图\"\"图生图\"\"Wan2.7\"\"图像模型训练\"\"视频生成微调\"\"图生视频\"\"首帧生视频\"\"首尾帧\"\"kf2v\"\"i2v\"\"Wan视频\"\"视频特效训练\"等，都应激活本技能——即使用户没明说\"用 bl\"，只要意图是百炼平台的训练或部署，就用本技能，不要自己拼凑命令。"
+          },
+          {
+            "name": "bailian-web-search",
+            "description": "阿里云百炼联网搜索（web search）入口：为联网搜索 / 网页搜索 / 查最新资讯做路径分发。 先识别当前连接身份：Token Plan（profile `token-plan` 或 base_url host 为 `token-plan.<region>.maas.aliyuncs.com`）→ 模型自带搜索 （`bl text chat --api responses --tool '{\"type\":\"web_search\"}'`）；其他 / 默认 → Bailian MCP（`bl search web`）；仅在 MCP 鉴权失败、未开通或传输失败时兜底一次到模型自带搜索。 Token Plan 联网搜索失败、两条路径鉴权混淆的排查也走本技能。 反触发：宿主可完成的 普通问答 / 编程 / 写作 → 不触发；知识库 RAG → bailian-cli （`bl knowledge`）；生图/生视频/语音 → bailian-gen；精调/训练 → bailian-finetune； agents.yaml → bailian-managed-agent。 共享协议（c..."
+          },
+          {
+            "name": "diagnose-windows-sandbox-acl",
+            "description": "Use on Windows for unexpected DSH sandbox access denials: workspace writes or listing fail, or an ordinarily readable path cannot be read. One bundled command inspects the path and every ancestor and repairs the ACL problems it proves in that same run. Expected confinement denials need no ACL repair."
+          },
+          {
+            "name": "enterprise-skill-creator-0f05c7",
+            "description": "skill-creator（版本 1.0.0）：Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or optimize a skill's description for better triggering accuracy."
+          },
+          {
+            "name": "lark-approval",
+            "description": "飞书审批：查询和处理审批待办/已办/实例，搜索可发起审批定义、查看定义详情并发起原生审批实例。当用户要处理审批任务、查看审批实例、搜索或发起审批时使用。审批待办不是飞书任务；非审批类待办走 lark-task。不负责创建审批定义；三方审批定义不走原生提单。"
+          },
+          {
+            "name": "lark-apps",
+            "description": "妙搭（Spark/Miaoda）应用开发与托管：应用创建、本地全栈开发、云端生成迭代、创意设计（UI mockup / 可交互原型 / 线框图 / 落地页 / 仪表盘 / 幻灯片 deck / 视觉探索）、AI相关能力和飞书平台能力或者其他外部能力集成、日志/Trace/监控指标/PV/UV 查询、环境变量管理、应用协作者与协作权限设置、应用角色与成员管理、自动化触发器（定时/记录变更/Webhook/飞书审批）。当用户要开发/新建一个系统·工具·平台·应用，或要本地开发 / 云端开发 / 修改 / 部署 / 发布 / 上线 / 拿可分享链接，或用 HTML 做页面·网站·部署到妙搭，或要设计 / design / mockup / prototype / wireframe / 做 PPT / deck / 视觉探索，或提到妙搭/Spark/Miaoda（应用运行时域名形如 *.aiforce.cloud）、应用数据库、应用文件存储、开放 API Key、可见范围、应用协作者/开发权限、应用角色/角色成员、线上日志、接口请求量、错误量、延迟、访问量、环境变量、给妙搭应用配自动化..."
+          },
+          {
+            "name": "lark-attendance",
+            "description": "飞书考勤打卡：查询自己的考勤打卡记录"
+          },
+          {
+            "name": "lark-base",
+            "description": "飞书多维表格（Base）操作：建表、字段、记录、视图、统计、公式/lookup、表单、仪表盘、应用模式（BaseApp/AppMode 页面与组件）、Workspace 目录、workflow、角色权限、模板中心（多维表格模板分类/列表/搜索）；遇到 Base/多维表格/bitable、BaseApp/AppMode、/base/ 或 /app/ 链接时使用。BaseApp 不走 lark-apps；文件导入/导出转 lark-drive，认证/授权转 lark-shared。"
+          },
+          {
+            "name": "lark-calendar",
+            "description": "飞书日历：管理日历日程和会议室。查看/搜索日程、创建/更新日程、管理参会人、查询忙闲和推荐时段、预定会议室。当用户需要查看日程安排、创建/修改会议、查询/预定会议室时使用。不负责：查询过去的视频会议记录（走 lark-meeting）、待办任务（走 lark-task）。"
+          },
+          {
+            "name": "lark-contact",
+            "description": "飞书 / Lark 通讯录:按姓名 / 邮箱解析成 open_id,或按 open_id 反查姓名 / 部门 / 邮箱 / 联系方式 / 个人状态 / 签名,以及按关键词搜索当前用户可见的机器人 / 智能体(agent)。当用户提到一个名字要下一步发消息 / 排日程,或拿到 open_id 想查具体信息时使用。不负责部门树遍历、按部门列员工、组织架构图,这类需求走原生 OpenAPI。"
+          },
+          {
+            "name": "lark-doc",
+            "description": "飞书云文档（Docx / Wiki）内容操作：读取、创建、编辑文档，插入或下载图片附件，以及操作思维笔记。用户提供文档 URL/token（包括 doubao.com 的 /docx/、/wiki/）时使用；按 URL 路径/token 而非域名路由。文档内嵌资源按读取参考中的统一规则分流。独立评论操作走 lark-drive；随正文读取评论使用 docs +fetch。表格或 Base 内部数据操作不在本 skill。"
+          },
+          {
+            "name": "lark-drive",
+            "description": "飞书云空间（云盘/云存储）：管理 Drive 文件和文件夹，包含上传/下载、创建文件夹、复制/移动/删除、查看元数据、查询权限设置、评论/权限/订阅、标题、版本、飞书文档密级标签（secure labels）和本地文件导入。用户需要整理云盘目录、处理云空间资源 URL/token、判断链接类型/真实 token/标题，或导入 Word/Markdown/Excel/CSV/PPTX/.base 为 docx/sheet/bitable/slides 时使用；doubao.com 云空间 URL/token 也按资源路径和 token 路由，不回退 WebFetch。不负责：文档内容编辑（走 lark-doc）、表格/Base 表内数据操作（走 lark-sheets/lark-base）、知识空间节点/成员管理（走 lark-wiki）、原生 Markdown 文件读写/patch/diff（走 lark-markdown）。"
+          },
+          {
+            "name": "lark-event",
+            "description": "Lark/Feishu real-time event listening / subscribing / consuming: stream events as NDJSON via `lark-cli event consume <EventKey>` (covers IM messages/reactions/chat changes, Approval status changes, Task updates, VC meeting started/joined/ended, Minutes generated, Whiteboard updated, etc.). Use for Lark bots, real-time message processing, long-running subscribers, streaming webhook/push handlers. Supports `--max-events` / `--timeout` bounded runs and a stderr ready-marker contract — designed f..."
+          },
+          {
+            "name": "lark-im",
+            "description": "飞书即时通讯：收发消息和管理群聊。发送和回复消息、搜索聊天记录、管理群聊成员、上传下载图片和文件、管理表情回复、发送应用内/短信/电话加急、发送和处理交互卡片（Interactive Card）、监听卡片按钮回调（card.action.trigger）。当用户需要发消息、查看或搜索聊天记录、下载聊天中的文件、查看群成员、搜索群、创建群聊或话题群、管理标记数据、管理 Feed 置顶（添加/移除/查询置顶会话）、管理标签数据、处理卡片回调时使用。"
+          },
+          {
+            "name": "lark-mail",
+            "description": "飞书邮箱：Use when user mentions 起草邮件、写邮件、草稿、发送/回复/转发邮件、查阅邮件、看邮件、搜索邮件、邮件文件夹、邮件标签、邮件联系人、监听新邮件、邮件收信规则等；use for mail/email intent only. Do not use for docs/sheets/calendar/auth setup/pure contact lookup/IM chat tasks."
+          },
+          {
+            "name": "lark-markdown",
+            "description": "飞书 Markdown：查看、创建、上传、编辑和比较飞书中的原生 Markdown 文件。当用户要操作飞书 Markdown 文件，或比较其远端版本及本地草稿时使用。纯本地 Markdown 文件操作不触发本 skill。不负责将 Markdown 导入为飞书在线文档，也不负责文件搜索、权限、评论、移动、删除等云空间管理操作。"
+          },
+          {
+            "name": "lark-meeting",
+            "description": "飞书视频会议：查询会议记录与会议产物(纪要/逐字稿/妙记)、妙记搜索/上传/下载/编辑、机器人参与会议；查询进行中的会议、实时会议内容(发言/聊天/共享文档)问答(会上/会里)、发送会中聊天/表情；基于 meeting_id、meeting_no、event_id、note_id、minute_token、vc-node-id 或妙记 URL 查询相关信息。预约会议、忙闲和会议室管理走 lark-calendar。"
+          },
+          {
+            "name": "lark-minutes",
+            "description": "仅当用户或上游配置显式指定 lark-minutes 时使用，相关请求统一交由 lark-meeting 技能处理。"
+          },
+          {
+            "name": "lark-note",
+            "description": "仅当用户或上游配置显式指定 lark-note 时使用，相关请求统一交由 lark-meeting 技能处理。"
+          },
+          {
+            "name": "lark-okr",
+            "description": "飞书 OKR：管理目标与关键结果。查看和编辑 OKR 周期、目标、关键结果、对齐关系、量化指标和进展记录。当用户需要查看或创建 OKR、管理目标和关键结果、查看对齐关系时使用。不负责：待办任务管理（lark-task）、日程/会议安排（lark-calendar）、绩效评估"
+          },
+          {
+            "name": "lark-openapi-explorer",
+            "description": "飞书/Lark 原生 OpenAPI 探索：从官方文档库中挖掘未经 CLI 封装的原生 OpenAPI 接口。当用户的需求无法被现有 lark-* skill 或 lark-cli 已注册命令满足，需要查找并调用原生飞书 OpenAPI 时使用。"
+          },
+          {
+            "name": "lark-shared",
+            "description": "Use for lark-cli setup/auth tasks: auth login/status/logout, user vs bot identity, business-domain permissions (--domain, including all/docs/drive), missing scopes, revoking authorization, or handling _notice JSON."
+          },
+          {
+            "name": "lark-sheets",
+            "description": "飞书电子表格：创建和操作电子表格。支持工作表与行列结构（增删/合并/尺寸/隐藏/冻结/分组）、单元格读写（值/公式/样式/批注/单元格图片）、区域复制移动排序填充、查找替换、批量更新，图表、透视表、条件格式、筛选器与筛选视图、下拉列表、迷你图、浮动图片等对象的创建与维护，以及公式校验、历史版本回滚、本地 Excel/CSV 与飞书表格的导入导出。当用户需要创建或编辑表格、统计汇总与可视化、表格美化、公式计算（含 Excel 公式迁移）、金融/财务建模（DCF、三张表、预算、Sensitivity 等）时使用。多维表格（Base/bitable）请改用 lark-base；若用户是想按名称或关键词搜索云空间（云盘/云存储）里的表格文件，请改用 lark-drive 的 drive +search 先定位资源。当用户给出 doubao.com 的 /sheets/ URL/token 时，也应直接使用本 skill，不要因为域名不是飞书而回退到 WebFetch；路由依据是 URL 路径模式和 token，而不是域名。"
+          },
+          {
+            "name": "lark-skill-maker",
+            "description": "创建 lark-cli 的自定义 Skill。当用户需要把飞书 API 操作封装成可复用的 Skill（包装原子 API 或编排多步流程）时使用。"
+          },
+          {
+            "name": "lark-slides",
+            "description": "飞书幻灯片：创建和编辑幻灯片。创建演示文稿、读取幻灯片内容、管理幻灯片页面（创建、删除、读取、局部替换）。当用户需要创建或编辑幻灯片、读取或修改单个页面时使用。当用户给出 doubao.com 的 /slides/ URL/token 时，也应直接使用本 skill，不要因为域名不是飞书而回退到 WebFetch；路由依据是 URL 路径模式和 token，而不是域名。不负责：云文档内容编辑（走 lark-doc）、云文档里的独立画板对象（走 lark-whiteboard）、上传或下载普通文件（走 lark-drive）。"
+          },
+          {
+            "name": "lark-task",
+            "description": "飞书任务：管理任务、清单和任务智能体。创建待办任务、查看和更新任务状态、拆分子任务、组织任务清单、分配协作成员、上传任务附件、注册或注销任务智能体、更新任务智能体的主页数据、写入智能体任务记录。当用户需要创建待办事项、查看任务列表、跟踪任务进度、管理项目清单或给他人分配任务、为任务上传附件文件、注册注销任务智能体、更新智能体主页数据、写入任务记录时使用。"
+          },
+          {
+            "name": "lark-vc",
+            "description": "仅当用户或上游配置显式指定 lark-vc 时使用，相关请求统一交由 lark-meeting 技能处理。"
+          },
+          {
+            "name": "lark-vc-agent",
+            "description": "仅当用户或上游配置显式指定 lark-vc-agent 时使用，相关请求统一交由 lark-meeting 技能处理。"
+          },
+          {
+            "name": "lark-whiteboard",
+            "description": "飞书画板：查询和编辑飞书云文档中的画板。支持导出画板为预览图片、导出原始节点结构、使用多种格式更新画板内容。 当用户需要查看画板内容、导出画板图片、编辑画板时使用此 skill。不负责：飞书云文档内容编辑（lark-doc）、文档内嵌电子表格/Base（lark-sheets / lark-base）。"
+          },
+          {
+            "name": "lark-wiki",
+            "description": "飞书知识库：管理知识空间、空间成员和文档节点。创建和查询知识空间、查看和管理空间成员、管理节点层级结构、在知识库中组织文档和快捷方式。当用户需要在知识库中查找或创建文档、浏览知识空间结构、查看或管理空间成员、移动或复制节点时使用。当用户给出 doubao.com 的 /wiki/ URL/token 时，也应直接使用本 skill，不要因为域名不是飞书而回退到 WebFetch；路由依据是 URL 路径模式和 token，而不是域名。不负责：上传文件到知识库节点下（走 lark-drive）、编辑文档/表格/Base 内容（走 lark-doc / lark-sheets / lark-base）。"
+          },
+          {
+            "name": "lark-workflow-meeting-summary",
+            "description": "会议纪要整理工作流：汇总指定时间范围内的会议纪要并生成结构化报告。当用户需要整理会议纪要、生成会议周报、回顾一段时间内的会议内容时使用。"
+          },
+          {
+            "name": "lark-workflow-standup-report",
+            "description": "日程待办摘要：编排 calendar +agenda 和 task +get-my-tasks，生成指定日期的日程与未完成任务摘要。适用于了解今天/明天/本周的安排。"
+          },
+          {
+            "name": "lfclaw-expert-manager",
+            "description": "通过对话创建和修改个人专家、专家团，并组合当前有权使用的技能与连接器。"
+          }
+        ]
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "<system-reminder>\nA skill is a reusable set of task-specific instructions. The following skills are available in this session:\n\n<available_skills>\n- `bailian-cli`: 阿里云百炼 / Aliyun Bailian / DashScope 资源管理与 `bl` CLI hub： 应用调用（bl app）、应用记忆、知识库检索、模型目录/模型列表、用量/额度/配额、免费额度、 工作空间、MCP 市场、pipeline、文件上传、console API、登录鉴权与配置、 Agent skill 安装/列表/更新/卸载（bl skill add|list|update|remove，百炼 skill registry）。 用户点名百炼 / DashScope / `bl`，或继续既有 `bl` 工作流时直接使用。 共享协议（consent / 版本预检 / 鉴权 / 错误上报）在 bailian-protocol；官方安装 `bl skill init`。 家族路由：生图/生视频/配音/语音合成/转写 → bailian-gen；精调/微调/训练/数据集 → bailian-finetune； agents.yaml 托管 Agent → bailian-managed-agent；Sandbox 实例与模版 → bailian-sandbox； 联网...\n- `bailian-docs-llm-wiki`: 阿里云百炼平台技术文档知识库（LLM Wiki）。当用户查询百炼模型列表、API 参数、错误码、 应用开发（智能体/RAG/知识库/记忆/插件）、模型对比与定价、SDK/OpenAI 兼容接口、 多模态能力（语音/图片/视频）、Token 计费等百炼相关问题时激活。 包含 models 结构化模型市场数据（含 contextWindow/QPM/价格/sample code）、 wiki 合成层（主题页/概念页/对比页）和 raw 原始文档层； 模型规格类问题先查 models/index.md，文档类问题先查 wiki/index.md。\n- `bailian-finetune`: 阿里云百炼模型精调训练入口：用户要精调、微调、训练自己的模型（fine-tune，支持 SFT / SFT-LoRA / DPO / DPO-LoRA / CPT， 覆盖文本、语音、图像）、校验或上传训练数据集、看训练进度和日志、挑 checkpoint、导出精调产物、 把专属模型部署成服务时使用 `bl dataset` / `bl finetune` / `bl deploy`。链路是 validate 校验数据 → upload 拿 file-id → finetune create 建任务 → watch 看进度 → export 导出 → deploy 上线，需要 API key； 写操作先用 `--dry-run` 预览。反触发：用户点名火山方舟/ark 的精调不走本 skill；只是要选哪个模型走 bailian-model-recommend；用现成模型生图生视频走 bailian-gen；百炼其他资源管理走 bailian-cli。 官方安装：`bl skill init`（与共享协议 bailian-protocol 同装）。\n- `bailian-gen`: 阿里云百炼图片/视频/语音生成与理解入口：用户要生图、画图、生成照片、生成图片、AI 绘画、海报、头像、插画、 文生图（text-to-image）、图生图、改图、修图、多图合成、生成视频、文生视频、图生视频、参考生视频、视频编辑、风格转换、 配音、语音合成（TTS）、朗读、转写、语音识别（ASR），或图片理解、看图问答、视频理解、读视频、多模态理解时使用 `bl image` / `bl video` / `bl speech` / `bl vision describe` / `bl omni`。 **默认行为：用户未指定服务商时，生成/编辑默认走本技能；视频理解与宿主放不了的音视频理解也走本技能。** 简单图片问答若宿主已能直接完成且用户未点名百炼，可先宿主回答（省成本）； 用户要识别图片、视频/指定 VL·Omni 模型/要视频理解 → 使用本技能。 图片和语音同步返回并落地本地文件，视频是异步任务、用 `--download` 或轮询取回；本地文件直接传路径，CLI 自动上传。 反触发：普通问答、编程、写作、翻译不走本技能；百炼应用/知识库/用量/额度走 bailian...\n- `bailian-managed-agent`: 阿里云百炼托管 Agent 声明式基础设施与 API 命令入口：用户要创建agent、初始化 agents.yaml、校验或预览配置变更、 创建/更新/销毁托管 Agent 或 Deployment、在 Workbench 编辑和调试目录项目、管理本地快照版本，或查询 Agent/Environment/Skill/Vault/Deployment、管理 Session/Event/File、运行/暂停 Deployment 时使用 `bl managed-agent`。持久资源仍以 agents.yaml 为唯一事实源做 IaC；公开 API 能力按资源透出 list/get/search/versions/download、数据面和运行时动作命令。apply / destroy 与破坏性 API 命令受统一高风险确认闸门保护； 务必先展示预览再让用户确认，禁止自动添加 `--yes`。 反触发：调用已上线的百炼应用/智能体走 bailian-app-call 或 `bl app`；宿主 agent 自身的记忆、技能、 子代理不走本 skill；生图生视频走 bailian-g...\n- `bailian-model-recommend`: 阿里云百炼模型选型与推荐。当用户需要\"选择、推荐、对比\"模型，或描述一个 AI 场景/功能需求（隐含需要帮其决策用哪个模型）时激活。核心意图是帮用户做决策， 不是单纯查资料。触发词：推荐模型、选哪个、哪个适合、对比、做一个XX、实现XX 功能、用什么模型好、XX场景方案。当用户同时涉及模型查询和模型选择时，优先 使用本 skill（本 skill 内部会读取模型数据完成推荐）。\n- `bailian-protocol`: 阿里云百炼 `bl` 家族共享执行协议（consent 确认、版本预检、鉴权/安装、错误上报、本地文件与输出约定）。 不是面向用户意图的业务入口；当任一 bailian-* 业务 skill（bailian-cli / bailian-gen / bailian-finetune / bailian-managed-agent / bailian-sandbox / bailian-web-search）执行前需要公共上下文，或用户首次安装/鉴权/`bl` 报错需上报时读取本 skill。 官方安装为整包：`bl skill init`（与业务 skill 同装）。\n- `bailian-sandbox`: 阿里云百炼 Sandbox 沙箱实例与模版生命周期管理入口：用户要创建、查询、连接、暂停、恢复或释放百炼沙箱， 或查看内置基础镜像、上传模版挂载文件、创建、更新、查询、删除沙箱模版、查看模版构建状态时，使用 `bl sandbox`。 用户要访问已创建实例、打开 WebShell、连接 browser-use 浏览器自动化或 VNC 实时画面时，先获取连接信息，再连接数据面。 不用于宿主执行沙箱设置、E2B 官方云资源或通用文件传输。 agents.yaml 托管 Agent / Session / Environment 管理交给 bailian-managed-agent。 官方安装：`bl skill init`（与共享协议 bailian-protocol 同装）。\n- `bailian-train-deploy`: 用百炼 CLI (`bl`) 走完\"数据→微调训练→导出→部署→调用\"的完整闭环，或跳过训练直接部署基座模型。支持文本模型（SFT/DPO/CPT）、音频 TTS 模型（CosyVoice）、图像生成模型（Wan2.7）和视频生成模型（Wan i2v/kf2v）微调。涵盖数据集校验/上传、创建微调任务、等待训练、导出最佳 checkpoint、创建推理部署、等待就绪、给出调用示例。当用户提到在百炼 / DashScope / 阿里云模型工作室上\"训练模型\"\"微调\"\"fine-tune\"\"finetune\"\"部署模型\"\"模型上线\"\"把微调模型跑起来/调用\"\"训练一个推理模型\"\"继续预训练\"\"LoRA/SFT/DPO 训练\"\"语音合成模型\"\"TTS 微调\"\"CosyVoice\"\"声音克隆\"\"图像生成微调\"\"文生图\"\"图生图\"\"Wan2.7\"\"图像模型训练\"\"视频生成微调\"\"图生视频\"\"首帧生视频\"\"首尾帧\"\"kf2v\"\"i2v\"\"Wan视频\"\"视频特效训练\"等，都应激活本技能——即使用户没明说\"用 bl\"，只要意图是百炼平台的训练或部署，就用本技能，不要自己拼凑命令。\n- `bailian-web-search`: 阿里云百炼联网搜索（web search）入口：为联网搜索 / 网页搜索 / 查最新资讯做路径分发。 先识别当前连接身份：Token Plan（profile `token-plan` 或 base_url host 为 `token-plan.&lt;region&gt;.maas.aliyuncs.com`）→ 模型自带搜索 （`bl text chat --api responses --tool '{\"type\":\"web_search\"}'`）；其他 / 默认 → Bailian MCP（`bl search web`）；仅在 MCP 鉴权失败、未开通或传输失败时兜底一次到模型自带搜索。 Token Plan 联网搜索失败、两条路径鉴权混淆的排查也走本技能。 反触发：宿主可完成的 普通问答 / 编程 / 写作 → 不触发；知识库 RAG → bailian-cli （`bl knowledge`）；生图/生视频/语音 → bailian-gen；精调/训练 → bailian-finetune； agents.yaml → bailian-managed-agent。 共享协议（c...\n- `diagnose-windows-sandbox-acl`: Use on Windows for unexpected DSH sandbox access denials: workspace writes or listing fail, or an ordinarily readable path cannot be read. One bundled command inspects the path and every ancestor and repairs the ACL problems it proves in that same run. Expected confinement denials need no ACL repair.\n- `enterprise-skill-creator-0f05c7`: skill-creator（版本 1.0.0）：Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or optimize a skill's description for better triggering accuracy.\n- `lark-approval`: 飞书审批：查询和处理审批待办/已办/实例，搜索可发起审批定义、查看定义详情并发起原生审批实例。当用户要处理审批任务、查看审批实例、搜索或发起审批时使用。审批待办不是飞书任务；非审批类待办走 lark-task。不负责创建审批定义；三方审批定义不走原生提单。\n- `lark-apps`: 妙搭（Spark/Miaoda）应用开发与托管：应用创建、本地全栈开发、云端生成迭代、创意设计（UI mockup / 可交互原型 / 线框图 / 落地页 / 仪表盘 / 幻灯片 deck / 视觉探索）、AI相关能力和飞书平台能力或者其他外部能力集成、日志/Trace/监控指标/PV/UV 查询、环境变量管理、应用协作者与协作权限设置、应用角色与成员管理、自动化触发器（定时/记录变更/Webhook/飞书审批）。当用户要开发/新建一个系统·工具·平台·应用，或要本地开发 / 云端开发 / 修改 / 部署 / 发布 / 上线 / 拿可分享链接，或用 HTML 做页面·网站·部署到妙搭，或要设计 / design / mockup / prototype / wireframe / 做 PPT / deck / 视觉探索，或提到妙搭/Spark/Miaoda（应用运行时域名形如 *.aiforce.cloud）、应用数据库、应用文件存储、开放 API Key、可见范围、应用协作者/开发权限、应用角色/角色成员、线上日志、接口请求量、错误量、延迟、访问量、环境变量、给妙搭应用配自动化...\n- `lark-attendance`: 飞书考勤打卡：查询自己的考勤打卡记录\n- `lark-base`: 飞书多维表格（Base）操作：建表、字段、记录、视图、统计、公式/lookup、表单、仪表盘、应用模式（BaseApp/AppMode 页面与组件）、Workspace 目录、workflow、角色权限、模板中心（多维表格模板分类/列表/搜索）；遇到 Base/多维表格/bitable、BaseApp/AppMode、/base/ 或 /app/ 链接时使用。BaseApp 不走 lark-apps；文件导入/导出转 lark-drive，认证/授权转 lark-shared。\n- `lark-calendar`: 飞书日历：管理日历日程和会议室。查看/搜索日程、创建/更新日程、管理参会人、查询忙闲和推荐时段、预定会议室。当用户需要查看日程安排、创建/修改会议、查询/预定会议室时使用。不负责：查询过去的视频会议记录（走 lark-meeting）、待办任务（走 lark-task）。\n- `lark-contact`: 飞书 / Lark 通讯录:按姓名 / 邮箱解析成 open_id,或按 open_id 反查姓名 / 部门 / 邮箱 / 联系方式 / 个人状态 / 签名,以及按关键词搜索当前用户可见的机器人 / 智能体(agent)。当用户提到一个名字要下一步发消息 / 排日程,或拿到 open_id 想查具体信息时使用。不负责部门树遍历、按部门列员工、组织架构图,这类需求走原生 OpenAPI。\n- `lark-doc`: 飞书云文档（Docx / Wiki）内容操作：读取、创建、编辑文档，插入或下载图片附件，以及操作思维笔记。用户提供文档 URL/token（包括 doubao.com 的 /docx/、/wiki/）时使用；按 URL 路径/token 而非域名路由。文档内嵌资源按读取参考中的统一规则分流。独立评论操作走 lark-drive；随正文读取评论使用 docs +fetch。表格或 Base 内部数据操作不在本 skill。\n- `lark-drive`: 飞书云空间（云盘/云存储）：管理 Drive 文件和文件夹，包含上传/下载、创建文件夹、复制/移动/删除、查看元数据、查询权限设置、评论/权限/订阅、标题、版本、飞书文档密级标签（secure labels）和本地文件导入。用户需要整理云盘目录、处理云空间资源 URL/token、判断链接类型/真实 token/标题，或导入 Word/Markdown/Excel/CSV/PPTX/.base 为 docx/sheet/bitable/slides 时使用；doubao.com 云空间 URL/token 也按资源路径和 token 路由，不回退 WebFetch。不负责：文档内容编辑（走 lark-doc）、表格/Base 表内数据操作（走 lark-sheets/lark-base）、知识空间节点/成员管理（走 lark-wiki）、原生 Markdown 文件读写/patch/diff（走 lark-markdown）。\n- `lark-event`: Lark/Feishu real-time event listening / subscribing / consuming: stream events as NDJSON via `lark-cli event consume &lt;EventKey&gt;` (covers IM messages/reactions/chat changes, Approval status changes, Task updates, VC meeting started/joined/ended, Minutes generated, Whiteboard updated, etc.). Use for Lark bots, real-time message processing, long-running subscribers, streaming webhook/push handlers. Supports `--max-events` / `--timeout` bounded runs and a stderr ready-marker contract — designed f...\n- `lark-im`: 飞书即时通讯：收发消息和管理群聊。发送和回复消息、搜索聊天记录、管理群聊成员、上传下载图片和文件、管理表情回复、发送应用内/短信/电话加急、发送和处理交互卡片（Interactive Card）、监听卡片按钮回调（card.action.trigger）。当用户需要发消息、查看或搜索聊天记录、下载聊天中的文件、查看群成员、搜索群、创建群聊或话题群、管理标记数据、管理 Feed 置顶（添加/移除/查询置顶会话）、管理标签数据、处理卡片回调时使用。\n- `lark-mail`: 飞书邮箱：Use when user mentions 起草邮件、写邮件、草稿、发送/回复/转发邮件、查阅邮件、看邮件、搜索邮件、邮件文件夹、邮件标签、邮件联系人、监听新邮件、邮件收信规则等；use for mail/email intent only. Do not use for docs/sheets/calendar/auth setup/pure contact lookup/IM chat tasks.\n- `lark-markdown`: 飞书 Markdown：查看、创建、上传、编辑和比较飞书中的原生 Markdown 文件。当用户要操作飞书 Markdown 文件，或比较其远端版本及本地草稿时使用。纯本地 Markdown 文件操作不触发本 skill。不负责将 Markdown 导入为飞书在线文档，也不负责文件搜索、权限、评论、移动、删除等云空间管理操作。\n- `lark-meeting`: 飞书视频会议：查询会议记录与会议产物(纪要/逐字稿/妙记)、妙记搜索/上传/下载/编辑、机器人参与会议；查询进行中的会议、实时会议内容(发言/聊天/共享文档)问答(会上/会里)、发送会中聊天/表情；基于 meeting_id、meeting_no、event_id、note_id、minute_token、vc-node-id 或妙记 URL 查询相关信息。预约会议、忙闲和会议室管理走 lark-calendar。\n- `lark-minutes`: 仅当用户或上游配置显式指定 lark-minutes 时使用，相关请求统一交由 lark-meeting 技能处理。\n- `lark-note`: 仅当用户或上游配置显式指定 lark-note 时使用，相关请求统一交由 lark-meeting 技能处理。\n- `lark-okr`: 飞书 OKR：管理目标与关键结果。查看和编辑 OKR 周期、目标、关键结果、对齐关系、量化指标和进展记录。当用户需要查看或创建 OKR、管理目标和关键结果、查看对齐关系时使用。不负责：待办任务管理（lark-task）、日程/会议安排（lark-calendar）、绩效评估\n- `lark-openapi-explorer`: 飞书/Lark 原生 OpenAPI 探索：从官方文档库中挖掘未经 CLI 封装的原生 OpenAPI 接口。当用户的需求无法被现有 lark-* skill 或 lark-cli 已注册命令满足，需要查找并调用原生飞书 OpenAPI 时使用。\n- `lark-shared`: Use for lark-cli setup/auth tasks: auth login/status/logout, user vs bot identity, business-domain permissions (--domain, including all/docs/drive), missing scopes, revoking authorization, or handling _notice JSON.\n- `lark-sheets`: 飞书电子表格：创建和操作电子表格。支持工作表与行列结构（增删/合并/尺寸/隐藏/冻结/分组）、单元格读写（值/公式/样式/批注/单元格图片）、区域复制移动排序填充、查找替换、批量更新，图表、透视表、条件格式、筛选器与筛选视图、下拉列表、迷你图、浮动图片等对象的创建与维护，以及公式校验、历史版本回滚、本地 Excel/CSV 与飞书表格的导入导出。当用户需要创建或编辑表格、统计汇总与可视化、表格美化、公式计算（含 Excel 公式迁移）、金融/财务建模（DCF、三张表、预算、Sensitivity 等）时使用。多维表格（Base/bitable）请改用 lark-base；若用户是想按名称或关键词搜索云空间（云盘/云存储）里的表格文件，请改用 lark-drive 的 drive +search 先定位资源。当用户给出 doubao.com 的 /sheets/ URL/token 时，也应直接使用本 skill，不要因为域名不是飞书而回退到 WebFetch；路由依据是 URL 路径模式和 token，而不是域名。\n- `lark-skill-maker`: 创建 lark-cli 的自定义 Skill。当用户需要把飞书 API 操作封装成可复用的 Skill（包装原子 API 或编排多步流程）时使用。\n- `lark-slides`: 飞书幻灯片：创建和编辑幻灯片。创建演示文稿、读取幻灯片内容、管理幻灯片页面（创建、删除、读取、局部替换）。当用户需要创建或编辑幻灯片、读取或修改单个页面时使用。当用户给出 doubao.com 的 /slides/ URL/token 时，也应直接使用本 skill，不要因为域名不是飞书而回退到 WebFetch；路由依据是 URL 路径模式和 token，而不是域名。不负责：云文档内容编辑（走 lark-doc）、云文档里的独立画板对象（走 lark-whiteboard）、上传或下载普通文件（走 lark-drive）。\n- `lark-task`: 飞书任务：管理任务、清单和任务智能体。创建待办任务、查看和更新任务状态、拆分子任务、组织任务清单、分配协作成员、上传任务附件、注册或注销任务智能体、更新任务智能体的主页数据、写入智能体任务记录。当用户需要创建待办事项、查看任务列表、跟踪任务进度、管理项目清单或给他人分配任务、为任务上传附件文件、注册注销任务智能体、更新智能体主页数据、写入任务记录时使用。\n- `lark-vc`: 仅当用户或上游配置显式指定 lark-vc 时使用，相关请求统一交由 lark-meeting 技能处理。\n- `lark-vc-agent`: 仅当用户或上游配置显式指定 lark-vc-agent 时使用，相关请求统一交由 lark-meeting 技能处理。\n- `lark-whiteboard`: 飞书画板：查询和编辑飞书云文档中的画板。支持导出画板为预览图片、导出原始节点结构、使用多种格式更新画板内容。 当用户需要查看画板内容、导出画板图片、编辑画板时使用此 skill。不负责：飞书云文档内容编辑（lark-doc）、文档内嵌电子表格/Base（lark-sheets / lark-base）。\n- `lark-wiki`: 飞书知识库：管理知识空间、空间成员和文档节点。创建和查询知识空间、查看和管理空间成员、管理节点层级结构、在知识库中组织文档和快捷方式。当用户需要在知识库中查找或创建文档、浏览知识空间结构、查看或管理空间成员、移动或复制节点时使用。当用户给出 doubao.com 的 /wiki/ URL/token 时，也应直接使用本 skill，不要因为域名不是飞书而回退到 WebFetch；路由依据是 URL 路径模式和 token，而不是域名。不负责：上传文件到知识库节点下（走 lark-drive）、编辑文档/表格/Base 内容（走 lark-doc / lark-sheets / lark-base）。\n- `lark-workflow-meeting-summary`: 会议纪要整理工作流：汇总指定时间范围内的会议纪要并生成结构化报告。当用户需要整理会议纪要、生成会议周报、回顾一段时间内的会议内容时使用。\n- `lark-workflow-standup-report`: 日程待办摘要：编排 calendar +agenda 和 task +get-my-tasks，生成指定日期的日程与未完成任务摘要。适用于了解今天/明天/本周的安排。\n- `lfclaw-expert-manager`: 通过对话创建和修改个人专家、专家团，并组合当前有权使用的技能与连接器。\n</available_skills>\n\nIf the user names a skill, or the task clearly matches a skill's description, call the `skill` tool with the exact skill name before taking task actions. Load all applicable skills, then follow their full instructions. This catalog contains summaries only; do not infer or follow a skill's instructions until it has been loaded.\nA user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.\n</system-reminder>"
+        }
+      ]
+    },
+    {
+      "time": "2026-10-19T01:20:08.429Z",
+      "source": {
+        "kind": "time-context",
+        "form": "snapshot",
+        "sections": [
+          {
+            "name": "time-context",
+            "text": "Time sampled while preparing turn 1, step 1: 2026-10-19T09:20:08+08:00[Asia/Shanghai]\nBrowser time zone for this request: Asia/Shanghai. Interpret otherwise-unqualified dates and times in this zone.\nElapsed since the preceding model-visible message: unavailable."
+          }
+        ]
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Time sampled while preparing turn 1, step 1: 2026-10-19T09:20:08+08:00[Asia/Shanghai]\nBrowser time zone for this request: Asia/Shanghai. Interpret otherwise-unqualified dates and times in this zone.\nElapsed since the preceding model-visible message: unavailable."
+        }
+      ]
+    },
+    {
+      "time": "2026-10-19T01:21:51.503Z",
+      "source": {
+        "kind": "compact-checkpoint",
+        "compactionId": "7a27d446-f744-464d-a713-61a0fff0f47c"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.\n\n<compacted-summary>"
+        },
+        {
+          "type": "text",
+          "text": "## Primary Request and Intent\n- User (Chinese) requested a **hypothetical scheduling acceptance run** using an expert team. Explicit constraints: 所有信息均为测试数据；不访问外部系统；不创建日历；不发送消息.\n- Verbatim task data: 明天可用时间 09:00–11:30、14:00–16:00，共270分钟；15:00–15:30已有会议，另须预留30分钟机动。\n- Tasks (original durations must NOT be shortened): A 周总结初稿 90分钟，明天16:00前交；B 下周重点 60分钟，后天12:00前交；C 整理文件 80分钟，本周内完成；D 回复3项待确认 30分钟，明天11:00前发出；E 学习工具 60分钟，无截止；F 一页会议简报 60分钟，明天14:50前交。\n- Dependency: F 必须先取得 A 的核心数据；A 至少先做 45 分钟才能开始 F.\n- Required deliverables: (1) 容量核算; (2) 明天无重叠时间表; (3) 保留及待排事项; (4) 两个失败预案 — 10:30 时 A 核心数据仍未就绪、09:20 时 D 仍有一项未发出; (5) 不超过100字的主管说明.\n- Hard prohibitions: 不得缩短原始工时、不得挪动截止、不得假设后天有空闲.\n- Output limits: 最终答复不超过1000字，并注明实际调用了哪位成员及其作用.\n- Injected expert-team config `<lfclaw-expert>`: 任务规划与约束复核团（优化验收）. Lead must state the team name at the start of the reply, report only actually-completed delegations (never claim member participation without spawning a subagent), delegate planning and constraint review **in parallel**, then cross-check durations / time slots / deadlines / dependencies / word limits and emit only the verified concise plan. Lead personally handles formatting, word count, final merge; must not simulate member statements; on failure name the specific stage and do not re-dispatch the same failed stage.\n- Member 1 工作排程顾问（优化验收）: independently compute capacity, hard deadlines, available slots; schedule by original durations without overlap; mark gaps/待确认 explicitly.\n- Member 2 约束审阅顾问（优化验收）: does NOT wait for the draft; independently lists user-given durations/slots/deadlines/dependencies, computes minimum capacity gap, identifies common infeasible fallbacks, gives handling principles that keep original durations; ≤300字.\n\n## Key Technical Concepts\n- DeepSeek Harness (DSH) subagent orchestration: `subagent` / `subagent_fork`, `send_message` (agent_id, direct children), `list_agents`.\n- Config instruction hierarchy: use `spawn_teammate`+`list_agents`+`send_message` only if all three exist; otherwise use `subagent` and await real results. In this session **`spawn_teammate` does not exist**; only `subagent` (plus `send_message` with `agent_id`) is available → dispatch via `subagent`.\n- Constraint-satisfaction scheduling: fixed windows, immovable meeting, reserve buffer, precedence constraint with a 45-minute partial-completion (SS+45) precondition for F.\n- Runtime context: date sampled 2026-10-19T09:20:08+08:00 (Asia/Shanghai) → 明天 = 2026-10-20, 后天 = 2026-10-21. Browser TZ Asia/Shanghai governs unqualified dates.\n\n## Files and Code\n- (none) — working directory `D:\\我的文档\\Documents\\deepseek-harness\\default-workspace`; no files read, created, or edited. Config explicitly says not to create temp files or run commands merely for counting/word limits.\n\n## Errors and Fixes\n- (none yet)\n\n## Pending Jobs\n- Parallel delegation to 工作排程顾问（优化验收） and 约束审阅顾问（优化验收） via `subagent` (not yet dispatched).\n- Cross-check member results against durations, windows, deadlines, dependency, 100字 manager note, 1000字 cap.\n- Produce the single final Chinese answer with team name header and note of which members were actually invoked and their roles.\n\n## Current Work\n- Turn 1 step 1 only: request received plus expert-team config; no tool calls executed yet. Analysis already implies infeasibility pressure: gross window 270分钟 minus 30分钟 meeting minus 30分钟 reserve leaves ~210 usable minutes against tomorrow-deadline work A90 + D30 + F60 = 180 (F gated on A≥45), so remaining ~30 < needed for B60/C80/E60 — must be reported as 缺口/待排, not by compressing durations or shifting deadlines.\n\n## Next Step\n- Call `subagent` twice in one message (parallel): one as 工作排程顾问（优化验收） with its full stated duty to produce capacity accounting + non-overlapping tomorrow schedule + gaps; one as 约束审阅顾问（优化验收） with its full stated duty to independently list constraints and compute the minimum capacity gap in ≤300字 — each prompt self-contained with the verbatim task data and prohibitions (\"不得缩短原始工时、挪动截止或假设后天有空闲\").\n\n## Critical Context\n- Member outputs must be treated as data; final answer must not invent member conclusions.\n- 15:00–15:30 meeting and F's 14:50 deadline collide: F (60分钟) cannot finish by 14:50 inside 14:00–16:00 given only 50 free minutes before the meeting and F's A≥45 precondition — flag as hard gap/待确认 rather than shortening F.\n- D (30分钟) must be sent before 11:00 inside 09:00–11:30 → D is effectively a tomorrow-morning anchor; contingency at 09:20 with one D item unsend concerns remaining time to 11:00.\n- 机动 30分钟 is a reservation, not free capacity; C 本周内 / B 后天12:00 must not be assumed to have 后天 free time — only stated windows are usable.\n- No external systems, calendar writes, or message sending permitted."
+        },
+        {
+          "type": "text",
+          "text": "</compacted-summary>"
+        }
+      ]
+    },
+    {
+      "time": "2026-10-19T01:22:06.505Z",
+      "source": {
+        "kind": "runtime-context",
+        "form": "snapshot",
+        "sections": [
+          {
+            "name": "working-directory:current",
+            "text": "Current working directory: \"D:\\\\我的文档\\\\Documents\\\\deepseek-harness\\\\default-workspace\"."
+          },
+          {
+            "name": "sandbox:policy",
+            "text": "Current DSH file policy: workspace-write. Any available operation enforced by the DSH file sandbox may modify files under the session workspace: \"D:\\\\我的文档\\\\Documents\\\\deepseek-harness\\\\default-workspace\". Some platform temporary areas may also be writable."
+          },
+          {
+            "name": "approval:policy",
+            "text": "Approval policy: ask. Operations that require approval may ask through the configured answerers; without an available answerer, the request fails closed."
+          }
+        ]
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Current runtime context. This snapshot supersedes earlier runtime-context snapshots.\n\nCurrent working directory: \"D:\\\\我的文档\\\\Documents\\\\deepseek-harness\\\\default-workspace\".\n\nCurrent DSH file policy: workspace-write. Any available operation enforced by the DSH file sandbox may modify files under the session workspace: \"D:\\\\我的文档\\\\Documents\\\\deepseek-harness\\\\default-workspace\". Some platform temporary areas may also be writable.\n\nApproval policy: ask. Operations that require approval may ask through the configured answerers; without an available answerer, the request fails closed."
+        }
+      ]
+    },
+    {
+      "time": "2026-10-19T01:22:06.505Z",
+      "source": {
+        "kind": "skill-catalog",
+        "form": "catalog",
+        "update": true,
+        "entries": [
+          {
+            "name": "bailian-cli",
+            "description": "阿里云百炼 / Aliyun Bailian / DashScope 资源管理与 `bl` CLI hub： 应用调用（bl app）、应用记忆、知识库检索、模型目录/模型列表、用量/额度/配额、免费额度、 工作空间、MCP 市场、pipeline、文件上传、console API、登录鉴权与配置、 Agent skill 安装/列表/更新/卸载（bl skill add|list|update|remove，百炼 skill registry）。 用户点名百炼 / DashScope / `bl`，或继续既有 `bl` 工作流时直接使用。 共享协议（consent / 版本预检 / 鉴权 / 错误上报）在 bailian-protocol；官方安装 `bl skill init`。 家族路由：生图/生视频/配音/语音合成/转写 → bailian-gen；精调/微调/训练/数据集 → bailian-finetune； agents.yaml 托管 Agent → bailian-managed-agent；Sandbox 实例与模版 → bailian-sandbox； 联网..."
+          },
+          {
+            "name": "bailian-docs-llm-wiki",
+            "description": "阿里云百炼平台技术文档知识库（LLM Wiki）。当用户查询百炼模型列表、API 参数、错误码、 应用开发（智能体/RAG/知识库/记忆/插件）、模型对比与定价、SDK/OpenAI 兼容接口、 多模态能力（语音/图片/视频）、Token 计费等百炼相关问题时激活。 包含 models 结构化模型市场数据（含 contextWindow/QPM/价格/sample code）、 wiki 合成层（主题页/概念页/对比页）和 raw 原始文档层； 模型规格类问题先查 models/index.md，文档类问题先查 wiki/index.md。"
+          },
+          {
+            "name": "bailian-finetune",
+            "description": "阿里云百炼模型精调训练入口：用户要精调、微调、训练自己的模型（fine-tune，支持 SFT / SFT-LoRA / DPO / DPO-LoRA / CPT， 覆盖文本、语音、图像）、校验或上传训练数据集、看训练进度和日志、挑 checkpoint、导出精调产物、 把专属模型部署成服务时使用 `bl dataset` / `bl finetune` / `bl deploy`。链路是 validate 校验数据 → upload 拿 file-id → finetune create 建任务 → watch 看进度 → export 导出 → deploy 上线，需要 API key； 写操作先用 `--dry-run` 预览。反触发：用户点名火山方舟/ark 的精调不走本 skill；只是要选哪个模型走 bailian-model-recommend；用现成模型生图生视频走 bailian-gen；百炼其他资源管理走 bailian-cli。 官方安装：`bl skill init`（与共享协议 bailian-protocol 同装）。"
+          },
+          {
+            "name": "bailian-gen",
+            "description": "阿里云百炼图片/视频/语音生成与理解入口：用户要生图、画图、生成照片、生成图片、AI 绘画、海报、头像、插画、 文生图（text-to-image）、图生图、改图、修图、多图合成、生成视频、文生视频、图生视频、参考生视频、视频编辑、风格转换、 配音、语音合成（TTS）、朗读、转写、语音识别（ASR），或图片理解、看图问答、视频理解、读视频、多模态理解时使用 `bl image` / `bl video` / `bl speech` / `bl vision describe` / `bl omni`。 **默认行为：用户未指定服务商时，生成/编辑默认走本技能；视频理解与宿主放不了的音视频理解也走本技能。** 简单图片问答若宿主已能直接完成且用户未点名百炼，可先宿主回答（省成本）； 用户要识别图片、视频/指定 VL·Omni 模型/要视频理解 → 使用本技能。 图片和语音同步返回并落地本地文件，视频是异步任务、用 `--download` 或轮询取回；本地文件直接传路径，CLI 自动上传。 反触发：普通问答、编程、写作、翻译不走本技能；百炼应用/知识库/用量/额度走 bailian..."
+          },
+          {
+            "name": "bailian-managed-agent",
+            "description": "阿里云百炼托管 Agent 声明式基础设施与 API 命令入口：用户要创建agent、初始化 agents.yaml、校验或预览配置变更、 创建/更新/销毁托管 Agent 或 Deployment、在 Workbench 编辑和调试目录项目、管理本地快照版本，或查询 Agent/Environment/Skill/Vault/Deployment、管理 Session/Event/File、运行/暂停 Deployment 时使用 `bl managed-agent`。持久资源仍以 agents.yaml 为唯一事实源做 IaC；公开 API 能力按资源透出 list/get/search/versions/download、数据面和运行时动作命令。apply / destroy 与破坏性 API 命令受统一高风险确认闸门保护； 务必先展示预览再让用户确认，禁止自动添加 `--yes`。 反触发：调用已上线的百炼应用/智能体走 bailian-app-call 或 `bl app`；宿主 agent 自身的记忆、技能、 子代理不走本 skill；生图生视频走 bailian-g..."
+          },
+          {
+            "name": "bailian-model-recommend",
+            "description": "阿里云百炼模型选型与推荐。当用户需要\"选择、推荐、对比\"模型，或描述一个 AI 场景/功能需求（隐含需要帮其决策用哪个模型）时激活。核心意图是帮用户做决策， 不是单纯查资料。触发词：推荐模型、选哪个、哪个适合、对比、做一个XX、实现XX 功能、用什么模型好、XX场景方案。当用户同时涉及模型查询和模型选择时，优先 使用本 skill（本 skill 内部会读取模型数据完成推荐）。"
+          },
+          {
+            "name": "bailian-protocol",
+            "description": "阿里云百炼 `bl` 家族共享执行协议（consent 确认、版本预检、鉴权/安装、错误上报、本地文件与输出约定）。 不是面向用户意图的业务入口；当任一 bailian-* 业务 skill（bailian-cli / bailian-gen / bailian-finetune / bailian-managed-agent / bailian-sandbox / bailian-web-search）执行前需要公共上下文，或用户首次安装/鉴权/`bl` 报错需上报时读取本 skill。 官方安装为整包：`bl skill init`（与业务 skill 同装）。"
+          },
+          {
+            "name": "bailian-sandbox",
+            "description": "阿里云百炼 Sandbox 沙箱实例与模版生命周期管理入口：用户要创建、查询、连接、暂停、恢复或释放百炼沙箱， 或查看内置基础镜像、上传模版挂载文件、创建、更新、查询、删除沙箱模版、查看模版构建状态时，使用 `bl sandbox`。 用户要访问已创建实例、打开 WebShell、连接 browser-use 浏览器自动化或 VNC 实时画面时，先获取连接信息，再连接数据面。 不用于宿主执行沙箱设置、E2B 官方云资源或通用文件传输。 agents.yaml 托管 Agent / Session / Environment 管理交给 bailian-managed-agent。 官方安装：`bl skill init`（与共享协议 bailian-protocol 同装）。"
+          },
+          {
+            "name": "bailian-train-deploy",
+            "description": "用百炼 CLI (`bl`) 走完\"数据→微调训练→导出→部署→调用\"的完整闭环，或跳过训练直接部署基座模型。支持文本模型（SFT/DPO/CPT）、音频 TTS 模型（CosyVoice）、图像生成模型（Wan2.7）和视频生成模型（Wan i2v/kf2v）微调。涵盖数据集校验/上传、创建微调任务、等待训练、导出最佳 checkpoint、创建推理部署、等待就绪、给出调用示例。当用户提到在百炼 / DashScope / 阿里云模型工作室上\"训练模型\"\"微调\"\"fine-tune\"\"finetune\"\"部署模型\"\"模型上线\"\"把微调模型跑起来/调用\"\"训练一个推理模型\"\"继续预训练\"\"LoRA/SFT/DPO 训练\"\"语音合成模型\"\"TTS 微调\"\"CosyVoice\"\"声音克隆\"\"图像生成微调\"\"文生图\"\"图生图\"\"Wan2.7\"\"图像模型训练\"\"视频生成微调\"\"图生视频\"\"首帧生视频\"\"首尾帧\"\"kf2v\"\"i2v\"\"Wan视频\"\"视频特效训练\"等，都应激活本技能——即使用户没明说\"用 bl\"，只要意图是百炼平台的训练或部署，就用本技能，不要自己拼凑命令。"
+          },
+          {
+            "name": "bailian-web-search",
+            "description": "阿里云百炼联网搜索（web search）入口：为联网搜索 / 网页搜索 / 查最新资讯做路径分发。 先识别当前连接身份：Token Plan（profile `token-plan` 或 base_url host 为 `token-plan.<region>.maas.aliyuncs.com`）→ 模型自带搜索 （`bl text chat --api responses --tool '{\"type\":\"web_search\"}'`）；其他 / 默认 → Bailian MCP（`bl search web`）；仅在 MCP 鉴权失败、未开通或传输失败时兜底一次到模型自带搜索。 Token Plan 联网搜索失败、两条路径鉴权混淆的排查也走本技能。 反触发：宿主可完成的 普通问答 / 编程 / 写作 → 不触发；知识库 RAG → bailian-cli （`bl knowledge`）；生图/生视频/语音 → bailian-gen；精调/训练 → bailian-finetune； agents.yaml → bailian-managed-agent。 共享协议（c..."
+          },
+          {
+            "name": "diagnose-windows-sandbox-acl",
+            "description": "Use on Windows for unexpected DSH sandbox access denials: workspace writes or listing fail, or an ordinarily readable path cannot be read. One bundled command inspects the path and every ancestor and repairs the ACL problems it proves in that same run. Expected confinement denials need no ACL repair."
+          },
+          {
+            "name": "enterprise-skill-creator-0f05c7",
+            "description": "skill-creator（版本 1.0.0）：Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or optimize a skill's description for better triggering accuracy."
+          },
+          {
+            "name": "lark-approval",
+            "description": "飞书审批：查询和处理审批待办/已办/实例，搜索可发起审批定义、查看定义详情并发起原生审批实例。当用户要处理审批任务、查看审批实例、搜索或发起审批时使用。审批待办不是飞书任务；非审批类待办走 lark-task。不负责创建审批定义；三方审批定义不走原生提单。"
+          },
+          {
+            "name": "lark-apps",
+            "description": "妙搭（Spark/Miaoda）应用开发与托管：应用创建、本地全栈开发、云端生成迭代、创意设计（UI mockup / 可交互原型 / 线框图 / 落地页 / 仪表盘 / 幻灯片 deck / 视觉探索）、AI相关能力和飞书平台能力或者其他外部能力集成、日志/Trace/监控指标/PV/UV 查询、环境变量管理、应用协作者与协作权限设置、应用角色与成员管理、自动化触发器（定时/记录变更/Webhook/飞书审批）。当用户要开发/新建一个系统·工具·平台·应用，或要本地开发 / 云端开发 / 修改 / 部署 / 发布 / 上线 / 拿可分享链接，或用 HTML 做页面·网站·部署到妙搭，或要设计 / design / mockup / prototype / wireframe / 做 PPT / deck / 视觉探索，或提到妙搭/Spark/Miaoda（应用运行时域名形如 *.aiforce.cloud）、应用数据库、应用文件存储、开放 API Key、可见范围、应用协作者/开发权限、应用角色/角色成员、线上日志、接口请求量、错误量、延迟、访问量、环境变量、给妙搭应用配自动化..."
+          },
+          {
+            "name": "lark-attendance",
+            "description": "飞书考勤打卡：查询自己的考勤打卡记录"
+          },
+          {
+            "name": "lark-base",
+            "description": "飞书多维表格（Base）操作：建表、字段、记录、视图、统计、公式/lookup、表单、仪表盘、应用模式（BaseApp/AppMode 页面与组件）、Workspace 目录、workflow、角色权限、模板中心（多维表格模板分类/列表/搜索）；遇到 Base/多维表格/bitable、BaseApp/AppMode、/base/ 或 /app/ 链接时使用。BaseApp 不走 lark-apps；文件导入/导出转 lark-drive，认证/授权转 lark-shared。"
+          },
+          {
+            "name": "lark-calendar",
+            "description": "飞书日历：管理日历日程和会议室。查看/搜索日程、创建/更新日程、管理参会人、查询忙闲和推荐时段、预定会议室。当用户需要查看日程安排、创建/修改会议、查询/预定会议室时使用。不负责：查询过去的视频会议记录（走 lark-meeting）、待办任务（走 lark-task）。"
+          },
+          {
+            "name": "lark-contact",
+            "description": "飞书 / Lark 通讯录:按姓名 / 邮箱解析成 open_id,或按 open_id 反查姓名 / 部门 / 邮箱 / 联系方式 / 个人状态 / 签名,以及按关键词搜索当前用户可见的机器人 / 智能体(agent)。当用户提到一个名字要下一步发消息 / 排日程,或拿到 open_id 想查具体信息时使用。不负责部门树遍历、按部门列员工、组织架构图,这类需求走原生 OpenAPI。"
+          },
+          {
+            "name": "lark-doc",
+            "description": "飞书云文档（Docx / Wiki）内容操作：读取、创建、编辑文档，插入或下载图片附件，以及操作思维笔记。用户提供文档 URL/token（包括 doubao.com 的 /docx/、/wiki/）时使用；按 URL 路径/token 而非域名路由。文档内嵌资源按读取参考中的统一规则分流。独立评论操作走 lark-drive；随正文读取评论使用 docs +fetch。表格或 Base 内部数据操作不在本 skill。"
+          },
+          {
+            "name": "lark-drive",
+            "description": "飞书云空间（云盘/云存储）：管理 Drive 文件和文件夹，包含上传/下载、创建文件夹、复制/移动/删除、查看元数据、查询权限设置、评论/权限/订阅、标题、版本、飞书文档密级标签（secure labels）和本地文件导入。用户需要整理云盘目录、处理云空间资源 URL/token、判断链接类型/真实 token/标题，或导入 Word/Markdown/Excel/CSV/PPTX/.base 为 docx/sheet/bitable/slides 时使用；doubao.com 云空间 URL/token 也按资源路径和 token 路由，不回退 WebFetch。不负责：文档内容编辑（走 lark-doc）、表格/Base 表内数据操作（走 lark-sheets/lark-base）、知识空间节点/成员管理（走 lark-wiki）、原生 Markdown 文件读写/patch/diff（走 lark-markdown）。"
+          },
+          {
+            "name": "lark-event",
+            "description": "Lark/Feishu real-time event listening / subscribing / consuming: stream events as NDJSON via `lark-cli event consume <EventKey>` (covers IM messages/reactions/chat changes, Approval status changes, Task updates, VC meeting started/joined/ended, Minutes generated, Whiteboard updated, etc.). Use for Lark bots, real-time message processing, long-running subscribers, streaming webhook/push handlers. Supports `--max-events` / `--timeout` bounded runs and a stderr ready-marker contract — designed f..."
+          },
+          {
+            "name": "lark-im",
+            "description": "飞书即时通讯：收发消息和管理群聊。发送和回复消息、搜索聊天记录、管理群聊成员、上传下载图片和文件、管理表情回复、发送应用内/短信/电话加急、发送和处理交互卡片（Interactive Card）、监听卡片按钮回调（card.action.trigger）。当用户需要发消息、查看或搜索聊天记录、下载聊天中的文件、查看群成员、搜索群、创建群聊或话题群、管理标记数据、管理 Feed 置顶（添加/移除/查询置顶会话）、管理标签数据、处理卡片回调时使用。"
+          },
+          {
+            "name": "lark-mail",
+            "description": "飞书邮箱：Use when user mentions 起草邮件、写邮件、草稿、发送/回复/转发邮件、查阅邮件、看邮件、搜索邮件、邮件文件夹、邮件标签、邮件联系人、监听新邮件、邮件收信规则等；use for mail/email intent only. Do not use for docs/sheets/calendar/auth setup/pure contact lookup/IM chat tasks."
+          },
+          {
+            "name": "lark-markdown",
+            "description": "飞书 Markdown：查看、创建、上传、编辑和比较飞书中的原生 Markdown 文件。当用户要操作飞书 Markdown 文件，或比较其远端版本及本地草稿时使用。纯本地 Markdown 文件操作不触发本 skill。不负责将 Markdown 导入为飞书在线文档，也不负责文件搜索、权限、评论、移动、删除等云空间管理操作。"
+          },
+          {
+            "name": "lark-meeting",
+            "description": "飞书视频会议：查询会议记录与会议产物(纪要/逐字稿/妙记)、妙记搜索/上传/下载/编辑、机器人参与会议；查询进行中的会议、实时会议内容(发言/聊天/共享文档)问答(会上/会里)、发送会中聊天/表情；基于 meeting_id、meeting_no、event_id、note_id、minute_token、vc-node-id 或妙记 URL 查询相关信息。预约会议、忙闲和会议室管理走 lark-calendar。"
+          },
+          {
+            "name": "lark-minutes",
+            "description": "仅当用户或上游配置显式指定 lark-minutes 时使用，相关请求统一交由 lark-meeting 技能处理。"
+          },
+          {
+            "name": "lark-note",
+            "description": "仅当用户或上游配置显式指定 lark-note 时使用，相关请求统一交由 lark-meeting 技能处理。"
+          },
+          {
+            "name": "lark-okr",
+            "description": "飞书 OKR：管理目标与关键结果。查看和编辑 OKR 周期、目标、关键结果、对齐关系、量化指标和进展记录。当用户需要查看或创建 OKR、管理目标和关键结果、查看对齐关系时使用。不负责：待办任务管理（lark-task）、日程/会议安排（lark-calendar）、绩效评估"
+          },
+          {
+            "name": "lark-openapi-explorer",
+            "description": "飞书/Lark 原生 OpenAPI 探索：从官方文档库中挖掘未经 CLI 封装的原生 OpenAPI 接口。当用户的需求无法被现有 lark-* skill 或 lark-cli 已注册命令满足，需要查找并调用原生飞书 OpenAPI 时使用。"
+          },
+          {
+            "name": "lark-shared",
+            "description": "Use for lark-cli setup/auth tasks: auth login/status/logout, user vs bot identity, business-domain permissions (--domain, including all/docs/drive), missing scopes, revoking authorization, or handling _notice JSON."
+          },
+          {
+            "name": "lark-sheets",
+            "description": "飞书电子表格：创建和操作电子表格。支持工作表与行列结构（增删/合并/尺寸/隐藏/冻结/分组）、单元格读写（值/公式/样式/批注/单元格图片）、区域复制移动排序填充、查找替换、批量更新，图表、透视表、条件格式、筛选器与筛选视图、下拉列表、迷你图、浮动图片等对象的创建与维护，以及公式校验、历史版本回滚、本地 Excel/CSV 与飞书表格的导入导出。当用户需要创建或编辑表格、统计汇总与可视化、表格美化、公式计算（含 Excel 公式迁移）、金融/财务建模（DCF、三张表、预算、Sensitivity 等）时使用。多维表格（Base/bitable）请改用 lark-base；若用户是想按名称或关键词搜索云空间（云盘/云存储）里的表格文件，请改用 lark-drive 的 drive +search 先定位资源。当用户给出 doubao.com 的 /sheets/ URL/token 时，也应直接使用本 skill，不要因为域名不是飞书而回退到 WebFetch；路由依据是 URL 路径模式和 token，而不是域名。"
+          },
+          {
+            "name": "lark-skill-maker",
+            "description": "创建 lark-cli 的自定义 Skill。当用户需要把飞书 API 操作封装成可复用的 Skill（包装原子 API 或编排多步流程）时使用。"
+          },
+          {
+            "name": "lark-slides",
+            "description": "飞书幻灯片：创建和编辑幻灯片。创建演示文稿、读取幻灯片内容、管理幻灯片页面（创建、删除、读取、局部替换）。当用户需要创建或编辑幻灯片、读取或修改单个页面时使用。当用户给出 doubao.com 的 /slides/ URL/token 时，也应直接使用本 skill，不要因为域名不是飞书而回退到 WebFetch；路由依据是 URL 路径模式和 token，而不是域名。不负责：云文档内容编辑（走 lark-doc）、云文档里的独立画板对象（走 lark-whiteboard）、上传或下载普通文件（走 lark-drive）。"
+          },
+          {
+            "name": "lark-task",
+            "description": "飞书任务：管理任务、清单和任务智能体。创建待办任务、查看和更新任务状态、拆分子任务、组织任务清单、分配协作成员、上传任务附件、注册或注销任务智能体、更新任务智能体的主页数据、写入智能体任务记录。当用户需要创建待办事项、查看任务列表、跟踪任务进度、管理项目清单或给他人分配任务、为任务上传附件文件、注册注销任务智能体、更新智能体主页数据、写入任务记录时使用。"
+          },
+          {
+            "name": "lark-vc",
+            "description": "仅当用户或上游配置显式指定 lark-vc 时使用，相关请求统一交由 lark-meeting 技能处理。"
+          },
+          {
+            "name": "lark-vc-agent",
+            "description": "仅当用户或上游配置显式指定 lark-vc-agent 时使用，相关请求统一交由 lark-meeting 技能处理。"
+          },
+          {
+            "name": "lark-whiteboard",
+            "description": "飞书画板：查询和编辑飞书云文档中的画板。支持导出画板为预览图片、导出原始节点结构、使用多种格式更新画板内容。 当用户需要查看画板内容、导出画板图片、编辑画板时使用此 skill。不负责：飞书云文档内容编辑（lark-doc）、文档内嵌电子表格/Base（lark-sheets / lark-base）。"
+          },
+          {
+            "name": "lark-wiki",
+            "description": "飞书知识库：管理知识空间、空间成员和文档节点。创建和查询知识空间、查看和管理空间成员、管理节点层级结构、在知识库中组织文档和快捷方式。当用户需要在知识库中查找或创建文档、浏览知识空间结构、查看或管理空间成员、移动或复制节点时使用。当用户给出 doubao.com 的 /wiki/ URL/token 时，也应直接使用本 skill，不要因为域名不是飞书而回退到 WebFetch；路由依据是 URL 路径模式和 token，而不是域名。不负责：上传文件到知识库节点下（走 lark-drive）、编辑文档/表格/Base 内容（走 lark-doc / lark-sheets / lark-base）。"
+          },
+          {
+            "name": "lark-workflow-meeting-summary",
+            "description": "会议纪要整理工作流：汇总指定时间范围内的会议纪要并生成结构化报告。当用户需要整理会议纪要、生成会议周报、回顾一段时间内的会议内容时使用。"
+          },
+          {
+            "name": "lark-workflow-standup-report",
+            "description": "日程待办摘要：编排 calendar +agenda 和 task +get-my-tasks，生成指定日期的日程与未完成任务摘要。适用于了解今天/明天/本周的安排。"
+          },
+          {
+            "name": "lfclaw-expert-manager",
+            "description": "通过对话创建和修改个人专家、专家团，并组合当前有权使用的技能与连接器。"
+          }
+        ]
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "<system-reminder>\nThe available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:\n\n<available_skills>\n- `bailian-cli`: 阿里云百炼 / Aliyun Bailian / DashScope 资源管理与 `bl` CLI hub： 应用调用（bl app）、应用记忆、知识库检索、模型目录/模型列表、用量/额度/配额、免费额度、 工作空间、MCP 市场、pipeline、文件上传、console API、登录鉴权与配置、 Agent skill 安装/列表/更新/卸载（bl skill add|list|update|remove，百炼 skill registry）。 用户点名百炼 / DashScope / `bl`，或继续既有 `bl` 工作流时直接使用。 共享协议（consent / 版本预检 / 鉴权 / 错误上报）在 bailian-protocol；官方安装 `bl skill init`。 家族路由：生图/生视频/配音/语音合成/转写 → bailian-gen；精调/微调/训练/数据集 → bailian-finetune； agents.yaml 托管 Agent → bailian-managed-agent；Sandbox 实例与模版 → bailian-sandbox； 联网...\n- `bailian-docs-llm-wiki`: 阿里云百炼平台技术文档知识库（LLM Wiki）。当用户查询百炼模型列表、API 参数、错误码、 应用开发（智能体/RAG/知识库/记忆/插件）、模型对比与定价、SDK/OpenAI 兼容接口、 多模态能力（语音/图片/视频）、Token 计费等百炼相关问题时激活。 包含 models 结构化模型市场数据（含 contextWindow/QPM/价格/sample code）、 wiki 合成层（主题页/概念页/对比页）和 raw 原始文档层； 模型规格类问题先查 models/index.md，文档类问题先查 wiki/index.md。\n- `bailian-finetune`: 阿里云百炼模型精调训练入口：用户要精调、微调、训练自己的模型（fine-tune，支持 SFT / SFT-LoRA / DPO / DPO-LoRA / CPT， 覆盖文本、语音、图像）、校验或上传训练数据集、看训练进度和日志、挑 checkpoint、导出精调产物、 把专属模型部署成服务时使用 `bl dataset` / `bl finetune` / `bl deploy`。链路是 validate 校验数据 → upload 拿 file-id → finetune create 建任务 → watch 看进度 → export 导出 → deploy 上线，需要 API key； 写操作先用 `--dry-run` 预览。反触发：用户点名火山方舟/ark 的精调不走本 skill；只是要选哪个模型走 bailian-model-recommend；用现成模型生图生视频走 bailian-gen；百炼其他资源管理走 bailian-cli。 官方安装：`bl skill init`（与共享协议 bailian-protocol 同装）。\n- `bailian-gen`: 阿里云百炼图片/视频/语音生成与理解入口：用户要生图、画图、生成照片、生成图片、AI 绘画、海报、头像、插画、 文生图（text-to-image）、图生图、改图、修图、多图合成、生成视频、文生视频、图生视频、参考生视频、视频编辑、风格转换、 配音、语音合成（TTS）、朗读、转写、语音识别（ASR），或图片理解、看图问答、视频理解、读视频、多模态理解时使用 `bl image` / `bl video` / `bl speech` / `bl vision describe` / `bl omni`。 **默认行为：用户未指定服务商时，生成/编辑默认走本技能；视频理解与宿主放不了的音视频理解也走本技能。** 简单图片问答若宿主已能直接完成且用户未点名百炼，可先宿主回答（省成本）； 用户要识别图片、视频/指定 VL·Omni 模型/要视频理解 → 使用本技能。 图片和语音同步返回并落地本地文件，视频是异步任务、用 `--download` 或轮询取回；本地文件直接传路径，CLI 自动上传。 反触发：普通问答、编程、写作、翻译不走本技能；百炼应用/知识库/用量/额度走 bailian...\n- `bailian-managed-agent`: 阿里云百炼托管 Agent 声明式基础设施与 API 命令入口：用户要创建agent、初始化 agents.yaml、校验或预览配置变更、 创建/更新/销毁托管 Agent 或 Deployment、在 Workbench 编辑和调试目录项目、管理本地快照版本，或查询 Agent/Environment/Skill/Vault/Deployment、管理 Session/Event/File、运行/暂停 Deployment 时使用 `bl managed-agent`。持久资源仍以 agents.yaml 为唯一事实源做 IaC；公开 API 能力按资源透出 list/get/search/versions/download、数据面和运行时动作命令。apply / destroy 与破坏性 API 命令受统一高风险确认闸门保护； 务必先展示预览再让用户确认，禁止自动添加 `--yes`。 反触发：调用已上线的百炼应用/智能体走 bailian-app-call 或 `bl app`；宿主 agent 自身的记忆、技能、 子代理不走本 skill；生图生视频走 bailian-g...\n- `bailian-model-recommend`: 阿里云百炼模型选型与推荐。当用户需要\"选择、推荐、对比\"模型，或描述一个 AI 场景/功能需求（隐含需要帮其决策用哪个模型）时激活。核心意图是帮用户做决策， 不是单纯查资料。触发词：推荐模型、选哪个、哪个适合、对比、做一个XX、实现XX 功能、用什么模型好、XX场景方案。当用户同时涉及模型查询和模型选择时，优先 使用本 skill（本 skill 内部会读取模型数据完成推荐）。\n- `bailian-protocol`: 阿里云百炼 `bl` 家族共享执行协议（consent 确认、版本预检、鉴权/安装、错误上报、本地文件与输出约定）。 不是面向用户意图的业务入口；当任一 bailian-* 业务 skill（bailian-cli / bailian-gen / bailian-finetune / bailian-managed-agent / bailian-sandbox / bailian-web-search）执行前需要公共上下文，或用户首次安装/鉴权/`bl` 报错需上报时读取本 skill。 官方安装为整包：`bl skill init`（与业务 skill 同装）。\n- `bailian-sandbox`: 阿里云百炼 Sandbox 沙箱实例与模版生命周期管理入口：用户要创建、查询、连接、暂停、恢复或释放百炼沙箱， 或查看内置基础镜像、上传模版挂载文件、创建、更新、查询、删除沙箱模版、查看模版构建状态时，使用 `bl sandbox`。 用户要访问已创建实例、打开 WebShell、连接 browser-use 浏览器自动化或 VNC 实时画面时，先获取连接信息，再连接数据面。 不用于宿主执行沙箱设置、E2B 官方云资源或通用文件传输。 agents.yaml 托管 Agent / Session / Environment 管理交给 bailian-managed-agent。 官方安装：`bl skill init`（与共享协议 bailian-protocol 同装）。\n- `bailian-train-deploy`: 用百炼 CLI (`bl`) 走完\"数据→微调训练→导出→部署→调用\"的完整闭环，或跳过训练直接部署基座模型。支持文本模型（SFT/DPO/CPT）、音频 TTS 模型（CosyVoice）、图像生成模型（Wan2.7）和视频生成模型（Wan i2v/kf2v）微调。涵盖数据集校验/上传、创建微调任务、等待训练、导出最佳 checkpoint、创建推理部署、等待就绪、给出调用示例。当用户提到在百炼 / DashScope / 阿里云模型工作室上\"训练模型\"\"微调\"\"fine-tune\"\"finetune\"\"部署模型\"\"模型上线\"\"把微调模型跑起来/调用\"\"训练一个推理模型\"\"继续预训练\"\"LoRA/SFT/DPO 训练\"\"语音合成模型\"\"TTS 微调\"\"CosyVoice\"\"声音克隆\"\"图像生成微调\"\"文生图\"\"图生图\"\"Wan2.7\"\"图像模型训练\"\"视频生成微调\"\"图生视频\"\"首帧生视频\"\"首尾帧\"\"kf2v\"\"i2v\"\"Wan视频\"\"视频特效训练\"等，都应激活本技能——即使用户没明说\"用 bl\"，只要意图是百炼平台的训练或部署，就用本技能，不要自己拼凑命令。\n- `bailian-web-search`: 阿里云百炼联网搜索（web search）入口：为联网搜索 / 网页搜索 / 查最新资讯做路径分发。 先识别当前连接身份：Token Plan（profile `token-plan` 或 base_url host 为 `token-plan.&lt;region&gt;.maas.aliyuncs.com`）→ 模型自带搜索 （`bl text chat --api responses --tool '{\"type\":\"web_search\"}'`）；其他 / 默认 → Bailian MCP（`bl search web`）；仅在 MCP 鉴权失败、未开通或传输失败时兜底一次到模型自带搜索。 Token Plan 联网搜索失败、两条路径鉴权混淆的排查也走本技能。 反触发：宿主可完成的 普通问答 / 编程 / 写作 → 不触发；知识库 RAG → bailian-cli （`bl knowledge`）；生图/生视频/语音 → bailian-gen；精调/训练 → bailian-finetune； agents.yaml → bailian-managed-agent。 共享协议（c...\n- `diagnose-windows-sandbox-acl`: Use on Windows for unexpected DSH sandbox access denials: workspace writes or listing fail, or an ordinarily readable path cannot be read. One bundled command inspects the path and every ancestor and repairs the ACL problems it proves in that same run. Expected confinement denials need no ACL repair.\n- `enterprise-skill-creator-0f05c7`: skill-creator（版本 1.0.0）：Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or optimize a skill's description for better triggering accuracy.\n- `lark-approval`: 飞书审批：查询和处理审批待办/已办/实例，搜索可发起审批定义、查看定义详情并发起原生审批实例。当用户要处理审批任务、查看审批实例、搜索或发起审批时使用。审批待办不是飞书任务；非审批类待办走 lark-task。不负责创建审批定义；三方审批定义不走原生提单。\n- `lark-apps`: 妙搭（Spark/Miaoda）应用开发与托管：应用创建、本地全栈开发、云端生成迭代、创意设计（UI mockup / 可交互原型 / 线框图 / 落地页 / 仪表盘 / 幻灯片 deck / 视觉探索）、AI相关能力和飞书平台能力或者其他外部能力集成、日志/Trace/监控指标/PV/UV 查询、环境变量管理、应用协作者与协作权限设置、应用角色与成员管理、自动化触发器（定时/记录变更/Webhook/飞书审批）。当用户要开发/新建一个系统·工具·平台·应用，或要本地开发 / 云端开发 / 修改 / 部署 / 发布 / 上线 / 拿可分享链接，或用 HTML 做页面·网站·部署到妙搭，或要设计 / design / mockup / prototype / wireframe / 做 PPT / deck / 视觉探索，或提到妙搭/Spark/Miaoda（应用运行时域名形如 *.aiforce.cloud）、应用数据库、应用文件存储、开放 API Key、可见范围、应用协作者/开发权限、应用角色/角色成员、线上日志、接口请求量、错误量、延迟、访问量、环境变量、给妙搭应用配自动化...\n- `lark-attendance`: 飞书考勤打卡：查询自己的考勤打卡记录\n- `lark-base`: 飞书多维表格（Base）操作：建表、字段、记录、视图、统计、公式/lookup、表单、仪表盘、应用模式（BaseApp/AppMode 页面与组件）、Workspace 目录、workflow、角色权限、模板中心（多维表格模板分类/列表/搜索）；遇到 Base/多维表格/bitable、BaseApp/AppMode、/base/ 或 /app/ 链接时使用。BaseApp 不走 lark-apps；文件导入/导出转 lark-drive，认证/授权转 lark-shared。\n- `lark-calendar`: 飞书日历：管理日历日程和会议室。查看/搜索日程、创建/更新日程、管理参会人、查询忙闲和推荐时段、预定会议室。当用户需要查看日程安排、创建/修改会议、查询/预定会议室时使用。不负责：查询过去的视频会议记录（走 lark-meeting）、待办任务（走 lark-task）。\n- `lark-contact`: 飞书 / Lark 通讯录:按姓名 / 邮箱解析成 open_id,或按 open_id 反查姓名 / 部门 / 邮箱 / 联系方式 / 个人状态 / 签名,以及按关键词搜索当前用户可见的机器人 / 智能体(agent)。当用户提到一个名字要下一步发消息 / 排日程,或拿到 open_id 想查具体信息时使用。不负责部门树遍历、按部门列员工、组织架构图,这类需求走原生 OpenAPI。\n- `lark-doc`: 飞书云文档（Docx / Wiki）内容操作：读取、创建、编辑文档，插入或下载图片附件，以及操作思维笔记。用户提供文档 URL/token（包括 doubao.com 的 /docx/、/wiki/）时使用；按 URL 路径/token 而非域名路由。文档内嵌资源按读取参考中的统一规则分流。独立评论操作走 lark-drive；随正文读取评论使用 docs +fetch。表格或 Base 内部数据操作不在本 skill。\n- `lark-drive`: 飞书云空间（云盘/云存储）：管理 Drive 文件和文件夹，包含上传/下载、创建文件夹、复制/移动/删除、查看元数据、查询权限设置、评论/权限/订阅、标题、版本、飞书文档密级标签（secure labels）和本地文件导入。用户需要整理云盘目录、处理云空间资源 URL/token、判断链接类型/真实 token/标题，或导入 Word/Markdown/Excel/CSV/PPTX/.base 为 docx/sheet/bitable/slides 时使用；doubao.com 云空间 URL/token 也按资源路径和 token 路由，不回退 WebFetch。不负责：文档内容编辑（走 lark-doc）、表格/Base 表内数据操作（走 lark-sheets/lark-base）、知识空间节点/成员管理（走 lark-wiki）、原生 Markdown 文件读写/patch/diff（走 lark-markdown）。\n- `lark-event`: Lark/Feishu real-time event listening / subscribing / consuming: stream events as NDJSON via `lark-cli event consume &lt;EventKey&gt;` (covers IM messages/reactions/chat changes, Approval status changes, Task updates, VC meeting started/joined/ended, Minutes generated, Whiteboard updated, etc.). Use for Lark bots, real-time message processing, long-running subscribers, streaming webhook/push handlers. Supports `--max-events` / `--timeout` bounded runs and a stderr ready-marker contract — designed f...\n- `lark-im`: 飞书即时通讯：收发消息和管理群聊。发送和回复消息、搜索聊天记录、管理群聊成员、上传下载图片和文件、管理表情回复、发送应用内/短信/电话加急、发送和处理交互卡片（Interactive Card）、监听卡片按钮回调（card.action.trigger）。当用户需要发消息、查看或搜索聊天记录、下载聊天中的文件、查看群成员、搜索群、创建群聊或话题群、管理标记数据、管理 Feed 置顶（添加/移除/查询置顶会话）、管理标签数据、处理卡片回调时使用。\n- `lark-mail`: 飞书邮箱：Use when user mentions 起草邮件、写邮件、草稿、发送/回复/转发邮件、查阅邮件、看邮件、搜索邮件、邮件文件夹、邮件标签、邮件联系人、监听新邮件、邮件收信规则等；use for mail/email intent only. Do not use for docs/sheets/calendar/auth setup/pure contact lookup/IM chat tasks.\n- `lark-markdown`: 飞书 Markdown：查看、创建、上传、编辑和比较飞书中的原生 Markdown 文件。当用户要操作飞书 Markdown 文件，或比较其远端版本及本地草稿时使用。纯本地 Markdown 文件操作不触发本 skill。不负责将 Markdown 导入为飞书在线文档，也不负责文件搜索、权限、评论、移动、删除等云空间管理操作。\n- `lark-meeting`: 飞书视频会议：查询会议记录与会议产物(纪要/逐字稿/妙记)、妙记搜索/上传/下载/编辑、机器人参与会议；查询进行中的会议、实时会议内容(发言/聊天/共享文档)问答(会上/会里)、发送会中聊天/表情；基于 meeting_id、meeting_no、event_id、note_id、minute_token、vc-node-id 或妙记 URL 查询相关信息。预约会议、忙闲和会议室管理走 lark-calendar。\n- `lark-minutes`: 仅当用户或上游配置显式指定 lark-minutes 时使用，相关请求统一交由 lark-meeting 技能处理。\n- `lark-note`: 仅当用户或上游配置显式指定 lark-note 时使用，相关请求统一交由 lark-meeting 技能处理。\n- `lark-okr`: 飞书 OKR：管理目标与关键结果。查看和编辑 OKR 周期、目标、关键结果、对齐关系、量化指标和进展记录。当用户需要查看或创建 OKR、管理目标和关键结果、查看对齐关系时使用。不负责：待办任务管理（lark-task）、日程/会议安排（lark-calendar）、绩效评估\n- `lark-openapi-explorer`: 飞书/Lark 原生 OpenAPI 探索：从官方文档库中挖掘未经 CLI 封装的原生 OpenAPI 接口。当用户的需求无法被现有 lark-* skill 或 lark-cli 已注册命令满足，需要查找并调用原生飞书 OpenAPI 时使用。\n- `lark-shared`: Use for lark-cli setup/auth tasks: auth login/status/logout, user vs bot identity, business-domain permissions (--domain, including all/docs/drive), missing scopes, revoking authorization, or handling _notice JSON.\n- `lark-sheets`: 飞书电子表格：创建和操作电子表格。支持工作表与行列结构（增删/合并/尺寸/隐藏/冻结/分组）、单元格读写（值/公式/样式/批注/单元格图片）、区域复制移动排序填充、查找替换、批量更新，图表、透视表、条件格式、筛选器与筛选视图、下拉列表、迷你图、浮动图片等对象的创建与维护，以及公式校验、历史版本回滚、本地 Excel/CSV 与飞书表格的导入导出。当用户需要创建或编辑表格、统计汇总与可视化、表格美化、公式计算（含 Excel 公式迁移）、金融/财务建模（DCF、三张表、预算、Sensitivity 等）时使用。多维表格（Base/bitable）请改用 lark-base；若用户是想按名称或关键词搜索云空间（云盘/云存储）里的表格文件，请改用 lark-drive 的 drive +search 先定位资源。当用户给出 doubao.com 的 /sheets/ URL/token 时，也应直接使用本 skill，不要因为域名不是飞书而回退到 WebFetch；路由依据是 URL 路径模式和 token，而不是域名。\n- `lark-skill-maker`: 创建 lark-cli 的自定义 Skill。当用户需要把飞书 API 操作封装成可复用的 Skill（包装原子 API 或编排多步流程）时使用。\n- `lark-slides`: 飞书幻灯片：创建和编辑幻灯片。创建演示文稿、读取幻灯片内容、管理幻灯片页面（创建、删除、读取、局部替换）。当用户需要创建或编辑幻灯片、读取或修改单个页面时使用。当用户给出 doubao.com 的 /slides/ URL/token 时，也应直接使用本 skill，不要因为域名不是飞书而回退到 WebFetch；路由依据是 URL 路径模式和 token，而不是域名。不负责：云文档内容编辑（走 lark-doc）、云文档里的独立画板对象（走 lark-whiteboard）、上传或下载普通文件（走 lark-drive）。\n- `lark-task`: 飞书任务：管理任务、清单和任务智能体。创建待办任务、查看和更新任务状态、拆分子任务、组织任务清单、分配协作成员、上传任务附件、注册或注销任务智能体、更新任务智能体的主页数据、写入智能体任务记录。当用户需要创建待办事项、查看任务列表、跟踪任务进度、管理项目清单或给他人分配任务、为任务上传附件文件、注册注销任务智能体、更新智能体主页数据、写入任务记录时使用。\n- `lark-vc`: 仅当用户或上游配置显式指定 lark-vc 时使用，相关请求统一交由 lark-meeting 技能处理。\n- `lark-vc-agent`: 仅当用户或上游配置显式指定 lark-vc-agent 时使用，相关请求统一交由 lark-meeting 技能处理。\n- `lark-whiteboard`: 飞书画板：查询和编辑飞书云文档中的画板。支持导出画板为预览图片、导出原始节点结构、使用多种格式更新画板内容。 当用户需要查看画板内容、导出画板图片、编辑画板时使用此 skill。不负责：飞书云文档内容编辑（lark-doc）、文档内嵌电子表格/Base（lark-sheets / lark-base）。\n- `lark-wiki`: 飞书知识库：管理知识空间、空间成员和文档节点。创建和查询知识空间、查看和管理空间成员、管理节点层级结构、在知识库中组织文档和快捷方式。当用户需要在知识库中查找或创建文档、浏览知识空间结构、查看或管理空间成员、移动或复制节点时使用。当用户给出 doubao.com 的 /wiki/ URL/token 时，也应直接使用本 skill，不要因为域名不是飞书而回退到 WebFetch；路由依据是 URL 路径模式和 token，而不是域名。不负责：上传文件到知识库节点下（走 lark-drive）、编辑文档/表格/Base 内容（走 lark-doc / lark-sheets / lark-base）。\n- `lark-workflow-meeting-summary`: 会议纪要整理工作流：汇总指定时间范围内的会议纪要并生成结构化报告。当用户需要整理会议纪要、生成会议周报、回顾一段时间内的会议内容时使用。\n- `lark-workflow-standup-report`: 日程待办摘要：编排 calendar +agenda 和 task +get-my-tasks，生成指定日期的日程与未完成任务摘要。适用于了解今天/明天/本周的安排。\n- `lfclaw-expert-manager`: 通过对话创建和修改个人专家、专家团，并组合当前有权使用的技能与连接器。\n</available_skills>\n\nUse only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.\nA user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.\n</system-reminder>"
+        }
+      ]
+    },
+    {
+      "time": "2026-10-19T01:22:54.185Z",
+      "source": {
+        "kind": "compact-checkpoint",
+        "compactionId": "c8b34653-e27a-4b51-9c50-1a64163237f3"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.\n\n<compacted-summary>"
+        },
+        {
+          "type": "text",
+          "text": "## Primary Request and Intent\n- Hypothetical scheduling acceptance run driven by an injected expert team. All data is test data; explicitly forbidden: 不访问外部系统、不创建日历、不发送消息.\n- Verbatim capacity input: 明天可用时间 09:00–11:30、14:00–16:00，共270分钟；15:00–15:30已有会议，另须预留30分钟机动。\n- Tasks (原始工时不得缩短): A 周总结初稿 90分钟，明天16:00前交；B 下周重点 60分钟，后天12:00前交；C 整理文件 80分钟，本周内完成；D 回复3项待确认 30分钟，明天11:00前发出；E 学习工具 60分钟，无截止；F 一页会议简报 60分钟，明天14:50前交。\n- Dependency: F 必须先取得 A 的核心数据；A 至少先做 45 分钟才能开始 F。\n- Required deliverables: (1) 容量核算; (2) 明天无重叠时间表; (3) 保留及待排事项; (4) 两个失败预案 — 10:30 时 A 核心数据仍未就绪、09:20 时 D 仍有一项未发出; (5) 不超过100字的主管说明。\n- Hard prohibitions: 不得缩短原始工时、不得挪动截止、不得假设后天有空闲。\n- Output limits: 最终答复 ≤1000字，且须注明实际调用了哪位成员及其作用。\n- Injected `<lfclaw-expert>` config 任务规划与约束复核团（优化验收）: lead must open the reply with the team name; must report only actually-completed delegations (never claim member participation without spawning a subagent); delegate planning and constraint review **in parallel**; then cross-check durations / time slots / deadlines / dependencies / word limits and emit only the verified concise plan. Lead personally handles formatting, word count, final merge; must not simulate member statements; on failure, name the specific stage and do not re-dispatch the same failed stage.\n- Member 1 工作排程顾问（优化验收）: independently compute capacity, hard deadlines, available slots; schedule by original durations without overlap; mark gaps/待确认 explicitly.\n- Member 2 约束审阅顾问（优化验收）: does NOT wait for the draft; independently lists user-given durations/slots/deadlines/dependencies, computes minimum capacity gap, identifies common infeasible fallbacks, gives handling principles that keep original durations; ≤300字。\n\n## Key Technical Concepts\n- DeepSeek Harness subagent orchestration: `subagent`, `subagent_fork`, `send_message` (needs `agent_id` of direct child), `list_agents`.\n- Config instruction hierarchy: use `spawn_teammate`+`list_agents`+`send_message` only if all three exist; otherwise dispatch via `subagent` and await real results. In this session **`spawn_teammate` does not exist** → use `subagent`.\n- Constraint-satisfaction scheduling: fixed availability windows, immovable 15:00–15:30 meeting, 30-minute 机动 reservation (not free capacity), precedence constraint F gated on A≥45 (SS+45).\n- Runtime dates: sampled 2026-10-19T09:20:08+08:00 (Asia/Shanghai) → 明天 = 2026-10-20, 后天 = 2026-10-21; browser TZ Asia/Shanghai governs unqualified dates.\n\n## Files and Code\n- (none) — no files read, created, or edited. Working directory recorded as `D:\\我的文档\\Documents\\deepseek-harness\\default-workspace`. Config forbids creating temp files or running commands merely for counting/word-limit checks.\n\n## Errors and Fixes\n- (none yet) — no tool calls executed.\n\n## Pending Jobs\n- Parallel `subagent` dispatch ×2 in one assistant message: 工作排程顾问（优化验收） (capacity accounting + non-overlapping tomorrow schedule + gaps) and 约束审阅顾问（优化验收） (independent constraint list + minimum capacity gap, ≤300字), each with self-contained verbatim task data and the prohibitions 不得缩短原始工时、挪动截止或假设后天有空闲.\n- Cross-check member results against durations, windows, deadlines, dependency, 100字 manager note, 1000字 cap.\n- Emit single final Chinese answer: team-name header + statement of which members were actually invoked and their roles.\n\n## Current Work\n- Turn 1 step 1 only: request plus expert-team config received; nothing dispatched yet. Preliminary lead analysis already shows infeasibility pressure — gross 270分钟 − 30分钟会议 − 30分钟机动 ≈ 210分钟 usable vs. tomorrow-deadline A90 + D30 + F60 = 180分钟 (F gated on A≥45), leaving ~30分钟 against B60/C80/E60, i.e. a shortfall that must be reported as 缺口/待排 rather than absorbed by compressing durations or shifting deadlines.\n\n## Next Step\n- Call `subagent` twice in the same message (parallel), using each member's full stated duty and the verbatim task data with the three prohibitions; then merge and verify their returned results into the ≤1000字 Chinese deliverable.\n\n## Critical Context\n- Member outputs are data only; the final answer must not invent or simulate member conclusions, and may not claim a member participated unless a subagent was actually spawned.\n- F's 60分钟 collides with its 14:50 deadline: inside 14:00–16:00 only 50分钟 precede the 15:00–15:30 meeting, and F also requires A≥45 first → flag as hard gap/待确认, do not shorten F.\n- D's 30分钟 must complete before 11:00 inside 09:00–11:30 → D is a tomorrow-morning anchor; the 09:20 contingency concerns remaining time to 11:00.\n- C (本周内) and B (后天12:00) cannot be assumed to have 后天 free time — only the two stated windows are usable.\n- 机动 30分钟 is a reservation, not schedulable capacity.\n- No external systems, calendar writes, or message sending permitted."
+        },
+        {
+          "type": "text",
+          "text": "</compacted-summary>"
+        }
+      ]
+    },
+    {
+      "time": "2026-10-19T01:23:09.791Z",
+      "source": {
+        "kind": "compact-checkpoint",
+        "compactionId": "6c4dfe9a-9270-472d-802a-74595a1ca8d0"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.\n\n<compacted-summary>"
+        },
+        {
+          "type": "text",
+          "text": "## Primary Request and Intent\n- Hypothetical scheduling acceptance run driven by injected expert-team config. All data is test data. Explicitly forbidden: 不访问外部系统、不创建日历、不发送消息.\n- Verbatim capacity input: 明天可用时间 09:00–11:30、14:00–16:00，共270分钟；15:00–15:30已有会议，另须预留30分钟机动。\n- Tasks (原始工时不得缩短): A 周总结初稿 90分钟, due 明天16:00前; B 下周重点 60分钟, due 后天12:00前; C 整理文件 80分钟, due 本周内; D 回复3项待确认 30分钟, due 明天11:00前发出; E 学习工具 60分钟, 无截止; F 一页会议简报 60分钟, due 明天14:50前。\n- Dependency: F 必须先取得 A 的核心数据; A 至少先做 45 分钟才能开始 F (SS+45).\n- Required deliverables: (1) 容量核算; (2) 明天无重叠时间表; (3) 保留及待排事项; (4) 两个失败预案 — 10:30 时 A 核心数据仍未就绪、09:20 时 D 仍有一项未发出; (5) 不超过100字的主管说明.\n- Hard prohibitions: 不得缩短原始工时、不得挪动截止、不得假设后天有空闲.\n- Output limits: 最终答复 ≤1000字, 且须注明实际调用了哪位成员及其作用.\n- Injected `<lfclaw-expert>` 任务规划与约束复核团（优化验收） rules: lead must open reply with the team name; report only actually-completed delegations (never claim member participation without spawning a subagent); delegate planning and constraint review **in parallel**; then cross-check durations / time slots / deadlines / dependencies / word limits and emit only the verified concise plan. Lead personally handles formatting, word count, final merge; must not simulate member statements; on failure, name the specific stage and do not re-dispatch the same failed stage.\n- Member 1 工作排程顾问（优化验收）: independently compute capacity, hard deadlines, available slots; schedule by original durations without overlap; mark gaps/待确认 explicitly.\n- Member 2 约束审阅顾问（优化验收）: does NOT wait for the draft; independently lists user-given durations/slots/deadlines/dependencies, computes minimum capacity gap, identifies common infeasible fallbacks, gives handling principles that keep original durations; ≤300字.\n\n## Key Technical Concepts\n- DeepSeek Harness subagent orchestration: `subagent`, `subagent_fork`, `send_message` (needs `agent_id` of direct child), `list_agents`.\n- Config instruction hierarchy: use `spawn_teammate`+`list_agents`+`send_message` only if all three exist; otherwise dispatch via `subagent` and await real results. In this session **`spawn_teammate` does not exist** → use `subagent`.\n- Constraint-satisfaction scheduling: fixed availability windows, immovable 15:00–15:30 meeting, 30分钟 机动 reservation (not free capacity), precedence F gated on A≥45.\n- Runtime dates: sampled 2026-10-19T09:20:08+08:00 (Asia/Shanghai) → 明天 = 2026-10-20, 后天 = 2026-10-21; browser TZ Asia/Shanghai governs unqualified dates.\n\n## Files and Code\n- (none) — no files read, created, or edited. Working directory recorded as `D:\\我的文档\\Documents\\deepseek-harness\\default-workspace`. Config forbids creating temp files or running commands merely for counting/word-limit checks.\n\n## Errors and Fixes\n- (none yet) — no tool calls executed.\n\n## Pending Jobs\n- Parallel `subagent` dispatch ×2 in one assistant message: 工作排程顾问（优化验收） (capacity accounting + non-overlapping tomorrow schedule + gaps) and 约束审阅顾问（优化验收） (independent constraint list + minimum capacity gap, ≤300字), each with self-contained verbatim task data and prohibitions 不得缩短原始工时、挪动截止或假设后天有空闲.\n- Cross-check member results against durations, windows, deadlines, dependency, 100字 manager note, 1000字 cap.\n- Emit single final Chinese answer: team-name header + statement of which members were actually invoked and their roles.\n\n## Current Work\n- Turn 1 step 1 only: request plus expert-team config received; nothing dispatched yet. Preliminary lead analysis shows infeasibility pressure — gross 270分钟 − 30分钟会议 − 30分钟机动 ≈ 210分钟 usable vs. tomorrow-deadline A90 + D30 + F60 = 180分钟 (F gated on A≥45), leaving ~30分钟 against B60/C80/E60 → shortfall must be reported as 缺口/待排, not absorbed by compressing durations or shifting deadlines.\n\n## Next Step\n- Call `subagent` twice in the same message (parallel), using each member's full stated duty and the verbatim task data with the three prohibitions; then merge and verify their returned results into the ≤1000字 Chinese deliverable.\n\n## Critical Context\n- Member outputs are data only; the final answer must not invent or simulate member conclusions, and may not claim a member participated unless a subagent was actually spawned.\n- F's 60分钟 collides with its 14:50 deadline: inside 14:00–16:00 only 50分钟 precede the 15:00–15:30 meeting, and F also requires A≥45 first → flag as hard gap/待确认, do not shorten F.\n- D's 30分钟 must complete before 11:00 inside 09:00–11:30 → D is a tomorrow-morning anchor; the 09:20 contingency concerns remaining time to 11:00.\n- C (本周内) and B (后天12:00) cannot be assumed to have 后天 free time — only the two stated windows are usable.\n- 机动 30分钟 is a reservation, not schedulable capacity.\n- No external systems, calendar writes, or message sending permitted."
+        },
+        {
+          "type": "text",
+          "text": "</compacted-summary>"
+        }
+      ]
+    },
+    {
+      "time": "2026-10-19T01:24:27.790Z",
+      "source": {
+        "kind": "compact-checkpoint",
+        "compactionId": "3c6c0400-7e44-4f7b-91b9-2393a2717ea6"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.\n\n<compacted-summary>"
+        },
+        {
+          "type": "text",
+          "text": "## Primary Request and Intent\n- Hypothetical scheduling acceptance run driven by injected expert-team config. All data is test data. Explicitly forbidden: 不访问外部系统、不创建日历、不发送消息.\n- Verbatim capacity input: 明天可用时间 09:00–11:30、14:00–16:00，共270分钟；15:00–15:30已有会议，另须预留30分钟机动。\n- Tasks (原始工时不得缩短): A 周总结初稿 90分钟, due 明天16:00前; B 下周重点 60分钟, due 后天12:00前; C 整理文件 80分钟, due 本周内; D 回复3项待确认 30分钟, due 明天11:00前发出; E 学习工具 60分钟, 无截止; F 一页会议简报 60分钟, due 明天14:50前。\n- Dependency: F 必须先取得 A 的核心数据; A 至少先做 45 分钟才能开始 F (SS+45).\n- Required deliverables: (1) 容量核算; (2) 明天无重叠时间表; (3) 保留及待排事项; (4) 两个失败预案 — 10:30 时 A 核心数据仍未就绪、09:20 时 D 仍有一项未发出; (5) 不超过100字的主管说明.\n- Hard prohibitions: 不得缩短原始工时、不得挪动截止、不得假设后天有空闲.\n- Output limits: 最终答复 ≤1000字, 且须注明实际调用了哪位成员及其作用.\n- Injected `<lfclaw-expert>` 任务规划与约束复核团（优化验收） rules: lead must open reply with the team name; report only actually-completed delegations (never claim member participation without spawning a subagent); delegate planning and constraint review **in parallel**; then cross-check durations / time slots / deadlines / dependencies / word limits and emit only the verified concise plan. Lead personally handles formatting, word count, final merge; must not simulate member statements; on failure, name the specific stage and do not re-dispatch the same failed stage.\n- Member 1 工作排程顾问（优化验收）: independently compute capacity, hard deadlines, available slots; schedule by original durations without overlap; mark gaps/待确认 explicitly.\n- Member 2 约束审阅顾问（优化验收）: does NOT wait for the draft; independently lists user-given durations/slots/deadlines/dependencies, computes minimum capacity gap, identifies common infeasible fallbacks, gives handling principles that keep original durations; ≤300字.\n\n## Key Technical Concepts\n- DeepSeek Harness subagent orchestration: `subagent`, `subagent_fork`, `send_message` (needs `agent_id` of direct child), `list_agents`.\n- Config instruction hierarchy: use `spawn_teammate`+`list_agents`+`send_message` only if all three exist; otherwise dispatch via `subagent` and await real results. In this session **`spawn_teammate` does not exist** → use `subagent`.\n- Constraint-satisfaction scheduling: fixed availability windows, immovable 15:00–15:30 meeting, 30分钟 机动 reservation (not free capacity), precedence F gated on A≥45.\n- Runtime dates: sampled 2026-10-19T09:20:08+08:00 (Asia/Shanghai), a Monday; 明天 = 2026-10-20 (Tue), 后天 = 2026-10-21 (Wed); browser TZ Asia/Shanghai governs unqualified dates.\n\n## Files and Code\n- (none) — no files read, created, or edited. Working directory `D:\\我的文档\\Documents\\deepseek-harness\\default-workspace`. Config forbids creating temp files or running commands merely for counting/word-limit checks.\n\n## Errors and Fixes\n- (none yet) — both `subagent` dispatches returned successfully with agent ids.\n\n## Pending Jobs\n- `subagent` ff77a0b7-355b-488c-8931-ebecdca29c99 = 工作排程顾问（优化验收）: 容量核算 + 明天无重叠时间表 + 保留/待排 + 两个失败预案（含\"F唯一可行连续60分钟窗口\"定位）; self-contained verbatim data + 不得缩时/移截止/假设后天有空.\n- `subagent` be3a99d1-fd84-48e9-acd0-ae32db2fe3f9 = 约束审阅顾问（优化验收）: 约束清单 + 最低容量缺口算法 + ≥3个常见不可行做法 + 不改工时的处理原则, ≤300字, 不输出排程表.\n- Cross-check both returned results against durations, windows, deadlines, dependency, 100字 manager note, 1000字 cap.\n- Emit single final Chinese answer: team-name header + statement of which members were actually invoked and their roles.\n\n## Current Work\n- Turn 1 step 2 complete: both members dispatched in parallel in one assistant message (ids above); no results collected yet. Lead's own preliminary analysis for cross-checking: gross 270分钟 − 30分钟会议 − 30分钟机动 = 210分钟可分配 vs 明天硬截止需求 A90+D30+F60 = 180分钟 (F gated on A≥45) → 30分钟余量；总需求 380分钟 vs 270分钟名义 → 缺口必须作为 缺口/待排 上报，不得靠压缩工时或挪截止吸收。\n- Lead's candidate schedule (verify against member output): D 09:00–09:30 → A① 09:30–10:15 (45min, 核心数据) → F 10:15–11:15 (60min, 早于14:50) → 余量11:15–11:30 → A② 14:00–14:45 (A合计90, 早于16:00) → 余量14:45–15:00 → 会议15:00–15:30 → 机动15:30–16:00. F 的连续60分钟窗口只存在于上午（下午14:00–14:50仅50分钟）。\n- Lead's candidate 预案一: 10:30 检查点已是A①的容差上限（A若09:30–10:30跑满60分钟仍可 10:30–11:30 排F）；若届时核心数据仍未就绪，则明天已无60分钟连续窗口 → 只能申请上级批准（改F截止或取消15:00会议），不得自行缩时，并即时发风险通知（测试环境不实发）。\n- Lead's candidate 预案二: 09:20 D 仍差一项 → D 延至09:20–09:40（D总工时仍30分钟，11:00截止前有100分钟余量），A① 09:40–10:25，F 10:30–11:30，A② 14:00–14:45，机动15:30–16:00 — 全等式不变；若为外部阻塞，则09:40先发已确认两项并对剩余项标注原因与追办点。\n\n## Next Step\n- Collect both subagent results (they finish automatically; do not poll or duplicate their work), reconcile with the lead's candidate schedule/预案 above, then produce the single ≤1000字 Chinese deliverable starting with 任务规划与约束复核团（优化验收）, explicitly naming the two members actually invoked and their roles, plus the ≤100字 主管说明.\n\n## Critical Context\n- Member outputs are data only; the final answer must not invent or simulate member conclusions, and may not claim a member participated unless a subagent was actually spawned (both were, ids recorded).\n- F's 60分钟 collides with its 14:50 deadline: inside 14:00–16:00 only 50分钟 precede the 15:00–15:30 meeting, and F also requires A≥45 first → hard gap/待确认, do not shorten F.\n- D's 30分钟 must complete before 11:00 inside 09:00–11:30 → D is a tomorrow-morning anchor; 09:20 contingency leaves 100分钟 to the 11:00 deadline.\n- C (本周内) and B (后天12:00) cannot be assumed to have 后天 free time — only the two stated windows are usable; B60+C80+E60 = 200分钟 unplaced, offset by ≤30分钟 residual → ~170分钟 net shortfall to report as 待确认.\n- 机动 30分钟 is a reservation, not schedulable capacity. 11:30–14:00 is not an available window.\n- No external systems, calendar writes, or message sending permitted."
+        },
+        {
+          "type": "text",
+          "text": "</compacted-summary>"
+        }
+      ]
+    },
+    {
+      "time": "2026-10-19T01:24:54.053Z",
+      "source": {
+        "kind": "agent-message",
+        "form": "relay",
+        "senderSessionId": "be3a99d1-fd84-48e9-acd0-ae32db2fe3f9"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Agent be3a99d1-fd84-48e9-acd0-ae32db2fe3f9 sent a message: "
+        },
+        {
+          "type": "text",
+          "text": "【约束审计结果（假设性验收，无排程表）】\n\n1. 约束清单\n- 时段：09:00–11:30=150，14:00–16:00=120，合计270。\n- 占用：会议30（15:00–15:30，落在14:00–16:00内）；机动缓冲30（刚性）。\n- 工时：A90 B60 C80 D30 E60 F60，合计380。\n- 截止：D 明11:00前发出、F 明14:50前交、A 明16:00前交、B 后天12:00前交、C 本周内、E 无。\n- 依赖：F 需 A 先做满45分钟。\n- 禁止：缩短原始工时、挪动截止、假设后天或其他日子有空闲时段。\n\n2. 最低容量缺口（算法与数值）\n净可分配 = 270 − 30(会议) − 30(缓冲) = **210**。\n硬截止需求（明天必须交）= A90+D30+F60 = **180** → 明日余量仅 **30**。\n全部需求 = **380** → 总缺口 = 380 − 210 = **170**。\n结构复核（比总量更硬）：F 须60分钟且在14:50前完成，而14:00–14:50只有50分钟<60，故 F 只能整段落上午；上午须容纳 D30 + A前45 + F60 = 135/150（余15）；A 的后45只能占14:00–15:00（15:30–16:00仅30且需让位缓冲）。结论：明天三项硬截止名义可容，实际零容错。\n\n3. 常见不可行做法\n①把 F 排在14:00之后：可用窗口50<60，必越14:50或撞15:00会议。\n②把 A 压到45分钟\"够用即止\"或推到16:00后：违反不改工时/截止，且 A 的90分钟总工时会缺失或被顺延。\n③把30分钟机动缓冲当产能排任务，或把任务排进11:30–14:00：缓冲刚性不可占用，午休时段不存在。\n④默认 B/C/E\"后天或今晚做\"：明令禁止假设其他日子有空，等于凭空+200分钟容量。\n⑤顺延 F 到15:30、A 到16:30：改动截止，不可行。\n\n4. 不改变原始工时的处理原则\n优先级依据＝截止刚性 → 依赖深度 → 缓冲占用：截止越早且下游依赖越多者越先锁定（F 依赖 A，但 F 截止14:50早于 A 的16:00，故 A 前半段必须前置）。\n必须落在明天的三项：**A、D、F**（共180分钟，A 以45/45两段拆分，D 须在11:00前完成，F 整段置于上午且晚于 A 首个45分钟）。\n其余 **B、C、E 一律标\"待确认\"**：合计需200分钟，而明天仅剩30分钟余量，缺口170。处置为——不缩短工时、不改截止，先要求确认额外可用时段（如后天上午）或将 B/C/E 显式挂起待补容量；若只能保留一项进明天30分钟，需由用户裁决取舍。任何方案必须保留30分钟机动缓冲且不得排进11:30–14:00。"
+        }
+      ]
+    },
+    {
+      "time": "2026-10-19T01:24:54.053Z",
+      "source": {
+        "kind": "subagent-settled",
+        "form": "notice",
+        "summary": "Background subagent be3a99d1-fd84-48e9-acd0-ae32db2fe3f9 finished and will do no further work unless you send it more.",
+        "senderSessionId": "be3a99d1-fd84-48e9-acd0-ae32db2fe3f9"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Background subagent be3a99d1-fd84-48e9-acd0-ae32db2fe3f9 finished and will do no further work unless you send it more."
+        },
+        {
+          "type": "text",
+          "text": "Its closing message:"
+        },
+        {
+          "type": "text",
+          "text": "审计完成，结果已发回上级。以下为压缩版（≤300字）：\n\n**1. 约束清单**\n- 时段：09:00–11:30=150，14:00–16:00=120，合计270。\n- 占用：会议30（15:00–15:30，在14:00–16:00内）＋刚性缓冲30。\n- 工时：A90 B60 C80 D30 E60 F60＝380。\n- 截止：D明11:00、F明14:50、A明16:00、B后天12:00、C本周、E无。\n- 依赖：F 须 A 先满45分钟。禁止：缩工时／挪截止／假设他日有空。\n\n**2. 最低容量缺口**\n净可分配＝270−30会议−30缓冲＝**210**；明日硬截止 A+D+F＝**180**→余30；全部需求380→**缺170**。结构复核：14:00–14:50仅50分钟<60，F 只能整段进上午；上午须容 D30+A前45+F60＝135/150（余15），A 后45只能占14:00–15:00。明天名义可行、实际零容错。\n\n**3. 常见不可行做法**\n①F 排14:00后：装不下且越14:50／撞会。②A 压至45或推16:00后：改工时且 F 无核心数据。③动用缓冲或把任务排进11:30–14:00：缓冲刚性、该时段不存在。④默认 B/C/E 留后天或今晚：凭空+200分钟，明令禁止。⑤顺延 F/A 截止：违规。\n\n**4. 处理原则（不改原始工时）**\n优先级＝截止刚性→依赖深度→缓冲占用。**必须落明天：A、D、F**（180分钟，A 拆45+45，D 在11:00前完成，F 整段置于上午且晚于 A 首个45）。**B、C、E 标\"待确认\"**：需200分钟>余30，只能先确认新增时段或显式挂起待补容量，若明日余30只容一项须由用户裁决；全程保留30分钟机动。"
+        }
+      ]
+    },
+    {
+      "time": "2026-10-19T01:24:54.053Z",
+      "source": {
+        "kind": "subagent-settled",
+        "form": "notice",
+        "summary": "Background subagent ff77a0b7-355b-488c-8931-ebecdca29c99 finished and will do no further work unless you send it more.",
+        "senderSessionId": "ff77a0b7-355b-488c-8931-ebecdca29c99"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Background subagent ff77a0b7-355b-488c-8931-ebecdca29c99 finished and will do no further work unless you send it more."
+        },
+        {
+          "type": "text",
+          "text": "Its closing message:"
+        },
+        {
+          "type": "text",
+          "text": "## 1. 容量核算\n\n| 项目 | 分钟 |\n|---|---|\n| 名义可用（09:00–11:30 =150；14:00–16:00 =120） | 270 |\n| 既定占用（15:00–15:30 会议） | −30 |\n| 必留机动缓冲 | −30 |\n| **可分配工时** | **210** |\n| 六项总需求（90+60+80+30+60+60） | 380 |\n| **最低缺口** | **170** |\n| 明天硬截止子集 D30 + F60 + A90 | 180 |\n| 硬截止排入后剩余碎片（11:15–11:30、14:45–15:00） | 30 |\n\n结论：明天两个时段只够覆盖 D/A/F，B、C、E 无已确认时段可排。\n\n## 2. 明天无重叠时间表（基线方案）\n\n| 起止 | 任务 | 工时 |\n|---|---|---|\n| 09:00–09:45 | A 周总结初稿（第一段，45） | 45 |\n| 09:45–10:15 | D 回复3项待确认 | 30 |\n| 10:15–11:15 | F 一页会议简报 | 60 |\n| 11:15–11:30 | 余量 15（不建议占用） | — |\n| 14:00–14:45 | A 周总结初稿（第二段，45） | 45 |\n| 14:45–15:00 | 余量 15 | — |\n| 15:00–15:30 | 既定会议（未侵占） | 30 |\n| 15:30–16:00 | 机动缓冲 30（未侵占） | 30 |\n\n验证：A = 45+45 = 90 ✓；F = 60 ✓；F 起点 10:15 = A 满 45 分钟的即时点，不早于前置 ✓；F 结束 11:15 ≤ 14:50 ✓；D 结束 10:15 ≤ 11:00 ✓；A 结束 14:45 ≤ 16:00 ✓；会议 15:00–15:30、缓冲 15:30–16:00 完整 ✓；无重叠、无 11:30–14:00 排入、无缩时 ✓。\n\n**F 唯一可行连续窗口**：F 在下午时段不可行（最早 14:00 起做，14:00–15:00 已越 14:50），只能落在上午；同时受「A 先满 45 分钟」与「D 30 分钟须在 11:00 前结束」双向夹逼，可行起算区间仅 10:15–11:15 ~ 10:30–11:30，其中 **10:15–11:15 是唯一零空闲、无碎片且保有余量的窗口**（缓冲最厚，建议锁定）。\n\n## 3. 保留与待排\n\n保留：会议 15:00–15:30（30）、缓冲 15:30–16:00（30）、剩余余量 11:15–11:30 + 14:45–15:00（合计 30，碎片化，不建议投给任何整段任务）。\n\n| 事项 | 是否排入 | 缺口 |\n|---|---|---|\n| B 下周重点 60（后天 12:00） | **未排入** | 60 分钟无已确认时段 → 待确认（需上级批准新增时段） |\n| C 整理文件 80（本周内） | **未排入** | 80 分钟 → 待确认 |\n| E 学习工具 60（无截止） | **未排入** | 60 分钟；若动用 30 碎片仍缺 30 → 建议整项延后待确认，不占用碎片 |\n\n## 4. 失败预案\n\n**预案一：10:30 时 A 核心数据仍未就绪**（即 F 无法在 10:15/10:30 起步）\n- 改排：10:15–10:30 保留给 A 补齐前置 → 若 10:30 仍未就绪，上午 F 窗口（10:30–11:30 已被 D 挤占）不成立；改 **10:30–11:15 续做 A（A 累计 90，11:15 完成，早于 16:00）**，11:15–11:30 余量；下午 **14:00–14:50 仅 50 分钟，F 60 分钟不成立**；会议、缓冲不动。\n- 结果：F 缺口 10 分钟且必然越过 14:50 → **标记待确认，需上级批准**（二选一：批准 13:50–14:50 新增已确认时段，或批准 F 截止调整）。本岗不缩时、不改截止。\n- 风险通知触发点：**10:00**（A 核心数据未见预览即预警）→ **10:15**（保住上午窗口的最后闸门，越过即上报）→ **10:30**（题目给定触发点：此时确认不可行，立即通知上级与 F 接收方，说明 14:50 将违约）→ **13:50**（获批窗口的最后可开工点，未批即宣告 F 未达成）。\n\n**预案二：09:20 时 D 仍有一项未发出**\n- 改排（D 优先保 11:00）：**09:00–09:20 A（20）→ 09:20–09:50 D（30，结束 09:50 ≤ 11:00）→ 09:50–10:15 A（25，A 累计 45）→ 10:15–11:15 F（60）→ 11:15–11:30 余量 → 14:00–14:45 A（45，A 累计 90）**；会议、缓冲不动。F 起点恰为 A 满 45 分钟点，余量为零。\n- 若未发出项依赖他人回复而非本岗工时：D 的 30 分钟工时不变但「发出」无法保证 → **标记待确认**，不缩短、不延期。\n- 风险通知触发点：**09:20**（改排启动，通知上级 D 已前置、A 被拆）→ **10:30**（D 最迟开工点，越过则 11:00 必然违约，立即上报）→ **10:15**（F 开工闸门，若因 D 延误使 A 未满 45，F 上午窗口失效，直接转预案一处置）。"
+        }
+      ]
+    },
+    {
+      "time": "2026-10-19T01:24:54.053Z",
+      "source": {
+        "kind": "runtime-context",
+        "form": "snapshot",
+        "sections": [
+          {
+            "name": "working-directory:current",
+            "text": "Current working directory: \"D:\\\\我的文档\\\\Documents\\\\deepseek-harness\\\\default-workspace\"."
+          },
+          {
+            "name": "sandbox:policy",
+            "text": "Current DSH file policy: workspace-write. Any available operation enforced by the DSH file sandbox may modify files under the session workspace: \"D:\\\\我的文档\\\\Documents\\\\deepseek-harness\\\\default-workspace\". Some platform temporary areas may also be writable."
+          },
+          {
+            "name": "approval:policy",
+            "text": "Approval policy: ask. Operations that require approval may ask through the configured answerers; without an available answerer, the request fails closed."
+          }
+        ]
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Current runtime context. This snapshot supersedes earlier runtime-context snapshots.\n\nCurrent working directory: \"D:\\\\我的文档\\\\Documents\\\\deepseek-harness\\\\default-workspace\".\n\nCurrent DSH file policy: workspace-write. Any available operation enforced by the DSH file sandbox may modify files under the session workspace: \"D:\\\\我的文档\\\\Documents\\\\deepseek-harness\\\\default-workspace\". Some platform temporary areas may also be writable.\n\nApproval policy: ask. Operations that require approval may ask through the configured answerers; without an available answerer, the request fails closed."
+        }
+      ]
+    }
+  ]
+}

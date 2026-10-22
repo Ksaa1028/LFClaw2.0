@@ -1,6 +1,6 @@
 /** User-authorized downloads and separate installation of one version-bound Desktop release. */
 
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { app } from 'electron'
 import electronUpdater, { type AppUpdater, type ProgressInfo, type UpdateInfo } from 'electron-updater'
@@ -8,6 +8,7 @@ import { gt, valid } from 'semver'
 import type { DesktopUpdateState } from './ipc.ts'
 import { DesktopUpdateHttpExecutor } from './update-http-executor.ts'
 import { DesktopUpdatePreparationError } from './update-error.ts'
+import { verifyLFClawUpdate } from './lfclaw-update-signature.ts'
 
 const { autoUpdater } = electronUpdater
 
@@ -185,11 +186,21 @@ export class DesktopUpdateCoordinator {
       if (!this.enabled()) throw new Error('desktop update: this application has no packaged update source')
       const result = await this.updater.checkForUpdates()
       if (result === null) throw new Error('desktop update: no check result was returned')
+      if (this.updater === autoUpdater && app.isPackaged) {
+        const metadata: unknown = JSON.parse(readFileSync(join(app.getAppPath(), 'package.json'), 'utf8'))
+        if (typeof metadata === 'object' && metadata !== null && 'lfclawUpdatePublicKey' in metadata) {
+          if (typeof metadata.lfclawUpdatePublicKey !== 'string') throw new Error('LFClaw update key is invalid')
+          verifyLFClawUpdate(result.updateInfo, metadata.lfclawUpdatePublicKey)
+          // LFClaw installer filenames use release IDs rather than SemVer substitution.
+          this.updater.disableDifferentialDownload = true
+        }
+      }
       const version = result.updateInfo.version
       if (valid(version) === null) throw new Error('desktop update: feed version is invalid')
       this.candidate = result.isUpdateAvailable && gt(version, this.currentVersion()) ? version : undefined
       return this.setState(this.candidate === undefined ? { phase: 'idle' } : { phase: 'available', version })
     } catch (error) {
+      this.candidate = undefined
       return this.failure(error, 'check')
     }
   }

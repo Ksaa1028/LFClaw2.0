@@ -138,3 +138,5 @@ kind: "package-reference"
 无。
 
 </details>
+
+带 `data-lfclaw-logo="auto"` 的 LFClaw 界面图标在浅色模式显示黑色，深色模式显示白色；`inverse` 用于始终为深色的区域，保持白色。启动页和品牌展示图未设置此标记，保留金色。

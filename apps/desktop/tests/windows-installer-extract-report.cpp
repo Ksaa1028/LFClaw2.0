@@ -62,6 +62,7 @@ int wmain() {
 
     // The report carries the result, both paths, and 7-Zip's output verbatim.
     const std::wstring report = Compose(2, L"C:\\Temp\\app-64.7z", L"C:\\Apps\\Harness.new-1", locked, L"2026-09-22 10:59:49", L"10.0.26100");
+    assert(report.rfind(L"LFClaw installer: extraction failed\r\n", 0) == 0);
     assert(Contains(report, L"Result: 7-Zip exit code 2 (fatal error)\r\n"));
     assert(Contains(report, L"Archive: C:\\Temp\\app-64.7z\r\n"));
     assert(Contains(report, L"Destination: C:\\Apps\\Harness.new-1\r\n"));

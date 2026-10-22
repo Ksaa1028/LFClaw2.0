@@ -1,0 +1,142 @@
+diff --git a/lib/engine/access.js b/lib/engine/access.js
+index 01c70da1f4..d6edb61c3a 100644
+--- a/lib/engine/access.js
++++ b/lib/engine/access.js
+@@ -13,7 +13,7 @@ export function isUserAllowed(allowlist, userId) {
+ }
+ export function decideAccess(input) {
+     if (input.kind === 'group') {
+-        return input.addressed === false ? 'ignore' : 'allow';
++        return 'ignore';
+     }
+     return input.userAllowed ? 'allow' : 'deny';
+ }
+@@ -21,4 +21,4 @@ export function decideAccess(input) {
+ export function canAnswerToolApproval(input) {
+     return input.userAllowed && input.kind !== 'group';
+ }
+-//# sourceMappingURL=access.js.map
+\ No newline at end of file
++//# sourceMappingURL=access.js.map
+diff --git a/src/engine/access.ts b/src/engine/access.ts
+index a667c6065f..2a1671752e 100644
+--- a/src/engine/access.ts
++++ b/src/engine/access.ts
+@@ -20,7 +20,7 @@ export function decideAccess(input: {
+   addressed?: boolean
+ }): AccessDecision {
+   if (input.kind === 'group') {
+-    return input.addressed === false ? 'ignore' : 'allow'
++    return 'ignore'
+   }
+   return input.userAllowed ? 'allow' : 'deny'
+ }
+diff --git a/lib/client.js b/lib/client.js
+index b79e337d87..528d38091c 100644
+--- a/lib/client.js
++++ b/lib/client.js
+@@ -888,7 +888,7 @@ react-is/cjs/react-is.production.js:
+       schedule();
+     }
+     const EMPTY_EXTRA_TABS = [];
+-    const inject = ["slots", "sessions", "workspaces", "locale"];
++    const inject = ["slots", "sessions", "workspaces", "locale", "layout"];
+     const API_BASE = "/api/dsh-im-connect";
+     const TAB_KEY = "dsh-im-connect.sidebar-tab";
+     const ACCOUNT_SELECTION_KEY = "dsh-im-connect.settings.selected-account";
+@@ -1055,6 +1055,7 @@ react-is/cjs/react-is.production.js:
+ .ima-field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;font-size:13px}
+ .ima-field .ant-input,.ima-field input{width:100%}
+ .ima-page.ima-account-page{container-type:inline-size;min-width:0;max-width:1080px;width:100%;margin:0 auto;padding:0 0 32px}
++.ima-main-panel{box-sizing:border-box;width:100%;height:100%;overflow:auto;padding:28px clamp(24px,4vw,48px) 48px}
+ .ima-account-shell,.ima-account-shell *{box-sizing:border-box}
+ .ima-account-shell{display:block;min-height:0;border:0;border-radius:0;overflow:visible;background:transparent}
+ .ima-platforms{display:flex;flex-direction:column;gap:12px;padding:0;border:0;background:transparent;min-width:0}
+@@ -2408,10 +2409,6 @@ react-is/cjs/react-is.production.js:
+           h("div", { className: "ima-heading" },
+             h("div", { className: "ima-title-row" },
+               h("h2", { className: "ima-title" }, t("settings.title")),
+-              h("div", { className: "ima-title-links" },
+-                h(Button, { size: "small", shape: "default", href: "https://github.com/MichengAI/dsh-im-connect", target: "_blank", rel: "noreferrer", "aria-label": t("settings.viewProject"), icon: h(GithubMark16) }, t("settings.viewProject")),
+-                h(Button, { size: "small", shape: "default", href: "https://github.com/MichengAI/dsh-im-connect/issues", target: "_blank", rel: "noreferrer", "aria-label": t("settings.feedback"), icon: h(IconListPenOutline16, { size: 16 }) }, t("settings.feedback")),
+-              ),
+             ),
+             h("p", { className: "ima-sub" }, t("settings.description")),
+           ),
+@@ -3644,17 +3641,12 @@ react-is/cjs/react-is.production.js:
+           if (error) console.warn("[dsh-im-connect] 无法刷新渠道会话归属", error);
+         });
+       }, "im-connect: channel membership");
++      IM_LOCALES.zh["settings.label"] = "渠道接入";
++      IM_LOCALES.en["settings.label"] = "Channel Connections";
++      IM_LOCALES.zh["rail.empty"] = "暂无频道会话。请先在侧边栏「渠道接入」中连接渠道，再给机器人发送一条消息";
++      IM_LOCALES.en["rail.empty"] = "No channel sessions yet. Connect a channel in Channel Connections in the sidebar, then send the bot a message.";
+       ctx.effect(() => ctx.locale.register(IM_LOCALE_NS, IM_LOCALES), "im-connect: dictionaries");
+       const t = ctx.locale.bind(IM_LOCALE_NS);
+-      ctx.effect(() => observePluginUpdate({
+-        endpoint: "/api/michengai/dsh-im-connect/update",
+-        packageName: "@michengai/dsh-im-connect",
+-        titleRowSelector: ".ima-title-row",
+-        linksSelector: ".ima-title-links",
+-        zhName: t("settings.title"),
+-        enName: t("settings.title"),
+-        createIcon: createPluginUpdateIcon,
+-      }), "im-connect: plugin update ui");
+       const permissionT = ctx.locale.bind("permission.access");
+       const modelT = ctx.locale.bind("model");
+       const presetT = ctx.locale.bind("settings.agentPreset");
+@@ -3664,10 +3656,7 @@ react-is/cjs/react-is.production.js:
+         const next = parseChannelSettingsRequest(request);
+         if (!next) return;
+         requestChannelSettings(next);
+-        openSettingsSection(
+-          [t("settings.label"), IM_LOCALES.en["settings.label"], IM_LOCALES.zh["settings.label"]],
+-          () => { requestChannelSettings(next); },
+-        );
++        ctx.layout.selectPanel("im-assistant");
+       };
+       function LocalizedChannelRail(props) {
+         useSyncExternalStore(subscribeLocale, localeSnapshot, localeSnapshot);
+@@ -3679,7 +3668,11 @@ react-is/cjs/react-is.production.js:
+       }
+       function LocalizedSettingsPage(props) {
+         useSyncExternalStore(subscribeLocale, localeSnapshot, localeSnapshot);
+-        return h(AntdProvider, null, h(SettingsPage, Object.assign({}, props, { t, permissionT, modelT, presetT, readMainSessionModel: () => readMainSessionModel(ctx) })));
++        return h(AntdProvider, null, h("div", { className: "ima-main-panel" },
++          h(SettingsPage, Object.assign({}, props, { t, permissionT, modelT, presetT, readMainSessionModel: () => readMainSessionModel(ctx) }))));
++      }
++      function ImPanelIcon({ size }) {
++        return h(pickHostIcon("IconNewChatOutlineRegular", "IconNewChatOutlineMedium"), { size });
+       }
+       openImSession = (id) => {
+         try {
+@@ -3688,12 +3681,9 @@ react-is/cjs/react-is.production.js:
+         try { return openHostSession(ctx, id); }
+         catch (error) { console.warn("[dsh-im-connect] 无法打开会话", id, error); return false; }
+       };
+-      ctx.slots.inject("settings.section", () => ctx.slots.register({
+-          name: "settings.section",
+-          id: "im-assistant",
+-          order: 40,
+-          label: () => t("settings.label"),
+-          icon: "chat",
++      ctx.slots.inject("main", () => ctx.slots.register({
++          name: "main",
++          key: "im-assistant",
+           locale: IM_LOCALE_NS,
+         inject: () => ({
+           createWorkspace: (input) => ctx.workspaces.create(input),
+@@ -3703,6 +3693,13 @@ react-is/cjs/react-is.production.js:
+           presetT,
+         }),
+       }, LocalizedSettingsPage));
++      ctx.slots.inject("sidebar.panellist", () => ctx.slots.register({
++        name: "sidebar.panellist",
++        id: "im-assistant",
++        order: 60,
++        label: () => t("settings.label"),
++        locale: IM_LOCALE_NS,
++      }, ImPanelIcon));
+
+       ctx.slots.inject("sidebar.channels", () => ctx.slots.register({
+           name: "sidebar.channels",

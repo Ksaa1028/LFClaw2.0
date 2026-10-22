@@ -99,7 +99,7 @@ export const zh = {
   'actions.unarchive': '取消归档',
   'actions.pin': '置顶会话',
   'actions.unpin': '取消置顶',
-  'actions.newSession': '新会话',
+  'actions.newSession': '新建会话',
   'actions.newSession.aria': '在“{name}”中新建会话',
   'status.running': '进行中',
   'status.subagentsRunning.one': '{n} 个子智能体运行中',

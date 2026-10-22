@@ -3,14 +3,14 @@
 # After editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write packages/client/ui-sidebar/README.md
 /:
-  en: 7884381c2c554eca
-  zh: e6d7199a9bb2f0f8
+  en: c51c8aa726124fef
+  zh: 37542ed9a4937ebc
 /deepseek-ai-dsh-client-ui-sidebar:
   en: e357f49fb1d1710e
   zh: 2e61922b104f77eb
 /deepseek-ai-dsh-client-ui-sidebar/summary:
-  en: af17f03561e5372b
-  zh: 91a1b9f6c7a51025
+  en: 3a72b2bcaf0bb0c7
+  zh: d1f883b44d275450
 /deepseek-ai-dsh-client-ui-sidebar/table-of-contents:
   en: d152484eb41ac6b4
   zh: 09388d293f9be9cb
@@ -18,14 +18,14 @@
   en: a970f0547496634f
   zh: 36ef9a85b26e19f1
 /deepseek-ai-dsh-client-ui-sidebar/use-this-package/brand-and-new-session:
-  en: 098f85b9287d3147
-  zh: b921c128ac37d2cd
+  en: 510d2b78ad823b79
+  zh: f3098f67d186b5ff
 /deepseek-ai-dsh-client-ui-sidebar/use-this-package/global-panel-entries:
   en: 5d3300d3506254c5
   zh: 541ae1ee1e10b921
 /deepseek-ai-dsh-client-ui-sidebar/use-this-package/collapse-behavior:
-  en: 20e744360b4be2cc
-  zh: a90be7e8526bbb21
+  en: a9dbf5f8af676a33
+  zh: 7dc41840ca9f89be
 /deepseek-ai-dsh-client-ui-sidebar/use-this-package/macos-desktop:
   en: 28e3639ed58492e0
   zh: 4896acd767287c8a
@@ -36,8 +36,8 @@
   en: 676cd4c309b4110d
   zh: 25d1bd0b2c7db645
 /deepseek-ai-dsh-client-ui-sidebar/understand-the-implementation/slot-discipline:
-  en: 6eefc5c45abe8a8f
-  zh: 20b651e48a0ea903
+  en: 2e3f67e0e2f65ac4
+  zh: 8237e5a3e2ae4fd4
 /deepseek-ai-dsh-client-ui-sidebar/further-exploration:
   en: 5083bbf74e47bb67
   zh: 0236e569178756a2

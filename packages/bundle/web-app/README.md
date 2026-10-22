@@ -7,6 +7,12 @@ kind: "package-bundle"
 
 English | [中文](README.zh.md)
 
+LFClaw disables Session feedback commands, feedback UI (including message ratings), and Session telemetry export and its upload preference in this composition. Existing local feedback events remain; Session log download is available in Web and hidden in Desktop.
+
+The Desktop profile mounts the LFClaw connector center beside the skill center. Its Host reads the employee-scoped enterprise catalog and registers only currently authorized MCP tools; the server rechecks authorization on each call. The regular Web profile does not mount this enterprise integration.
+
+The Desktop profile also mounts the pinned `@michengai/dsh-im-connect@0.1.77` dependency. The shared LFClaw patch places Channel Connections in the sidebar and rejects group-chat input; desktop packaging preserves the patch and verifies private-chat access decisions. No developer Profile installation is required.
+
 Desktop analytics follows the [product collection policy](../../client/product-analytics/README.md), including its live application setting. Web usage is excluded.
 
 Desktop analytics schedules partial batches every 30 seconds, with a 15-second exporter timeout and a 20-second processor timeout. Shutdown allows 2 seconds to drain, then cancels pending requests and retry waits so telemetry does not keep the Host alive. Pending events may be lost on exit.
@@ -184,3 +190,7 @@ None.
 </details>
 
 The Web composition includes the account Remote controller and Account settings section.
+
+LFClaw disables the official DeepSeek sidebar brand occupant and uses the sidebar’s application favicon and localized brand name.
+
+The application disables the Harness identity opener and leaves shipped preset persona text empty. Skills, commands and connector tools retain their functional instructions and normal invocation.

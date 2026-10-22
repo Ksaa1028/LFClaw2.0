@@ -354,6 +354,17 @@ describe('catalog cache', () => {
     expect(payloads[2]).toEqual({ sessionId: 's1' })
   })
 
+  it('skills/change refreshes the candidates of every retained session', async () => {
+    const { list, payloads } = countingList()
+    const { source, remote } = await bench(list)
+    await source.candidates(proj('s1'), req(''))
+    await source.candidates(proj('s2'), req(''))
+    remote.emit('skills/change', [])
+    await source.candidates(proj('s1'), req(''))
+    await source.candidates(proj('s2'), req(''))
+    expect(payloads).toHaveLength(4)
+  })
+
   it('connection/reset clears every cached session', async () => {
     const { list, payloads } = countingList()
     const { ctx, source } = await bench(list)
@@ -429,11 +440,14 @@ describe('pick lands plain text', () => {
     expect(outcome).toEqual({ text: '/commit-helper ' })
   })
 
-  it('keeps the legacy reference codec removed and stays out of adjudication', async () => {
+  it('serializes named skill chips to the exact slash invocation without claiming commands', async () => {
     const { source } = await bench(listOk(CATALOG))
-    // Determinism lives host-side (the pre-step gesture boundary), so the
-    // source neither claims lines nor serializes reference markup.
-    expect(source.codec).toBeUndefined()
+    const ref = '/enterprise-skill-creator-0f05c7'
+    expect(source.codec?.clipboardText(ref)).toBe(ref)
+    await expect(source.codec?.serialize(ref, new AbortController().signal)).resolves.toBe(ref)
+    const abort = new AbortController()
+    abort.abort()
+    await expect(source.codec?.serialize(ref, abort.signal)).rejects.toThrow()
     expect(typeof source.matchSpace).toBe('undefined')
     expect(typeof source.matchEnter).toBe('undefined')
   })

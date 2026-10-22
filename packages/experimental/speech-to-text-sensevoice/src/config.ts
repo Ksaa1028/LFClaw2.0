@@ -4,6 +4,8 @@ import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
 
 /** Local runtime, inference, and retention settings. */
 export interface Config {
+  /** Prepare resources on activation; failures remain visible for explicit retry. */
+  autoPrepare: boolean
   /** Unique registration id; consumers select this exact id. */
   providerId: string
   /** Absolute directory for verified ONNX models. */
@@ -54,6 +56,7 @@ export interface Config {
 
 /** Validate deployment-varying runtime choices at plugin activation. */
 export const Config: z<Partial<Config>, Config> = z.object({
+  autoPrepare: z.boolean().default(false),
   providerId: z.string().min(1).default('sensevoice-local'),
   dataRoot: z.string().min(1).required(),
   modelDirectory: z.union([z.string().min(1), z.const(undefined)]),

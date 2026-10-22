@@ -57,7 +57,7 @@ function requiredFields(product) {
 }
 
 /**
- * Validate a build version against the product version it extends.
+ * Validate a product-derived build or an independent LFClaw YYYY.M.D-sequence release.
  * @param {string} buildVersion - Version this build publishes.
  * @param {string} productVersion - Version the manifests declare.
  * @returns {string} The version as semver normalizes it, which is what the artifacts will carry.
@@ -66,6 +66,14 @@ export function validateDesktopBuildVersion(buildVersion, productVersion) {
   const build = parseVersion(buildVersion, 'build version')
   const product = parseVersion(productVersion, 'product version')
   if (build.version === product.version) return build.version
+  // LFClaw calendar releases use independent product numbering with a daily sequence.
+  if (build.major >= 2000 && build.major <= 9999 && build.prerelease.length === 1
+    && typeof build.prerelease[0] === 'number' && build.prerelease[0] >= 1 && build.prerelease[0] <= 99) {
+    const date = new Date(Date.UTC(build.major, build.minor - 1, build.patch))
+    if (date.getUTCFullYear() === build.major && date.getUTCMonth() + 1 === build.minor
+      && date.getUTCDate() === build.patch) return build.version
+    throw new Error('desktop build version: calendar release has an invalid date')
+  }
   if (build.compareMain(product) !== 0) {
     throw new Error(`desktop build version: ${buildVersion} must extend product version ${productVersion}`)
   }

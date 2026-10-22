@@ -218,7 +218,7 @@ export class DesktopOnboardingController {
     const next: DesktopOnboardingState = {
       progress: shallowEqual(previous.progress, progress) ? previous.progress : progress,
       creditFunded: this.creditFunded ?? false,
-      visible: !done && signedIn && !unavailable,
+      visible: false, // Disabled: activation gate handles first-run
       status: this.completing || (this.saving && this.draft === undefined) ? 'saving' : unavailable || readFailed || accountFailed || this.error !== null ? 'error'
         : host.status === 'loading' || account === undefined ? 'loading' : 'ready',
       error: unavailable || readFailed ? 'settings' : this.error,

@@ -1,0 +1,36 @@
+# 独立管理端 profile：仅 HTTP 服务、企业 API、管理网页。
+- insert:
+    - id: lfclaw-http
+      name: '@deepseek-ai/dsh-host-webserver'
+      config:
+        host: !!js process.env.LFCLAW_BIND_HOST
+        port: !!js Number(process.env.LFCLAW_PORT)
+        compression: none
+    - id: lfclaw-enterprise-api
+      name: '@deepseek-ai/lfclaw-admin-server'
+      config:
+        dataDirectory: !!js process.env.LFCLAW_DATA_DIR
+        routePrefix: /lfclaw/api
+        allowedOrigin: !!js process.env.LFCLAW_PUBLIC_ORIGIN
+        initialPasswordEnv: LFCLAW_ADMIN_PASSWORD
+        skillArchiveLimits:
+          maxArchiveBytes: 33554432
+          maxUnpackedBytes: 67108864
+          maxFiles: 20000
+        oauthCallbackUrl: !!js process.env.LFCLAW_OAUTH_CALLBACK_URL
+        oauthFlowTtlMs: 600000
+        mcpTimeoutMs: 30000
+        expertTimeoutMs: 180000
+        modelTimeoutMs: 120000
+        authWindowMs: 900000
+        loginMaxFailures: 5
+        activationMaxFailures: 10
+        adminSessionTtlMs: 43200000
+        employeeSessionTtlMs: 2592000000
+        shareCleanupIntervalMs: 60000
+    - id: lfclaw-admin-static
+      name: '@deepseek-ai/lfclaw-admin-server/admin-static'
+      config:
+        webDirectory: !!js process.env.LFCLAW_WEB_DIR
+        desktopDirectory: !!js process.env.LFCLAW_DESKTOP_DIR
+        releaseId: !!js process.env.LFCLAW_RELEASE_ID

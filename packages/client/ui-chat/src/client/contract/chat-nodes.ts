@@ -28,6 +28,8 @@ export type ChatNode<Kind extends ChatNodeKind = ChatNodeKind> = {
 
 /** Final Assistant row payload shared by streaming and settled states. */
 export interface AssistantChatData {
+  /** Model ID reported by this response, or its recorded request route when unavailable. */
+  readonly modelId?: string
   readonly status: 'running' | 'settled' | 'interrupted'
   readonly turn: number
   readonly step: number

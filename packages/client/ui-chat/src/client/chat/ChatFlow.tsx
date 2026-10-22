@@ -12,11 +12,12 @@ import { RunningStatus } from './RunningStatus.tsx'
 /** Render the flow without adding a DOM parent or changing keyed row positions. */
 export const ChatFlow = memo(function ChatFlow({
   entries, pendingInputs, lastInputTurn, deferCollapse,
-  useSession, useChat, useChatNode, useChatNodeBottom, useChatNodeProcess, useChatGroup, usePresentation,
+  useSession, useInput, useChat, useChatNode, useChatNodeBottom, useChatNodeProcess, useChatGroup, usePresentation,
   useStore, actions, renderSlot, t, useGroupAction, useGroupHeaderAction,
   cwd, openFile, openSkill, inspectCall, forkAt, loadImage, fileMentions,
 }: ChatFlowSlotProps) {
   const nodeStore = useChat(snapshot => snapshot.nodes)
+  const submittedSkillLabels = useInput(state => state.submittedSkillLabels)
   const running = useSession(snapshot => snapshot.running)
   const latestTurnAnchor = useChat(snapshot => snapshot.navigation.items().at(-1)?.anchorKey)
   const runningStartTime = useChatNode(latestTurnAnchor ?? '', (node) => {
@@ -48,9 +49,11 @@ export const ChatFlow = memo(function ChatFlow({
   })
   const pendingRows = pendingInputs.map(item => 'requestId' in item ? (
     <PendingSubmissionBubble key={item.requestId} submission={item}
+      {...submittedSkillLabels?.[item.text] === undefined ? {} : { skillLabels: submittedSkillLabels[item.text] }}
       renderMessageImages={renderMessageImages} t={t} />
   ) : (
     <PendingSteeringBubble key={item.id} content={item.content}
+      {...submittedSkillLabels === undefined ? {} : { submittedSkillLabels }}
       renderMessageImages={renderMessageImages} t={t} />
   ))
   const tail = entries.at(-1)

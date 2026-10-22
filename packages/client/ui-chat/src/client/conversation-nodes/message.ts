@@ -12,6 +12,8 @@ interface ReferencedUserMessageNode extends UserMessageNode {
   readonly referenceLabels?: readonly string[]
   /** Skill names the same step's `skill-invocation` injections loaded. */
   readonly skillNames?: readonly string[]
+  /** Human-facing labels recorded with the loaded skills. */
+  readonly skillLabels?: Readonly<Record<string, string>>
 }
 
 interface ReferencedSteeringMessageNode extends SteeringMessageNode {
@@ -19,6 +21,8 @@ interface ReferencedSteeringMessageNode extends SteeringMessageNode {
   readonly referenceLabels?: readonly string[]
   /** Skill names the same step's `skill-invocation` injections loaded. */
   readonly skillNames?: readonly string[]
+  /** Human-facing labels recorded with the loaded skills. */
+  readonly skillLabels?: Readonly<Record<string, string>>
 }
 
 type MessageNode = ReferencedUserMessageNode | ReferencedSteeringMessageNode | (ContextMessageNode & { readonly waking?: boolean })

@@ -1,0 +1,319 @@
+[
+  {
+    "id": "0709e11c-a43e-4e72-9768-8337d004e714",
+    "firstAt": "2026-10-19T01:43:43.946Z",
+    "latestAt": "2026-10-19T01:44:45.918Z",
+    "elapsedMs": 61972,
+    "turns": [
+      {
+        "time": "2026-10-19T01:44:45.918Z",
+        "reason": {
+          "kind": "completed"
+        }
+      }
+    ],
+    "calls": [
+      {
+        "name": "send_message",
+        "time": "2026-10-19T01:44:37.722Z"
+      }
+    ],
+    "answers": 1
+  },
+  {
+    "id": "124b8506-59d6-4719-b2cb-a5c210f53f3b",
+    "firstAt": "2026-10-19T01:34:04.730Z",
+    "latestAt": "2026-10-19T01:35:48.146Z",
+    "elapsedMs": 103416,
+    "turns": [
+      {
+        "time": "2026-10-19T01:35:48.146Z",
+        "reason": {
+          "kind": "completed"
+        }
+      }
+    ],
+    "calls": [
+      {
+        "name": "send_message",
+        "time": "2026-10-19T01:35:10.707Z"
+      }
+    ],
+    "answers": 2
+  },
+  {
+    "id": "638506b9-4f93-4414-b7e6-55f99abbc96f",
+    "firstAt": "2026-10-19T01:54:13.379Z",
+    "latestAt": "2026-10-19T01:54:53.345Z",
+    "elapsedMs": 39966,
+    "turns": [
+      {
+        "time": "2026-10-19T01:54:53.345Z",
+        "reason": {
+          "kind": "completed"
+        }
+      }
+    ],
+    "calls": [
+      {
+        "name": "send_message",
+        "time": "2026-10-19T01:54:49.174Z"
+      }
+    ],
+    "answers": 2
+  },
+  {
+    "id": "8c108f08-88b4-4f84-8f83-78f897581ec2",
+    "firstAt": "2026-10-19T01:43:43.942Z",
+    "latestAt": "2026-10-19T01:44:22.884Z",
+    "elapsedMs": 38942,
+    "turns": [
+      {
+        "time": "2026-10-19T01:44:22.884Z",
+        "reason": {
+          "kind": "completed"
+        }
+      }
+    ],
+    "calls": [
+      {
+        "name": "send_message",
+        "time": "2026-10-19T01:44:16.085Z"
+      }
+    ],
+    "answers": 1
+  },
+  {
+    "id": "b2a2a66a-a9a7-4dc7-862a-2035cf353220",
+    "firstAt": "2026-10-19T01:34:04.735Z",
+    "latestAt": "2026-10-19T01:36:32.430Z",
+    "elapsedMs": 147695,
+    "turns": [
+      {
+        "time": "2026-10-19T01:36:32.430Z",
+        "reason": {
+          "kind": "completed"
+        }
+      }
+    ],
+    "calls": [
+      {
+        "name": "send_message",
+        "time": "2026-10-19T01:35:41.721Z"
+      }
+    ],
+    "answers": 2
+  },
+  {
+    "id": "be3a99d1-fd84-48e9-acd0-ae32db2fe3f9",
+    "firstAt": "2026-10-19T01:21:27.102Z",
+    "latestAt": "2026-10-19T01:23:07.423Z",
+    "elapsedMs": 100321,
+    "turns": [
+      {
+        "time": "2026-10-19T01:23:07.423Z",
+        "reason": {
+          "kind": "completed"
+        }
+      }
+    ],
+    "calls": [
+      {
+        "name": "send_message",
+        "time": "2026-10-19T01:22:34.918Z"
+      }
+    ],
+    "answers": 1
+  },
+  {
+    "id": "c5e42aa4-e2c3-4c6c-b3fe-ca77ceb1eac7",
+    "firstAt": "2026-10-19T01:54:13.376Z",
+    "latestAt": "2026-10-19T01:55:11.669Z",
+    "elapsedMs": 58293,
+    "turns": [
+      {
+        "time": "2026-10-19T01:55:11.669Z",
+        "reason": {
+          "kind": "completed"
+        }
+      }
+    ],
+    "calls": [
+      {
+        "name": "send_message",
+        "time": "2026-10-19T01:55:01.741Z"
+      }
+    ],
+    "answers": 1
+  },
+  {
+    "id": "ff77a0b7-355b-488c-8931-ebecdca29c99",
+    "firstAt": "2026-10-19T01:21:27.105Z",
+    "latestAt": "2026-10-19T01:23:13.689Z",
+    "elapsedMs": 106584,
+    "turns": [
+      {
+        "time": "2026-10-19T01:23:13.689Z",
+        "reason": {
+          "kind": "completed"
+        }
+      }
+    ],
+    "calls": [],
+    "answers": 1
+  },
+  {
+    "id": "session-3206cc2e-3aee-4828-9e00-9dec4a3201e1",
+    "firstAt": "2026-10-19T01:42:55.812Z",
+    "latestAt": "2026-10-19T01:51:09.980Z",
+    "elapsedMs": 494168,
+    "turns": [
+      {
+        "time": "2026-10-19T01:47:32.760Z",
+        "reason": {
+          "kind": "completed"
+        }
+      }
+    ],
+    "calls": [
+      {
+        "name": "subagent",
+        "time": "2026-10-19T01:43:43.781Z"
+      },
+      {
+        "name": "subagent",
+        "time": "2026-10-19T01:43:43.782Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-19T01:43:47.871Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-19T01:44:17.957Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-19T01:46:29.013Z"
+      }
+    ],
+    "answers": 4
+  },
+  {
+    "id": "session-ba4c225f-0aa3-44aa-9079-07b749c06215",
+    "firstAt": "2026-10-19T01:20:08.431Z",
+    "latestAt": "2026-10-19T01:32:33.371Z",
+    "elapsedMs": 744940,
+    "turns": [
+      {
+        "time": "2026-10-19T01:27:54.057Z",
+        "reason": {
+          "kind": "completed"
+        }
+      }
+    ],
+    "calls": [
+      {
+        "name": "subagent",
+        "time": "2026-10-19T01:21:26.951Z"
+      },
+      {
+        "name": "subagent",
+        "time": "2026-10-19T01:21:26.953Z"
+      },
+      {
+        "name": "list_agents",
+        "time": "2026-10-19T01:22:13.025Z"
+      },
+      {
+        "name": "list_agents",
+        "time": "2026-10-19T01:22:33.909Z"
+      },
+      {
+        "name": "pwsh",
+        "time": "2026-10-19T01:23:19.657Z"
+      }
+    ],
+    "answers": 1
+  },
+  {
+    "id": "session-c445b5a6-e258-4e91-b68f-a3efeb016fbd",
+    "firstAt": "2026-10-19T01:53:14.614Z",
+    "latestAt": "2026-10-19T01:56:18.083Z",
+    "elapsedMs": 183469,
+    "turns": [
+      {
+        "time": "2026-10-19T01:54:43.167Z",
+        "reason": {
+          "kind": "completed"
+        }
+      },
+      {
+        "time": "2026-10-19T01:56:18.083Z",
+        "reason": {
+          "kind": "completed"
+        }
+      }
+    ],
+    "calls": [
+      {
+        "name": "subagent",
+        "time": "2026-10-19T01:54:13.222Z"
+      },
+      {
+        "name": "subagent",
+        "time": "2026-10-19T01:54:13.224Z"
+      },
+      {
+        "name": "job_output",
+        "time": "2026-10-19T01:55:12.294Z"
+      }
+    ],
+    "answers": 2
+  },
+  {
+    "id": "session-d36e6dcc-6815-4aa8-bf2f-19828604222c",
+    "firstAt": "2026-10-19T01:33:51.525Z",
+    "latestAt": "2026-10-19T01:41:49.494Z",
+    "elapsedMs": 477969,
+    "turns": [
+      {
+        "time": "2026-10-19T01:34:11.833Z",
+        "reason": {
+          "kind": "completed"
+        }
+      },
+      {
+        "time": "2026-10-19T01:35:19.294Z",
+        "reason": {
+          "kind": "completed"
+        }
+      },
+      {
+        "time": "2026-10-19T01:37:38.187Z",
+        "reason": {
+          "kind": "completed"
+        }
+      }
+    ],
+    "calls": [
+      {
+        "name": "subagent",
+        "time": "2026-10-19T01:34:04.571Z"
+      },
+      {
+        "name": "subagent",
+        "time": "2026-10-19T01:34:04.573Z"
+      },
+      {
+        "name": "list_agents",
+        "time": "2026-10-19T01:34:05.936Z"
+      },
+      {
+        "name": "job_list",
+        "time": "2026-10-19T01:34:07.690Z"
+      }
+    ],
+    "answers": 5
+  }
+]

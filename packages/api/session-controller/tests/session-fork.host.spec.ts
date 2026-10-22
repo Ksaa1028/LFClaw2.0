@@ -34,7 +34,7 @@ async function composed(workspaces: readonly Workspace[] = []): Promise<Context>
   await ctx.plugin(SystemPrompt, { personaPrefix: '' })
   await ctx.plugin(AgentRegistry)
   installSessionReadTestServices(ctx)
-  ctx.provide('workspaceRegistry', { list: () => workspaces, archivedSessionIds: [] } as never)
+  ctx.provide('workspaceRegistry', { list: () => workspaces, archivedSessionIds: [], archiveSession: vi.fn(async () => {}) } as never)
   ctx.agents.setFactory({
     createAgent: async (ownerCtx: Context, options: CreateAgentOptions): Promise<AgentHandle> => {
       const session = ctx.sessions.create(options.sessionId, {
@@ -169,7 +169,7 @@ describe('sessions.fork', () => {
       source.append('turn/start', { turn: 1 })
       source.append('turn/end', { turn: 1, reason: { kind: 'completed' } })
       const stat = vi.fn(() => Promise.reject(new Error('unexpected metadata read')))
-      ctx.provide('sessionPersistence', testSessionPersistence(ctx, { stat }) as never)
+      ctx.provide('sessionPersistence', testSessionPersistence(ctx, { stat, delete: vi.fn(async () => {}) }) as never)
 
       const result = await remote(ctx).fork({ sessionId: source.id, allowMigration: false })
 
@@ -177,6 +177,39 @@ describe('sessions.fork', () => {
       expect(stat).not.toHaveBeenCalled()
       expect(ctx.agents.get(source.id)).toBeUndefined()
       expect(ctx.sessions.get(result.value.sessionId)?.inheritedEventCount).toBe(2)
+      const remove = vi.fn(async () => {})
+      const stops: { sessionId: SessionId; includeDescendants?: boolean }[] = []
+      ctx.on('workspace/session-stop', (request) => { stops.push(request) })
+      const list = vi.spyOn(ctx.sessionPersistence, 'list').mockResolvedValue([
+        { revision: SessionPersistenceRevision('test:retained-fork'), header: { ...source.header, id: sid('retained-fork'), parentSession: result.value.sessionId, isSeeded: true } },
+        { revision: SessionPersistenceRevision('test:managed-child'), header: { ...source.header, id: sid('managed-child'), parentSession: result.value.sessionId, origin: 'subagent' } },
+      ])
+      vi.spyOn(ctx.sessionPersistence, 'delete').mockImplementation(remove)
+      await ctx.sessionController.deleteSession(result.value.sessionId)
+      expect(remove).toHaveBeenCalledExactlyOnceWith(result.value.sessionId)
+      expect(list).not.toHaveBeenCalled()
+      expect(stops).toEqual([{ sessionId: result.value.sessionId, includeDescendants: false }])
+      expect(ctx.sessions.get(source.id)).toBe(source)
+    } finally {
+      await ctx.fiber.dispose()
+    }
+  })
+
+  it('deletes a selected idle subagent Session without deleting its parent', async () => {
+    const ctx = await composed()
+    try {
+      const parent = ctx.sessions.create(sid('retained-parent'), { meta: { cwd: '/proj' } })
+      const child = ctx.sessions.create(sid('selected-child'), {
+        meta: { cwd: '/proj', parentSession: parent.id, origin: 'subagent' },
+      })
+      const remove = vi.fn(async () => {})
+      ctx.provide('sessionPersistence', testSessionPersistence(ctx, { delete: remove }) as never)
+      remote(ctx)
+
+      await ctx.sessionController.deleteSession(child.id)
+
+      expect(remove).toHaveBeenCalledExactlyOnceWith(child.id)
+      expect(ctx.sessions.get(parent.id)).toBe(parent)
     } finally {
       await ctx.fiber.dispose()
     }

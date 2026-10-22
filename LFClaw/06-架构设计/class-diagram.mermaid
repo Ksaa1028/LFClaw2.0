@@ -1,0 +1,261 @@
+classDiagram
+    direction TB
+
+    class Employee {
+        +string id
+        +string name
+        +string email
+        +string departmentId
+        +string activationCode
+        +AccountStatus status
+        +string avatarUrl
+        +IMBinding[] imBindings
+        +ISOString createdAt
+        +ISOString updatedAt
+    }
+
+    class Department {
+        +string id
+        +string name
+        +string parentId
+        +DepartmentType type
+        +Department[] children
+    }
+
+    class ActivationCode {
+        +string code
+        +string employeeId
+        +CodeStatus status
+        +ISOString createdAt
+        +ISOString resetAt
+    }
+
+    class ResourceScope {
+        +ScopeType type
+        +string[] departmentIds
+        +string[] employeeIds
+    }
+
+    class Model {
+        +string id
+        +string name
+        +string displayName
+        +string provider
+        +ModelProtocol protocol
+        +string baseUrl
+        +boolean isDefault
+        +Status status
+        +Pricing pricing
+        +ResourceScope scope
+    }
+
+    class Skill {
+        +string id
+        +string name
+        +string description
+        +string version
+        +Source source
+        +Status status
+        +string iconUrl
+        +ResourceScope scope
+        +string zipUrl
+        +string skillMd
+        +string authorId
+    }
+
+    class Tool {
+        +string id
+        +string name
+        +string description
+        +boolean enabled
+    }
+
+    class Connector {
+        +string id
+        +string name
+        +string description
+        +ConnectorType type
+        +Tool[] tools
+        +Source source
+        +Status status
+        +ResourceScope scope
+        +PersonalBinding personalBinding
+    }
+
+    class Expert {
+        +string id
+        +string name
+        +string description
+        +string[] tags
+        +Source source
+        +ExpertType type
+        +Status status
+        +ExpertConfig config
+        +ResourceScope scope
+    }
+
+    class Plugin {
+        +string id
+        +string name
+        +string version
+        +string description
+        +Source source
+        +Status status
+        +ConfigSchema configSchema
+        +Record_string_any_ config
+    }
+
+    class AutomationTask {
+        +string id
+        +string name
+        +string cron
+        +string instruction
+        +string sessionId
+        +TaskStatus status
+        +ISOString lastRunAt
+        +ISOString nextRunAt
+        +TaskResult lastResult
+        +string ownerId
+        +boolean enabled
+    }
+
+    class ConversationShare {
+        +string id
+        +string title
+        +string senderId
+        +string[] receiverIds
+        +ISOString expiresAt
+        +number sizeBytes
+        +ShareStatus status
+        +SharedMessage[] messages
+        +SharedAttachment[] attachments
+    }
+
+    class Notification {
+        +string id
+        +NotificationType type
+        +string title
+        +string content
+        +boolean read
+        +string targetId
+        +ISOString createdAt
+        +ISOString expiresAt
+    }
+
+    class VersionPackage {
+        +string id
+        +string version
+        +Platform platform
+        +number sizeBytes
+        +string downloadUrl
+        +boolean forceUpdate
+        +string releaseNotes
+        +PackageStatus status
+        +ISOString publishedAt
+    }
+
+    class Backup {
+        +string id
+        +string name
+        +BackupType type
+        +number sizeBytes
+        +BackupStatus status
+        +ISOString createdAt
+        +string downloadUrl
+    }
+
+    class SystemStatus {
+        +number cpuPercent
+        +number memoryPercent
+        +number diskPercent
+        +GatewayStatus gatewayStatus
+        +SystemError[] lastErrors
+        +number onlineUsers
+    }
+
+    class ApiClient {
+        -string baseURL
+        -string token
+        +get~T~(url, params): Promise~T~
+        +post~T~(url, body): Promise~T~
+        +put~T~(url, body): Promise~T~
+        +delete~T~(url): Promise~T~
+        +setToken(token): void
+        +onAuthError(handler): void
+    }
+
+    class AuthService {
+        +login(code): Promise~AuthResult~
+        +logout(): void
+        +refreshStatus(): Promise~AccountStatus~
+        +validateActivation(code): Promise~boolean~
+    }
+
+    class ResourceService {
+        +fetchList(type, source): Promise~Resource[]~
+        +toggleEnabled(type, id): Promise~void~
+    }
+
+    class ChatService {
+        +sendMessage(modelId, content, attachments): Promise~Message~
+        +invokeResource(type, id, context): Promise~Message~
+        +createSessionFromShare(share): Promise~Session~
+    }
+
+    class TaskService {
+        +create(task): Promise~AutomationTask~
+        +update(id, task): Promise~AutomationTask~
+        +delete(id): Promise~void~
+        +run(taskId): Promise~TaskResult~
+    }
+
+    class ShareService {
+        +fetchReceived(): Promise~ConversationShare[]~
+        +fetchSent(): Promise~ConversationShare[]~
+        +claim(id): Promise~ConversationShare~
+    }
+
+    class NotificationService {
+        +fetch(): Promise~Notification[]~
+        +markRead(id): Promise~void~
+        +clear(): Promise~void~
+    }
+
+    class AdminService {
+        +login(credentials): Promise~AdminAuth~
+        +grantAuthorization(scope): Promise~void~
+        +revokeAuthorization(scope): Promise~void~
+        +publishVersion(pkg): Promise~VersionPackage~
+    }
+
+    class AuthStore {
+        -string token
+        -Employee employee
+        -AccountStatus status
+        +setToken(t): void
+        +setEmployee(e): void
+        +setStatus(s): void
+        +isAuthenticated(): boolean
+    }
+
+    Employee "1" --o "0..*" Department : belongsTo
+    Department "1" --* "0..*" Department : children
+    Employee "1" --* "1" ActivationCode : owns
+    Employee "1" --* "0..*" AutomationTask : owns
+    Employee "1" --* "0..*" Notification : receives
+    Employee "1" --o "0..*" ConversationShare : senderOrReceiver
+    Model "0..*" --> "1" ResourceScope : scopedBy
+    Skill "0..*" --> "1" ResourceScope : scopedBy
+    Connector "0..*" --> "1" ResourceScope : scopedBy
+    Connector "1" --* "0..*" Tool : contains
+    Expert "0..*" --> "1" ResourceScope : scopedBy
+    ConversationShare "1" --* "0..*" SharedMessage : contains
+    ConversationShare "1" --* "0..*" SharedAttachment : contains
+    AuthService ..> ApiClient : uses
+    ResourceService ..> ApiClient : uses
+    ChatService ..> ApiClient : uses
+    TaskService ..> ApiClient : uses
+    ShareService ..> ApiClient : uses
+    NotificationService ..> ApiClient : uses
+    AdminService ..> ApiClient : uses
+    AuthStore ..> AuthService : uses

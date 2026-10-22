@@ -92,7 +92,7 @@
 :global([data-windows-titlebar]) .collapsed .newSession {
   position: fixed;
   top: calc((var(--dsh-windows-titlebar-height) - 28px) / 2);
-  left: 48px;
+  left: 128px;
   margin: 0;
   padding: 0;
   border: none;
@@ -297,22 +297,7 @@
   white-space: nowrap;
 }
 
-.localBuildBrand {
-  flex: none;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 1px;
-  height: 24px;
-  white-space: nowrap;
-}
 
-.localBuildTitle {
-  font-size: 12px;
-  line-height: 13px;
-  letter-spacing: 0;
-}
 
 .iconButton {
   position: relative;
@@ -375,21 +360,6 @@
   color: var(--dsw-alias-label-primary);
 }
 
-.buildVersion {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  height: 10px;
-  padding: 0 3px;
-  border-radius: 2px;
-  color: var(--dsw-alias-label-primary-inverted);
-  background: var(--dsw-alias-label-primary);
-  font-family: var(--ds-font-family-code);
-  font-size: 6px;
-  font-weight: 500;
-  line-height: 10px;
-  white-space: nowrap;
-}
 
 /* New Session: 38px bar, 12px radius (figma 133:7634 geometry, squared-off
    corners); collapsed it renders as the rail's plain icon control. */
@@ -610,4 +580,22 @@
     transition: none;
     animation: none;
   }
+}
+
+:global([data-windows-titlebar]) .settingsArea {
+  position: fixed;
+  top: 0;
+  left: 48px;
+  z-index: 1100;
+  width: auto;
+  height: var(--dsh-windows-titlebar-height);
+  display: flex;
+  align-items: center;
+  -webkit-app-region: no-drag;
+}
+:global([data-windows-titlebar]) .settingsArea button {
+  height: 28px;
+  min-height: 28px;
+  border-radius: 6px;
+  font-size: 13px;
 }

@@ -420,6 +420,18 @@ describe('candidates', () => {
       expect(source.matchSpace!(proj('s1'), '/goal')).toHaveProperty('claim.name', 'goal')
     })
 
+    it('hides redundant menu rows without removing their typed slash commands', async () => {
+      const { command, source } = await bench({ commands: () => Promise.resolve({ commands: SHIPPED }) })
+      command.register(modelContribution())
+      const restoreModel = command.hideFromMenu('model')
+      command.hideFromMenu('permission')
+      expect((await source.candidates(proj('s1'), req(''))).map(row => row.name)).not.toContain('model')
+      expect((await source.candidates(proj('s1'), req(''))).map(row => row.name)).not.toContain('permission')
+      expect(source.matchSpace!(proj('s1'), '/permission')).toHaveProperty('claim.name', 'permission')
+      restoreModel()
+      expect((await source.candidates(proj('s1'), req(''))).map(row => row.name)).toContain('model')
+    })
+
     it.each([['en', en], ['zh', zh]] as const)('description edits preserve menu claims and bilingual parsing under %s', async (_locale, dictionary) => {
       const commands = SHIPPED.map(command => ({ ...command, description: command.description + '.' }))
       const { fiber, source, warm } = await bench({

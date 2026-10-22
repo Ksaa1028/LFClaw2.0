@@ -57,12 +57,13 @@ export const TurnTailNodeView = memo(function TurnTailNodeView({
     <div
       className={css.root}
       data-turn-tail={data.turn}
-      data-actions-reveal={endsWithResponse ? 'always' : 'hover'}
+      data-actions-reveal={endsWithResponse || closing.modelId !== undefined ? 'always' : 'hover'}
     >
       {tail}
       <MessageIconActions
         text={assistantText(closing.blocks)}
         time={closing.time}
+        modelId={closing.modelId}
         clock="end"
         // The branch action owns boundary resolution: it sends the real
         // turn/end seq it already has, and the Host cuts exactly there.

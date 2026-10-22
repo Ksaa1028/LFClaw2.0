@@ -118,6 +118,8 @@ Read these pages when the package-level contract is not enough. They move from t
 
 -----
 
+An explicit skill invocation may carry a `displayName` in its logged source; the invocation `name` remains the unique loader key. Older sources without this optional field remain readable.
+
 <a id="model-experience"></a>
 ## Model Experience
 

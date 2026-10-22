@@ -12,7 +12,7 @@ import type {
   ChatTurnNavigationIndex, ChatTurnProcessPresentation, LegacyConversationSlice, TurnNavigationItem,
 } from '../contract/snapshot.ts'
 import { TURN_PROCESS_INDEPENDENT_KINDS } from '../contract/turn-process.ts'
-import { sessionRecallLabels, skillInvocationName } from './event-projection.ts'
+import { sessionRecallLabels, skillInvocationDisplayName, skillInvocationName } from './event-projection.ts'
 import { sameTurnNavigationItem, turnNavigationItem } from './turn-navigation.ts'
 import { ChatTurnProcessProjector } from './turn-process-presentation.ts'
 
@@ -628,15 +628,22 @@ class ReferenceLabelProjector {
 function withSkillNames(
   node: ChatConversationViewNode,
   names: readonly string[],
+  labels: Readonly<Record<string, string>>,
 ): ChatConversationViewNode {
   const candidate = node as ChatNode
   if (candidate.kind !== 'user' && candidate.kind !== 'steering') return node
   const current = candidate.data.skillNames ?? EMPTY_KEYS
   const hasNames = Object.hasOwn(candidate.data, 'skillNames')
-  if (sameReferences(current, names) && hasNames === (names.length > 0)) return node
+  const currentLabels = candidate.data.skillLabels ?? {}
+  const labelKeys = Object.keys(labels)
+  if (sameReferences(current, names) && hasNames === (names.length > 0)
+    && Object.keys(currentLabels).length === labelKeys.length
+    && labelKeys.every(key => currentLabels[key] === labels[key])) return node
   const data: Record<string, unknown> = { ...candidate.data }
   if (names.length === 0) delete data.skillNames
   else data.skillNames = names
+  if (labelKeys.length === 0) delete data.skillLabels
+  else data.skillLabels = labels
   return { ...candidate, data }
 }
 
@@ -649,6 +656,20 @@ interface SlashEntry {
   readonly kind: SlashEntryKind
   /** The injected skill name of a `skill` entry. */
   readonly name: string | null
+  readonly displayName: string | null
+}
+
+interface SkillPresentation {
+  readonly names: readonly string[]
+  readonly labels: Readonly<Record<string, string>>
+}
+const EMPTY_SKILL_PRESENTATION: SkillPresentation = { names: EMPTY_KEYS, labels: {} }
+
+/** Older LFClaw events lack display names; recover only their readable skill slug. */
+function historicalSkillLabel(name: string): string | null {
+  const enterprise = /^enterprise-(.+)-[a-f0-9]{6}$/u.exec(name)
+  if (enterprise) return enterprise[1] ?? null
+  return name.startsWith('my-') ? name.slice(3) : null
 }
 
 /**
@@ -659,17 +680,19 @@ interface SlashEntry {
 function slashEntryOf(node: ChatConversationViewNode): SlashEntry | null {
   const candidate = node as ChatNode
   if (candidate.kind === 'user' || candidate.kind === 'steering') {
-    return { key: node.key, seq: node.anchorSeq, kind: 'message', name: null }
+    return { key: node.key, seq: node.anchorSeq, kind: 'message', name: null, displayName: null }
   }
   if (candidate.kind === 'context') {
     const name = skillInvocationName(candidate.data.source)
-    return name === null ? null : { key: node.key, seq: node.anchorSeq, kind: 'skill', name }
+    return name === null ? null : { key: node.key, seq: node.anchorSeq, kind: 'skill', name,
+      displayName: skillInvocationDisplayName(candidate.data.source) }
   }
-  return { key: node.key, seq: node.anchorSeq, kind: 'boundary', name: null }
+  return { key: node.key, seq: node.anchorSeq, kind: 'boundary', name: null, displayName: null }
 }
 
 function sameSlashEntry(left: SlashEntry, right: SlashEntry): boolean {
   return left.seq === right.seq && left.kind === right.kind && left.name === right.name
+    && left.displayName === right.displayName
 }
 
 /**
@@ -710,14 +733,17 @@ export class SkillNameProjector {
       this.sorted.push(entry)
     }
     this.sorted.sort((left, right) => left.seq - right.seq)
-    const names = new Map<string, readonly string[]>()
+    const names = new Map<string, SkillPresentation>()
     for (let index = 0; index < this.sorted.length; index++) {
       if (this.sorted[index]?.kind === 'boundary') continue
       const end = this.runEnd(index)
       this.assignRun(index, end, names)
       index = end
     }
-    return nodes.map(node => withSkillNames(node, names.get(node.key) ?? EMPTY_KEYS))
+    return nodes.map((node) => {
+      const presentation = names.get(node.key) ?? EMPTY_SKILL_PRESENTATION
+      return withSkillNames(node, presentation.names, presentation.labels)
+    })
   }
 
   /**
@@ -750,13 +776,13 @@ export class SkillNameProjector {
       dirty.push(next.seq)
     }
     if (dirty.length === 0) return upserts
-    const names = new Map<string, readonly string[]>()
+    const names = new Map<string, SkillPresentation>()
     for (const seq of dirty) this.collectAround(seq, names)
     const byKey = new Map(upserts.map(node => [node.key, node]))
-    for (const [key, list] of names) {
+    for (const [key, presentation] of names) {
       const node = byKey.get(key) ?? store.get(key)
       if (node === undefined) continue
-      const next = withSkillNames(node, list)
+      const next = withSkillNames(node, presentation.names, presentation.labels)
       if (next !== node || byKey.has(key)) byKey.set(key, next)
     }
     return [...byKey.values()]
@@ -799,15 +825,20 @@ export class SkillNameProjector {
   }
 
   /** Record the names every message of the run `[start, end]` carries. */
-  private assignRun(start: number, end: number, names: Map<string, readonly string[]>): void {
+  private assignRun(start: number, end: number, names: Map<string, SkillPresentation>): void {
     const list: string[] = []
+    const labels: Record<string, string> = {}
     for (let index = start; index <= end; index++) {
       const entry = this.sorted[index]
-      if (entry?.kind === 'skill' && entry.name !== null && !list.includes(entry.name)) list.push(entry.name)
+      if (entry?.kind === 'skill' && entry.name !== null) {
+        if (!list.includes(entry.name)) list.push(entry.name)
+        const displayName = entry.displayName ?? historicalSkillLabel(entry.name)
+        if (displayName !== null) labels[entry.name] = displayName
+      }
     }
     for (let index = start; index <= end; index++) {
       const entry = this.sorted[index]
-      if (entry?.kind === 'message') names.set(entry.key, list)
+      if (entry?.kind === 'message') names.set(entry.key, { names: list, labels })
     }
   }
 
@@ -816,7 +847,7 @@ export class SkillNameProjector {
    * skill entry, or — for a boundary, or a seq that left the index — the runs
    * on both sides of that position.
    */
-  private collectAround(seq: number, names: Map<string, readonly string[]>): void {
+  private collectAround(seq: number, names: Map<string, SkillPresentation>): void {
     const at = this.lowerBound(seq)
     const here = this.sorted[at]
     if (here !== undefined && here.seq === seq && here.kind !== 'boundary') {

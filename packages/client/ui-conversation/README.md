@@ -52,11 +52,15 @@ Target packages declaration-merge their snapshot and Location data maps, then re
 <a id="shell-and-standard-props"></a>
 ## Shell and standard props
 
+Selected skill labels remain in Session-local input state, keyed by the serialized prompt, so Chat can display them before the Host loads the skill. They are display hints only, do not change prompt serialization or authorization, and are released with the input shell. Reloaded history uses durable skill-invocation labels.
+
 The shared image slot props keep display choices separate from durable references: `thumbnail` requests a contained attachment-list thumbnail, while `compact` requests a cropped gallery tile. An optional per-image `label` supplies the accessible display name; loading and cache identity still use the original attachment reference. [ui-attachment](../ui-attachment/README.md) owns rendering and the lightbox.
 
 The composer measures its expanded control groups after size, content, visibility, or font-loading changes. If they cannot share a line, the row sets `--dsh-composer-model-text-display: none` and `--dsh-composer-model-icon-display: block` for the model seat; their defaults are `block` and `none`. Wrapping remains available if even the icon cannot fit.
 
 The context-occupancy button shows a ring and percentage below the input card, after the Session statistics. Clicking it opens the token breakdown in a panel kept inside the viewport, including when no statistics are shown; the button stays hidden until context usage and capacity are available.
+
+The optional `conversation.context.capacity` slot supplies current model capacity inside a session; the start page does not mount it. Its occupant renders the meter with that capacity, or null when unavailable; without an occupant, the meter uses recorded capacity. Token usage and composition remain the session's latest measurements until another request updates them.
 
 With Coding Tools off, the shell hides only Trajectory; other plugin-contributed Views remain available. The View tab bar is hidden when fewer than two Views are available. Turning Coding Tools off while Trajectory is active returns to Chat; stored View preferences and recorded Session data remain intact. Turning it on makes Trajectory available again. View owners receive the available roster so their navigation actions can follow the same visibility.
 
@@ -180,3 +184,9 @@ None; Conversation assembly and browser input state do not alter provider-side p
 None.
 
 </details>
+
+The blank-session hero defaults to the transparent gold mark at `./assets/lfclaw-logo.svg`; deployments can replace it through the brand slot.
+
+The root-scoped single slot `conversation.hero.brand.text` replaces the welcome headline and badge together; its optional `badgeClassName` owner prop supplies the shell badge style. Without a contribution, the shell renders its localized headline and preview badge.
+
+Draft initialization accepts either plain text or an explicit reference document; reference labels and invocation identities survive restoration.

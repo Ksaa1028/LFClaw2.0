@@ -1,0 +1,87 @@
+name: LFClaw macOS Apple Silicon DMG (unsigned test build)
+run-name: LFClaw macOS ARM64 · ${{ inputs.release_id }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_id:
+        description: 'Release ID in YYYYMMDDxx form, for example 2026102202'
+        type: string
+        required: true
+      confirmed_desktop_version:
+        description: 'Confirm the complete Desktop version, for example 2026.10.22-2'
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lfclaw-mac-arm64-package
+  cancel-in-progress: false
+
+jobs:
+  package:
+    runs-on: macos-15
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+    env:
+      DSH_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v7.0.1
+        id: checkout
+        with:
+          persist-credentials: false
+          clean: true
+      - uses: pnpm/action-setup@v5.0.0
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: '24'
+      - name: Verify Apple Silicon runner
+        run: node -e "if (process.platform !== 'darwin' || process.arch !== 'arm64') throw new Error('This workflow requires macOS ARM64')"
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Resolve Desktop version
+        id: version
+        env:
+          LFCLAW_RELEASE_ID: ${{ inputs.release_id }}
+          LFCLAW_CONFIRMED_VERSION: ${{ inputs.confirmed_desktop_version }}
+        run: |
+          version="$(node apps/desktop/scripts/lfclaw-release-id.mjs "$LFCLAW_RELEASE_ID")"
+          test "$version" = "$LFCLAW_CONFIRMED_VERSION" || { echo 'Confirmed Desktop version does not match release ID' >&2; exit 1; }
+          printf 'version=%s\n' "$version" >> "$GITHUB_OUTPUT"
+          printf 'Release ID: %s\nDesktop version: %s\n' "$LFCLAW_RELEASE_ID" "$version" >> "$GITHUB_STEP_SUMMARY"
+      - name: Check packaging configuration and toolchain
+        env:
+          PACKAGE_VERSION: ${{ steps.version.outputs.version }}
+        run: pnpm run package:desktop:mac:arm64:unsigned --check --build-version "$PACKAGE_VERSION"
+      - name: Build Apple Silicon test DMG
+        env:
+          PACKAGE_VERSION: ${{ steps.version.outputs.version }}
+        run: pnpm run package:desktop:mac:arm64:unsigned --build-version "$PACKAGE_VERSION"
+      - name: Retain packaging diagnostics
+        if: always() && steps.checkout.outcome == 'success'
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: lfclaw-mac-arm64-logs-${{ github.run_id }}-${{ github.run_attempt }}
+          include-hidden-files: true
+          path: apps/desktop/.desktop-build/packaging-runs/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Retain DMG
+        id: dmg
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: lfclaw-mac-arm64-unsigned-${{ inputs.release_id }}
+          include-hidden-files: true
+          path: apps/desktop/.desktop-build/targets/mac-arm64/unsigned-artifacts/*.dmg
+          if-no-files-found: error
+          retention-days: 14
+      - name: Show download instructions
+        env:
+          ARTIFACT_URL: ${{ steps.dmg.outputs.artifact-url }}
+        run: |
+          printf '\n[Download Apple Silicon DMG artifact](%s)\n\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
+          printf '%s\n' 'Extract the artifact ZIP, open the DMG, and copy the app to your Mac.' 'This test build has no Developer ID signing, Apple notarization, or automatic updates. Artifacts expire after 14 days.' >> "$GITHUB_STEP_SUMMARY"

@@ -16,7 +16,7 @@ import { foldSubagentDescriptor } from './descriptor.ts'
 /**
  * Answer `workspace/session-activity` with the running subagent descendants of
  * the asked Session, and `workspace/session-stop` by cancelling each of them
- * as their parent would. Both listeners live as long as `ctx`'s fiber.
+ * unless the request is restricted to the selected Session. Both listeners live as long as `ctx`'s fiber.
  * @param ctx - context carrying the Agent registry; the Session query service is optional and only supplies labels.
  */
 export function installSubagentArchiveAdmission(ctx: Context): void {
@@ -27,7 +27,8 @@ export function installSubagentArchiveAdmission(ctx: Context): void {
     const own: SessionActivity = { kind: 'subagent', items: await Promise.all(running.map(child => describe(ctx, child))) }
     return [own, ...rest]
   })
-  ctx.on('workspace/session-stop', ({ sessionId }) => {
+  ctx.on('workspace/session-stop', ({ sessionId, includeDescendants }) => {
+    if (includeDescendants === false) return
     for (const child of runningDescendants(ctx, sessionId)) {
       try {
         child.cancel({ kind: 'parent' })

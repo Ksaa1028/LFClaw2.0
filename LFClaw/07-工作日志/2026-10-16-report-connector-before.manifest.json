@@ -1,0 +1,59 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "MINybXiMfa7KIlsXOw7cr7vVnJb",
+  "table_id": "tbldpZoKiYtgsu8H",
+  "rev": 1400,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "record_scope": "selected_record_ids",
+    "requested_record_count": 1
+  },
+  "records_count": 1,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "D:\\deepseek-harness\\LFClaw\\07-工作日志\\2026-10-16-report-connector-before.ndjson",
+  "record_file_size_bytes": 2515,
+  "manifest_file": "D:\\deepseek-harness\\LFClaw\\07-工作日志\\2026-10-16-report-connector-before.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 16
+      },
+      "example": "reczz28NteUicQ8X"
+    },
+    "今日工作总结": {
+      "field_id": "fldPjykYlg",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 839
+      },
+      "example": "一、技能调用与发布校验\n1. 补齐技能模块核查发现的关键问题，将“开始使用”接入系统原生技能加载流程，独立遵守用户主动调用和模型自动选用规则，完成仅限用户调用技能的真实对话验收。\n2. 企业发布与客户端安装共用 ZIP 校验规则，避免后台上传成功但桌面无法",
+      "example_truncated": true
+    },
+    "日报日期": {
+      "field_id": "fldVNtwJzE",
+      "field_type": "datetime",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "min": "2026-10-16T00:00:00.000+08:00",
+        "max": "2026-10-16T00:00:00.000+08:00"
+      },
+      "example": "2026-10-16T00:00:00.000+08:00"
+    },
+    "日报编号": {
+      "field_id": "flds6197Qz",
+      "field_type": "auto_number",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 11
+      },
+      "example": "20261016526"
+    }
+  }
+}

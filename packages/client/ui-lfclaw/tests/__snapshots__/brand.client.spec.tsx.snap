@@ -1,0 +1,45 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`uses the LFClaw logo in both brand slots at the host-requested size 1`] = `
+<div
+  data-slot="sidebar.brand.name"
+  style="display: contents;"
+>
+  <span
+    data-lfclaw-brand="name"
+  >
+    LFClaw
+  </span>
+</div>
+`;
+
+exports[`uses the LFClaw logo in both brand slots at the host-requested size 2`] = `
+<div
+  data-slot="sidebar.brand.mark"
+  style="display: contents;"
+>
+  <img
+    alt=""
+    data-lfclaw-logo="auto"
+    height="24"
+    src="./assets/lfclaw-logo.svg"
+    width="24"
+  />
+</div>
+`;
+
+exports[`uses the LFClaw logo in both brand slots at the host-requested size 3`] = `
+<div
+  data-slot="conversation.hero.brand.mark"
+  style="display: contents;"
+>
+  <img
+    alt=""
+    class="hero-brand"
+    data-lfclaw-logo="auto"
+    height="34"
+    src="./assets/lfclaw-logo.svg"
+    width="34"
+  />
+</div>
+`;

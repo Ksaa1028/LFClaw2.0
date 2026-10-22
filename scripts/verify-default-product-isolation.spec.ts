@@ -48,6 +48,24 @@ afterEach(() => {
 })
 
 describe('default product isolation', () => {
+  it.each([false, true])('limits the default voice exception to its four plugins (extra=%s)', (extra) => {
+    const root = fixture()
+    const voice = '@deepseek-ai/dsh-experimental-voice-input-bundle'
+    const plugins = ['speech-to-text', 'speech-to-text-sensevoice', 'api-speech-to-text', 'client-ui-voice-input']
+      .map(name => '@deepseek-ai/dsh-experimental-' + name)
+    const directory = 'packages/experimental/voice-input-bundle'
+    write(root, directory + '/package.json', { name: voice, icon: './icon.svg', exports: { './locale/*.json': './locale/*.json' },
+      dsh: { bundle: { patch: './cordis.patch.yml' } } })
+    write(root, directory + '/cordis.patch.yml', [{ insert: [...plugins, ...extra ? [experimental] : []].map(name => ({ name })) }])
+    manifest(root, 'apps/cli/package.json', { dependencies: { [core]: 'workspace:*', [voice]: 'workspace:*' } })
+    write(root, profile, 'export const PROFILE_TEMPLATES = { web: { bundles: [' + JSON.stringify(base) + ',' + JSON.stringify(voice) + '] } }\n'
+      + 'export const DEFAULT_PROFILE_BUNDLES = [' + JSON.stringify(base) + ']\n'
+      + 'export const OPTIONAL_BUNDLES = [' + JSON.stringify(voice) + ']\n')
+    const failures = verifyDefaultProductIsolation(root).failures
+    if (extra) expect(failures).toEqual(expect.arrayContaining([expect.stringContaining(experimental)]))
+    else expect(failures).toEqual([])
+  })
+
   describe.each(Object.entries(EXPERIMENTAL_PACKAGE_NAME_EXCEPTIONS))('retained experimental identity %s', (directory, name) => {
     it.each(['direct dependency', 'transitive dependency', 'npm alias', 'value import', 'subpath import', 'profile row', 'preset row'])(
       'rejects default product use through a %s', (route) => {

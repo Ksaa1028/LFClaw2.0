@@ -1,0 +1,16 @@
+# Bilingual-pair consistency record for guide.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write docs/upgrade-guide/v0.2.1-alpha.2/lfclaw-desktop-activation/guide.md
+/:
+  en: 5afbbc443fe12f75
+  zh: bdc62635feb88593
+/lfclaw-desktop-activation:
+  en: b8540c0f49eae0a3
+  zh: 2b24af169a11a6ad
+/lfclaw-desktop-activation/change:
+  en: 070cc8e374f74335
+  zh: 8cfd159c59a60ae3
+/lfclaw-desktop-activation/migration:
+  en: 4c5b6b244d83d67b
+  zh: 3267f3bb7e1c3709

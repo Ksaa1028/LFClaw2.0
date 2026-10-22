@@ -1,0 +1,49 @@
+@import '@deepseek-ai/dsh-client-ui-theme/styles/base.css';
+@import '@deepseek-ai/dsh-client-ui-theme/styles/design-platform.css';
+@import '@deepseek-ai/dsh-client-ui-theme/styles/scrollbar.css';
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--dsw-font-family);
+  color: var(--dsw-alias-label-primary);
+  background-color: var(--dsw-alias-bg-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: inherit;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+/* Admin-specific neutral surface on light mode */
+body:not([data-ds-dark-theme]) {
+  --dsw-admin-sidebar-bg: var(--dsw-static-neutral-bluish-950);
+  --dsw-admin-sidebar-text: var(--dsw-static-neutral-bluish-300);
+  --dsw-admin-sidebar-active: var(--dsw-static-neutral-bluish-50);
+  --dsw-admin-sidebar-active-bg: rgba(255, 255, 255, 0.1);
+  --dsw-admin-content-bg: var(--dsw-static-neutral-bluish-60);
+}
+
+body[data-ds-dark-theme] {
+  --dsw-admin-sidebar-bg: var(--dsw-static-neutral-bluish-950);
+  --dsw-admin-sidebar-text: var(--dsw-static-neutral-bluish-300);
+  --dsw-admin-sidebar-active: var(--dsw-static-neutral-bluish-50);
+  --dsw-admin-sidebar-active-bg: rgba(255, 255, 255, 0.1);
+  --dsw-admin-content-bg: var(--dsw-static-neutral-bluish-950);
+}

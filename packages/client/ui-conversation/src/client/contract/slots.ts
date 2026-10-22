@@ -189,6 +189,8 @@ declare module '@deepseek-ai/dsh-client-ui-slots' {
     'conversation.hero.workspace': { kind: 'single'; scope: 'root'; owner: EmptyWorkspaceOwnerProps }
     /** Brand mark shown before the blank-session headline. */
     'conversation.hero.brand.mark': { kind: 'single'; scope: 'root'; owner: HeroBrandMarkOwnerProps }
+    /** Deployment-owned welcome text and badge, using the host badge styling. */
+    'conversation.hero.brand.text': { kind: 'single'; scope: 'root'; owner: { badgeClassName?: string | undefined } }
     /** Agent-preset control staged for a New Session. */
     'conversation.hero.agentPreset': { kind: 'single'; scope: 'session-maybe'; owner: HeroAgentPresetOwnerProps }
     /** Full-width entries above the composer card. */
@@ -221,6 +223,15 @@ declare module '@deepseek-ai/dsh-client-ui-slots' {
      * --dsh-composer-model-icon-display to block for an occupant's compact display.
      */
     'conversation.input.model': { kind: 'single'; scope: 'session'; owner: InputControlOwnerProps }
+    /** Supplies live selected-model capacity to the conversation's context meter. */
+    'conversation.context.capacity': {
+      kind: 'single'
+      scope: 'session'
+      owner: {
+        /** Render with live capacity, or null while the selected route is unavailable. */
+        renderMeter: (contextWindow: number | null) => ReactNode
+      }
+    }
   }
 
   interface SlotFactoryMap {
@@ -234,6 +245,7 @@ declare module '@deepseek-ai/dsh-client-ui-slots' {
         'conversation.composer.bar': { kind: 'single'; scope: 'session-maybe' }
         'conversation.input.dock': { kind: 'list'; scope: 'session' }
         'conversation.hero.brand.mark': { kind: 'single'; scope: 'root' }
+        'conversation.hero.brand.text': { kind: 'single'; scope: 'root' }
         'conversation.hero.workspace': { kind: 'single'; scope: 'root' }
         'conversation.hero.agentPreset': { kind: 'single'; scope: 'session-maybe' }
       }
@@ -427,6 +439,7 @@ export type ComposerBarProps =
     | 'conversation.input.left' | 'conversation.input.plan'
     | 'conversation.input.right' | 'conversation.input.model' | 'conversation.input.activity'
     | 'conversation.composer.dock'
+    | 'conversation.context.capacity'
   >
   & InjectFace<ComposerBarInjected>
   & PropsLocale<'conversation'>

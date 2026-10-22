@@ -1,0 +1,562 @@
+$ tsx scripts/run-gates.ts doc-sync
+run-gates: doc-sync running 43 gate(s) with 4 worker(s) from 24 available CPU(s), doc-sync cap 4.
+run-gates: start doc-typecheck
+run-gates: start documentation build
+run-gates: start doc graphs
+run-gates: start CLI help reference
+
+== FAILED doc graphs (11.89s) ==
+[ELIFECYCLE] Command failed with exit code 1.
+command: pnpm run verify-doc-graphs
+outcome: exit 1
+$ tsx scripts/gen-doc-graphs.ts --check
+D:\deepseek-harness\packages\typert\generator\src\cordis-catalog.ts:51
+  throw new Error(
+        ^
+
+Error: gen-cordis-catalog: 1 signature type-link coverage violation(s):
+  service method ctx.enterpriseConnection.request (packages/client/ui-activation/src/connection.ts:14) references unclassified type 'RequestInit'. Add it to linkedTypePages with its documentation page, to foundationTypeNames if TypeScript or the framework owns it, or to typeLinkExemptions with the non-catalog documentation owner.
+    at reportTypeLinkViolations (D:\deepseek-harness\packages\typert\generator\src\cordis-catalog.ts:51:9)
+    at CordisCatalogProjector.collectServices (D:\deepseek-harness\packages\typert\generator\src\cordis-catalog.ts:328:5)
+    at CordisCatalogProjector.project (D:\deepseek-harness\packages\typert\generator\src\cordis-catalog.ts:161:22)
+    at projectCordisCatalog (D:\deepseek-harness\packages\typert\generator\src\cordis-catalog.ts:398:40)
+    at renderDocs (D:\deepseek-harness\scripts\gen-doc-graphs.ts:1679:21)
+    at main (D:\deepseek-harness\scripts\gen-doc-graphs.ts:1754:16)
+    at <anonymous> (D:\deepseek-harness\scripts\gen-doc-graphs.ts:1778:3)
+    at ModuleJob.run (node:internal/modules/esm/module_job:437:25)
+    at async node:internal/modules/esm/loader:639:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.15.0
+run-gates: start markdown links
+
+== FAILED doc-typecheck (13.63s) ==
+
+> @deepseek-ai/dsh-root@0.2.1-alpha.2 build:lib:host
+command: pnpm run doc-typecheck
+> node --max-old-space-size=4096 ./node_modules/typescript/bin/tsc -b tsconfig.host.json && tsdown --config-loader native --env.DSH_BUILD_FACE host && pnpm --filter @deepseek-ai/dsh-desktop run bundle
+outcome: exit 2
+
+$ npm run build:lib:host && npm run doc-typecheck:contracts-ready
+packages/api/session-controller/tests/session-fork.host.spec.ts(185,9): error TS2741: Property 'revision' is missing in type '{ header: { id: SessionId; parentSession: SessionId; isSeeded: true; version: typeof SESSION_FORMAT_VERSION; createdAt: number; cwd?: string; origin?: "subagent"; delegationDepth?: number; agentPreset?: string; }; }' but required in type 'SessionPersistenceSnapshot'.
+packages/api/session-controller/tests/session-fork.host.spec.ts(191,9): error TS2741: Property 'revision' is missing in type '{ header: { id: SessionId; parentSession: SessionId; origin: "subagent"; version: typeof SESSION_FORMAT_VERSION; createdAt: number; cwd?: string; isSeeded: boolean; delegationDepth?: number; agentPreset?: string; }; }' but required in type 'SessionPersistenceSnapshot'.
+packages/client/ui-activation/tests/models.spec.ts(6,34): error TS6307: File 'D:/deepseek-harness/LFClaw/02-管理端/server/src/model-gateway.ts' is not listed within the file list of project 'D:/deepseek-harness/tsconfig.host.json'. Projects must list all files or use an 'include' pattern.
+packages/client/ui-enterprise-connectors/src/index.ts(6,50): error TS6307: File 'D:/deepseek-harness/packages/client/ui-enterprise-connectors/src/catalog.ts' is not listed within the file list of project 'D:/deepseek-harness/tsconfig.host.json'. Projects must list all files or use an 'include' pattern.
+  The file is in the program because:
+    Imported via './catalog.ts' from file 'D:/deepseek-harness/packages/client/ui-enterprise-connectors/src/index.ts'
+    Imported via './catalog.ts' from file 'D:/deepseek-harness/packages/client/ui-enterprise-connectors/src/tools.ts'
+packages/client/ui-enterprise-connectors/src/index.ts(7,38): error TS6307: File 'D:/deepseek-harness/packages/client/ui-enterprise-connectors/src/tools.ts' is not listed within the file list of project 'D:/deepseek-harness/tsconfig.host.json'. Projects must list all files or use an 'include' pattern.
+  The file is in the program because:
+    Imported via './tools.ts' from file 'D:/deepseek-harness/packages/client/ui-enterprise-connectors/src/index.ts'
+    Imported via '../src/tools.ts' from file 'D:/deepseek-harness/packages/client/ui-enterprise-connectors/tests/host.spec.ts'
+    Imported via '../src/tools.ts' from file 'D:/deepseek-harness/packages/client/ui-enterprise-connectors/tests/permission-session-fixture.ts'
+packages/client/ui-enterprise-connectors/src/index.ts(8,41): error TS6307: File 'D:/deepseek-harness/packages/client/ui-enterprise-connectors/src/personal.ts' is not listed within the file list of project 'D:/deepseek-harness/tsconfig.host.json'. Projects must list all files or use an 'include' pattern.
+  The file is in the program because:
+    Imported via './personal.ts' from file 'D:/deepseek-harness/packages/client/ui-enterprise-connectors/src/index.ts'
+    Imported via '../src/personal.ts' from file 'D:/deepseek-harness/packages/client/ui-enterprise-connectors/tests/personal.host.spec.ts'
+packages/client/ui-enterprise-connectors/src/personal.ts(11,33): error TS6307: File 'D:/deepseek-harness/packages/client/ui-enterprise-connectors/src/personal-store.ts' is not listed within the file list of project 'D:/deepseek-harness/tsconfig.host.json'. Projects must list all files or use an 'include' pattern.
+  The file is in the program because:
+    Imported via './personal-store.ts' from file 'D:/deepseek-harness/packages/client/ui-enterprise-connectors/src/personal.ts'
+    Imported via '../src/personal-store.ts' from file 'D:/deepseek-harness/packages/client/ui-enterprise-connectors/tests/personal.host.spec.ts'
+packages/client/ui-enterprise-connectors/tests/host.spec.ts(3,23): error TS6307: File 'D:/deepseek-harness/packages/client/ui-enterprise-connectors/src/index.ts' is not listed within the file list of project 'D:/deepseek-harness/tsconfig.host.json'. Projects must list all files or use an 'include' pattern.
+  The file is in the program because:
+    Imported via '../src/index.ts' from file 'D:/deepseek-harness/packages/client/ui-enterprise-connectors/tests/host.spec.ts'
+    Imported via './index.ts' from file 'D:/deepseek-harness/packages/client/ui-enterprise-connectors/src/personal.ts'
+packages/client/ui-lfclaw/tests/sharing.host.spec.ts(78,62): error TS2367: This comparison appears to be unintentional because the types '"agent-preset/selected" | "turn/start" | "turn/end" | "step/start" | "step/end" | "user/message" | "developer/message" | "system/message" | "assistant/message" | "assistant/attempt" | ... 56 more ... | "tool-workflow/run-end"' and '"lfclaw/share-received"' have no overlap.
+packages/client/ui-lfclaw/tests/sharing.host.spec.ts(79,21): error TS2339: Property 'data' does not exist on type 'never'.
+packages/client/ui-lfclaw/tests/sharing.host.spec.ts(80,79): error TS2339: Property 'type' does not exist on type 'never'.
+packages/client/ui-lfclaw/tests/sharing.host.spec.ts(80,98): error TS2339: Property 'seq' does not exist on type 'never'.
+packages/client/ui-lfclaw/tests/sharing.host.spec.ts(81,26): error TS2339: Property 'data' does not exist on type 'never'.
+packages/client/ui-lfclaw/tests/sharing.host.spec.ts(86,114): error TS2339: Property 'data' does not exist on type 'never'.
+[ELIFECYCLE] Command failed with exit code 2.
+run-gates: start type equivalence
+run-gates: PASS CLI help reference (24.24s)
+run-gates: start cordis catalog
+
+== FAILED type equivalence (11.39s) ==
+[ELIFECYCLE] Command failed with exit code 1.
+command: pnpm run verify-type-equiv
+outcome: exit 1
+$ tsx scripts/verify-type-equiv.ts
+verify-type-equiv: type-equiv verification failed:
+  DRIFT: docs/subsystems/skills.md:166 — type-equiv block for SkillDefinition does not match packages/skill/skill/src/index.ts.
+    source structure: interface SkillDefinition extends SkillSummary { readonly content: string readonly displayName?: string readonly metadata?: Readonly<Record<string, unknown>> }
+    doc structure:    interface SkillDefinition extends SkillSummary { readonly content: string readonly metadata?: Readonly<Record<string, unknown>> }
+    source JSDoc:     ["/** Complete parsed skill definition, including the body loaded by `ctx.skills.get()`. */","/** Markdown instruction body after any provider-specific metadata removal. */","/** Human-facing name recorded with an explicit invocation; absent for ordinary skills. */","/** Parsed optional metadata object from frontmatter. */"]
+    doc JSDoc:        ["/** Complete parsed skill definition, including the body loaded by `ctx.skills.get()`. */","/** Markdown instruction body after any provider-specific metadata removal. */","/** Parsed optional metadata object from frontmatter. */"]
+
+(checked 479 primary block(s) across 50 doc(s), 479 paired derivative(s); manifest at scripts/type-equiv.manifest.json)
+run-gates: start Cordis inspect catalog
+[ELIFECYCLE] Command failed with exit code 1.
+
+== FAILED Cordis inspect catalog (9.48s) ==
+command: pnpm run verify-cordis-inspect-catalog
+outcome: exit 1
+$ tsx scripts/gen-cordis-inspect-catalog.ts --check
+D:\deepseek-harness\scripts\gen-cordis-inspect-catalog.ts:81
+      throw new Error(`gen-cordis-inspect-catalog: ${CLIENT_OUT} is stale; run pnpm run gen-cordis-inspect-catalog`)
+            ^
+
+Error: gen-cordis-inspect-catalog: packages/extensions/cordis-client-runner/src/client/api-catalog.ts is stale; run pnpm run gen-cordis-inspect-catalog
+    at main (D:\deepseek-harness\scripts\gen-cordis-inspect-catalog.ts:81:13)
+    at <anonymous> (D:\deepseek-harness\scripts\gen-cordis-inspect-catalog.ts:91:1)
+    at ModuleJob.run (node:internal/modules/esm/module_job:437:25)
+    at async node:internal/modules/esm/loader:639:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.15.0
+run-gates: start workflow guest source
+
+[ELIFECYCLE] Command failed with exit code 1.
+== FAILED markdown links (22.76s) ==
+command: pnpm run verify-md-links
+outcome: exit 1
+$ tsx scripts/verify-md-links.ts
+verify-md-links: broken relative cross-links found:
+  docs\user\develop\basic\index.zh.md:5  ../../../../README.zh.md#run-from-source  (no such anchor in target)
+  docs\user\develop\basic\publish.zh.md:7  ../../../../README.zh.md#run-from-source  (no such anchor in target)
+  docs\user\guide\index.zh.md:5  ../../../README.zh.md#run  (no such anchor in target)
+  docs\user\guide\providers.zh.md:5  ../../../README.zh.md#run  (no such anchor in target)
+run-gates: start verify-mermaid
+run-gates: PASS workflow guest source (0.80s)
+run-gates: start translation pairing
+
+[ELIFECYCLE] Command failed with exit code 1.
+== FAILED cordis catalog (12.14s) ==
+command: pnpm run verify-cordis-catalog
+outcome: exit 1
+$ tsx scripts/gen-cordis-catalog.ts --check
+D:\deepseek-harness\packages\typert\generator\src\cordis-catalog.ts:51
+  throw new Error(
+        ^
+
+Error: gen-cordis-catalog: 1 signature type-link coverage violation(s):
+  service method ctx.enterpriseConnection.request (packages/client/ui-activation/src/connection.ts:14) references unclassified type 'RequestInit'. Add it to linkedTypePages with its documentation page, to foundationTypeNames if TypeScript or the framework owns it, or to typeLinkExemptions with the non-catalog documentation owner.
+    at reportTypeLinkViolations (D:\deepseek-harness\packages\typert\generator\src\cordis-catalog.ts:51:9)
+    at CordisCatalogProjector.collectServices (D:\deepseek-harness\packages\typert\generator\src\cordis-catalog.ts:328:5)
+    at CordisCatalogProjector.project (D:\deepseek-harness\packages\typert\generator\src\cordis-catalog.ts:161:22)
+    at projectCordisCatalog (D:\deepseek-harness\packages\typert\generator\src\cordis-catalog.ts:398:40)
+    at computeOutputs (D:\deepseek-harness\scripts\gen-cordis-catalog.ts:1176:32)
+    at main (D:\deepseek-harness\scripts\gen-cordis-catalog.ts:1246:8)
+    at <anonymous> (D:\deepseek-harness\scripts\gen-cordis-catalog.ts:1283:3)
+    at ModuleJob.run (node:internal/modules/esm/module_job:437:25)
+    at async node:internal/modules/esm/loader:639:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.15.0
+run-gates: start markdown wrap
+run-gates: PASS documentation build (38.33s)
+run-gates: start client catalog
+
+== FAILED client catalog (3.27s) ==
+command: pnpm run verify-client-catalog
+outcome: exit 1
+$ tsx scripts/gen-client-catalog.ts --check
+D:\deepseek-harness\scripts\gen-client-catalog.ts:140
+    throw new Error(`gen-client-catalog: ${String(problems.length)} contract violation(s):\n${problems.map(problem => `  ${problem}`).join('\n')}`)
+          ^
+
+Error: gen-client-catalog: 25 contract violation(s):
+  slot 'sidebar.brand.mark' (packages/client/ui-sidebar/src/client/contract/slots.d.ts:28) names owner props 'SidebarBrandMarkOwnerProps' that no exported declaration provides; export the interface so the catalog can show what the component receives.
+  slot 'sidebar.brand.name' (packages/client/ui-sidebar/src/client/contract/slots.d.ts:37) names owner props 'SidebarBrandNameOwnerProps' that no exported declaration provides; export the interface so the catalog can show what the component receives.
+  slot 'sidebar.panellist' (packages/client/ui-sidebar/src/client/contract/slots.d.ts:46) names owner props 'SidebarPanelIconOwnerProps' that no exported declaration provides; export the interface so the catalog can show what the component receives.
+  slot 'sidebar.workspaces' (packages/client/ui-sidebar/src/client/contract/slots.d.ts:57) names owner props 'SidebarSectionOwnerProps' that no exported declaration provides; export the interface so the catalog can show what the component receives.
+  slot 'sidebar.settings' (packages/client/ui-sidebar/src/client/contract/slots.d.ts:67) names owner props 'SidebarSettingsOwnerProps' that no exported declaration provides; export the interface so the catalog can show what the component receives.
+  slot 'sidebar.footer.action' (packages/client/ui-sidebar/src/client/contract/slots.d.ts:76) names owner props 'SidebarFooterActionOwnerProps' that no exported declaration provides; export the interface so the catalog can show what the component receives.
+  slot 'sidebar.toggle.badge' (packages/client/ui-sidebar/src/client/contract/slots.ts:19) is also declared at packages/client/ui-sidebar/src/client/contract/slots.d.ts:18; SlotMap merges duplicates silently, so the catalog cannot tell which documentation wins.
+  slot 'sidebar.brand.mark' (packages/client/ui-sidebar/src/client/contract/slots.ts:25) is also declared at packages/client/ui-sidebar/src/client/contract/slots.d.ts:28; SlotMap merges duplicates silently, so the catalog cannot tell which documentation wins.
+  slot 'sidebar.brand.name' (packages/client/ui-sidebar/src/client/contract/slots.ts:30) is also declared at packages/client/ui-sidebar/src/client/contract/slots.d.ts:37; SlotMap merges duplicates silently, so the catalog cannot tell which documentation wins.
+  slot 'sidebar.panellist' (packages/client/ui-sidebar/src/client/contract/slots.ts:35) is also declared at packages/client/ui-sidebar/src/client/contract/slots.d.ts:46; SlotMap merges duplicates silently, so the catalog cannot tell which documentation wins.
+  slot 'sidebar.workspaces' (packages/client/ui-sidebar/src/client/contract/slots.ts:42) is also declared at packages/client/ui-sidebar/src/client/contract/slots.d.ts:57; SlotMap merges duplicates silently, so the catalog cannot tell which documentation wins.
+  slot 'sidebar.settings' (packages/client/ui-sidebar/src/client/contract/slots.ts:48) is also declared at packages/client/ui-sidebar/src/client/contract/slots.d.ts:67; SlotMap merges duplicates silently, so the catalog cannot tell which documentation wins.
+  slot 'sidebar.footer.action' (packages/client/ui-sidebar/src/client/contract/slots.ts:53) is also declared at packages/client/ui-sidebar/src/client/contract/slots.d.ts:76; SlotMap merges duplicates silently, so the catalog cannot tell which documentation wins.
+  slot 'conversation.hero.workspace.directoryFlow' (packages/client/ui-workspace/src/client/contract/slots.d.ts:103) names owner props 'DirectoryFlowOwnerProps' that no exported declaration provides; export the interface so the catalog can show what the component receives.
+  slot 'sidebar.workspaces.directoryFlow' (packages/client/ui-workspace/src/client/contract/slots.d.ts:109) names owner props 'DirectoryFlowOwnerProps' that no exported declaration provides; export the interface so the catalog can show what the component receives.
+  slot 'sidebar.session.row.leading' (packages/client/ui-workspace/src/client/contract/slots.d.ts:123) names owner props 'SessionRowScheduleOwnerProps' that no exported declaration provides; export the interface so the catalog can show what the component receives.
+  slot 'sidebar.session.row.hover' (packages/client/ui-workspace/src/client/contract/slots.d.ts:132) names owner props 'SessionRowScheduleOwnerProps' that no exported declaration provides; export the interface so the catalog can show what the component receives.
+  slot 'sidebar.workspaces.session.menu.item' (packages/client/ui-workspace/src/client/contract/slots.d.ts:168) names owner props 'SessionRowOwnerProps' that no exported declaration provides; export the interface so the catalog can show what the component receives.
+[ELIFECYCLE] Command failed with exit code 1.
+  slot 'sidebar.workspaces.session.row.action' (packages/client/ui-workspace/src/client/contract/slots.d.ts:188) names owner props 'SessionRowOwnerProps' that no exported declaration provides; export the interface so the catalog can show what the component receives.
+  slot 'conversation.hero.workspace.directoryFlow' (packages/client/ui-workspace/src/client/contract/slots.ts:118) is also declared at packages/client/ui-workspace/src/client/contract/slots.d.ts:103; SlotMap merges duplicates silently, so the catalog cannot tell which documentation wins.
+  slot 'sidebar.workspaces.directoryFlow' (packages/client/ui-workspace/src/client/contract/slots.ts:120) is also declared at packages/client/ui-workspace/src/client/contract/slots.d.ts:109; SlotMap merges duplicates silently, so the catalog cannot tell which documentation wins.
+  slot 'sidebar.session.row.leading' (packages/client/ui-workspace/src/client/contract/slots.ts:130) is also declared at packages/client/ui-workspace/src/client/contract/slots.d.ts:123; SlotMap merges duplicates silently, so the catalog cannot tell which documentation wins.
+  slot 'sidebar.session.row.hover' (packages/client/ui-workspace/src/client/contract/slots.ts:135) is also declared at packages/client/ui-workspace/src/client/contract/slots.d.ts:132; SlotMap merges duplicates silently, so the catalog cannot tell which documentation wins.
+  slot 'sidebar.workspaces.session.menu.item' (packages/client/ui-workspace/src/client/contract/slots.ts:167) is also declared at packages/client/ui-workspace/src/client/contract/slots.d.ts:168; SlotMap merges duplicates silently, so the catalog cannot tell which documentation wins.
+  slot 'sidebar.workspaces.session.row.action' (packages/client/ui-workspace/src/client/contract/slots.ts:185) is also declared at packages/client/ui-workspace/src/client/contract/slots.d.ts:188; SlotMap merges duplicates silently, so the catalog cannot tell which documentation wins.
+    at collectSlotEntries (D:\deepseek-harness\scripts\gen-client-catalog.ts:140:11)
+    at main (D:\deepseek-harness\scripts\gen-client-catalog.ts:569:39)
+    at <anonymous> (D:\deepseek-harness\scripts\gen-client-catalog.ts:593:3)
+    at ModuleJob.run (node:internal/modules/esm/module_job:437:25)
+    at async node:internal/modules/esm/loader:639:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.15.0
+run-gates: start export jsdoc
+
+== FAILED markdown wrap (10.13s) ==
+[ELIFECYCLE] Command failed with exit code 1.
+command: pnpm run verify-md-wrap
+outcome: exit 1
+$ tsx scripts/verify-md-wrap.ts
+verify-md-wrap: hard-wrapped prose paragraphs found (write one physical line per paragraph):
+  README.zh.md:3  > **项目定位**：基于 DeepSeek Harness（DSH）二次开发的企业级 AI 桌面工作平台
+  README.zh.md:52  LFClaw 产品的完整工作区，包含需求、设计、架构、实现计划、工作日志。
+  README.zh.md:60  \\\ash
+  README.zh.md:73  pnpm --filter @deepseek-ai/lfclaw-admin-web run build
+  README.zh.md:98  pnpm run test:e2e
+  README.zh.md:116  pnpm run dev:desktop
+  README.zh.md:130  pnpm --filter @deepseek-ai/lfclaw-admin-web run dev
+  README.zh.md:153  \\\
+run-gates: start tool catalog
+run-gates: PASS verify-mermaid (12.86s)
+run-gates: start config catalog
+run-gates: PASS tool catalog (2.19s)
+run-gates: start skill plugin package list
+
+== FAILED export jsdoc (7.30s) ==
+command: pnpm run verify-export-jsdoc
+outcome: exit 1
+$ tsx scripts/verify-export-jsdoc.ts
+verify-export-jsdoc: 43 JSDoc completeness violation(s) (see AGENTS.md):
+  exported function 'employeeProfile' (packages/client/ui-activation/src/client/employee.ts:4) is missing @param value.
+  exported function 'employeeProfile' (packages/client/ui-activation/src/client/employee.ts:4) is missing @returns (return type: EmployeeProfile | null).
+  exported const 'zh' (packages/client/ui-activation/src/client/locales.ts:1) has no JSDoc.
+  exported const 'en' (packages/client/ui-activation/src/client/locales.ts:23) has no JSDoc.
+  exported type 'ActivationLocaleKey' (packages/client/ui-activation/src/client/locales.ts:45) has no JSDoc.
+  exported function 'PopupSelectView' (packages/client/ui-commands/src/client/PopupSelectView.d.ts:15): parameter '{ popup, t }' is a binding pattern; the exported API needs simple identifier parameters so @param can name them.
+  exported function 'PopupSelectView' (packages/client/ui-commands/src/client/PopupSelectView.d.ts:15): @param props does not match any parameter (stale tag?).
+  exported function 'MenuView' (packages/client/ui-input-trigger/src/client/MenuView.d.ts:10): parameter '{ menu, headers, onPick, onCrumb, onHover, onDismiss, t }' is a binding pattern; the exported API needs simple identifier parameters so @param can name them.
+  exported function 'MenuView' (packages/client/ui-input-trigger/src/client/MenuView.d.ts:10): @param props does not match any parameter (stale tag?).
+  exported function 'HeaderLeadingControls' (packages/client/ui-sidebar/src/client/HeaderLeadingControls.d.ts:14): parameter '{ toggleSidebar, startSession, useShortcuts, t }' is a binding pattern; the exported API needs simple identifier parameters so @param can name them.
+  exported function 'HeaderLeadingControls' (packages/client/ui-sidebar/src/client/HeaderLeadingControls.d.ts:14): @param props does not match any parameter (stale tag?).
+  exported function 'SidebarRoot' (packages/client/ui-sidebar/src/client/SidebarRoot.d.ts:7): parameter '{ collapsed, width, startSession, toggleSidebar, selectPanel, usePanels, useShortcuts, usePanelInfo, t, renderSlot, }' is a binding pattern; the exported API needs simple identifier parameters so @param can name them.
+  exported function 'SidebarRoot' (packages/client/ui-sidebar/src/client/SidebarRoot.d.ts:7): @param props does not match any parameter (stale tag?).
+  exported function 'WorkspacePickFlow' (packages/client/ui-workspace/src/client/WorkspacePicker.d.ts:51): parameter '{ t, open, anchorRef, useWorkspaces, createWorkspace, useDirectoryFlow, renderDirectoryFlow, onPick, onClose, addOnly, onBusyChange, side, selectedId, }' is a binding pattern; the exported API needs simple identifier parameters so @param can name them.
+  exported function 'WorkspacePickFlow' (packages/client/ui-workspace/src/client/WorkspacePicker.d.ts:51): @param props does not match any parameter (stale tag?).
+  exported function 'WorkspacePicker' (packages/client/ui-workspace/src/client/WorkspacePicker.d.ts:58): parameter '{ open, anchorRef, useWorkspaces, selectedId, onPick, onClose, createWorkspace, useDirectoryFlow, renderSlot, t, }' is a binding pattern; the exported API needs simple identifier parameters so @param can name them.
+  exported function 'WorkspacePicker' (packages/client/ui-workspace/src/client/WorkspacePicker.d.ts:58): @param props does not match any parameter (stale tag?).
+  exported class property 'DirectoryBrowseError.rpcError' (packages/client/ui-workspace/src/client/navigation.d.ts:107) has no JSDoc.
+  exported class method 'AnimatedRows.getSnapshotBeforeUpdate' (packages/client/ui-workspace/src/client/rows/AnimatedRows.d.ts:33) is missing @param previous.
+  exported class method 'AnimatedRows.componentDidUpdate' (packages/client/ui-workspace/src/client/rows/AnimatedRows.d.ts:34) is missing @param previous.
+  exported class method 'AnimatedRows.componentDidUpdate' (packages/client/ui-workspace/src/client/rows/AnimatedRows.d.ts:34) is missing @param _state.
+  exported function 'ProjectRowItem' (packages/client/ui-workspace/src/client/rows/Rows.d.ts:42): parameter '{ group, containsCurrentDescendant, onToggle, onCreate, actions, drag, home, newShortcut, t }' is a binding pattern; the exported API needs simple identifier parameters so @param can name them.
+  exported function 'ProjectRowItem' (packages/client/ui-workspace/src/client/rows/Rows.d.ts:42): @param props does not match any parameter (stale tag?).
+  exported function 'SearchResultItem' (packages/client/ui-workspace/src/client/rows/Rows.d.ts:71): parameter '{ result, currentId, onOpen, onUnarchive, t }' is a binding pattern; the exported API needs simple identifier parameters so @param can name them.
+  exported function 'SearchResultItem' (packages/client/ui-workspace/src/client/rows/Rows.d.ts:71): @param props does not match any parameter (stale tag?).
+  exported function 'SessionNodeItem' (packages/client/ui-workspace/src/client/rows/Rows.d.ts:98): parameter '{ node, currentId, now, onOpen, onRenameRequest, renderSlot, onReveal, drag, t, }' is a binding pattern; the exported API needs simple identifier parameters so @param can name them.
+  exported function 'SessionNodeItem' (packages/client/ui-workspace/src/client/rows/Rows.d.ts:98): @param props does not match any parameter (stale tag?).
+  exported function 'WorkspaceBrowser' (packages/client/ui-workspace/src/client/rows/WorkspaceBrowser.d.ts:7): parameter '{ wide, usePanelInfo, expandSidebar, useSessions, useSessionStatus, useWorkspaces, useStore, actions, startSession, open, requestSessionRename, notifyArchivedNotOpenable, renameWorkspace, deleteWorkspace, insertWorkspaceBefore, unarchiveSession, createWorkspace, searchSessions, searchResultLimit, useDirectoryFlow, useHostInfo, useShortcuts, useWorkspaceShortcuts, requestSearch, requestAddWorkspace, closeAddWorkspace, setDirectoryBusy, dismissForkError, renderSlot, t, }' is a binding pattern; the exported API needs simple identifier parameters so @param can name them.
+  exported function 'WorkspaceBrowser' (packages/client/ui-workspace/src/client/rows/WorkspaceBrowser.d.ts:7): @param props does not match any parameter (stale tag?).
+  exported function 'ArchiveSessionMenuItem' (packages/client/ui-workspace/src/client/session-actions/ArchiveSession.d.ts:7): parameter '{ sessionId, useArchived, useMenuOpenState, useShortcuts, archiveSession, unarchiveSession, t, }' is a binding pattern; the exported API needs simple identifier parameters so @param can name them.
+  exported function 'ArchiveSessionMenuItem' (packages/client/ui-workspace/src/client/session-actions/ArchiveSession.d.ts:7): @param props does not match any parameter (stale tag?).
+  exported function 'ArchiveSessionRowButton' (packages/client/ui-workspace/src/client/session-actions/ArchiveSession.d.ts:13): parameter '{ sessionId, useArchived, archiveSession, unarchiveSession, t, }' is a binding pattern; the exported API needs simple identifier parameters so @param can name them.
+  exported function 'ArchiveSessionRowButton' (packages/client/ui-workspace/src/client/session-actions/ArchiveSession.d.ts:13): @param props does not match any parameter (stale tag?).
+  exported function 'SessionArchiveConfirmDialog' (packages/client/ui-workspace/src/client/session-actions/ArchiveSession.d.ts:22): parameter '{ useArchiveRequest, settleSessionArchive, stopAndArchiveSession, t, }' is a binding pattern; the exported API needs simple identifier parameters so @param can name them.
+  exported function 'SessionArchiveConfirmDialog' (packages/client/ui-workspace/src/client/session-actions/ArchiveSession.d.ts:22): @param props does not match any parameter (stale tag?).
+  exported function 'ForkSessionMenuItem' (packages/client/ui-workspace/src/client/session-actions/ForkSession.d.ts:8): parameter '{ sessionId, useMenuOpenState, useShortcuts, forkSession, t, }' is a binding pattern; the exported API needs simple identifier parameters so @param can name them.
+  exported function 'ForkSessionMenuItem' (packages/client/ui-workspace/src/client/session-actions/ForkSession.d.ts:8): @param props does not match any parameter (stale tag?).
+  exported function 'RenameSessionMenuItem' (packages/client/ui-workspace/src/client/session-actions/RenameSession.d.ts:7): parameter '{ sessionId, displayTitle, useMenuOpenState, useShortcuts, requestSessionRename, t, }' is a binding pattern; the exported API needs simple identifier parameters so @param can name them.
+  exported function 'RenameSessionMenuItem' (packages/client/ui-workspace/src/client/session-actions/RenameSession.d.ts:7): @param props does not match any parameter (stale tag?).
+  exported function 'SessionRenameDialog' (packages/client/ui-workspace/src/client/session-actions/RenameSession.d.ts:17): parameter '{ useRenameRequest, settleSessionRename, renameSession, t }' is a binding pattern; the exported API needs simple identifier parameters so @param can name them.
+  exported function 'SessionRenameDialog' (packages/client/ui-workspace/src/client/session-actions/RenameSession.d.ts:17): @param props does not match any parameter (stale tag?).
+[ELIFECYCLE] Command failed with exit code 1.
+  exported function 'RowActionToast' (packages/client/ui-workspace/src/client/session-actions/RowActionToast.d.ts:7): parameter '{ useToast, useStore, dismissToast, undoArchive, showArchived, openForkSource, t }' is a binding pattern; the exported API needs simple identifier parameters so @param can name them.
+  exported function 'RowActionToast' (packages/client/ui-workspace/src/client/session-actions/RowActionToast.d.ts:7): @param props does not match any parameter (stale tag?).
+run-gates: start npm dependency catalog
+
+== FAILED config catalog (1.82s) ==
+command: pnpm run verify-config-catalog
+outcome: exit 1
+$ tsx scripts/gen-config-catalog.ts --check
+D:\deepseek-harness\scripts\gen-config-catalog.ts:108
+  throw new Error(
+        ^
+
+Error: gen-config-catalog: 9 violation(s):
+  config field 'Config.refreshIntervalMs' (packages/client/ui-enterprise-connectors/src/index.ts:15) has no JSDoc prose.
+  config field 'Config.dataDirectory' (packages/client/ui-enterprise-connectors/src/index.ts:15) has no JSDoc prose.
+  config field 'Config.requestTimeoutMs' (packages/client/ui-enterprise-connectors/src/index.ts:15) has no JSDoc prose.
+  config field 'Config.maxConfigBytes' (packages/client/ui-enterprise-connectors/src/index.ts:15) has no JSDoc prose.
+  config field 'Config.dataDirectory' (packages/client/ui-enterprise-skills/src/index.ts:20) has no JSDoc prose.
+  config field 'Config.refreshIntervalMs' (packages/client/ui-enterprise-skills/src/index.ts:20) has no JSDoc prose.
+  config field 'Limits.maxArchiveBytes' (packages/client/ui-enterprise-skills/src/archive.ts:5) has no JSDoc prose.
+  config field 'Limits.maxUnpackedBytes' (packages/client/ui-enterprise-skills/src/archive.ts:5) has no JSDoc prose.
+  config field 'Limits.maxFiles' (packages/client/ui-enterprise-skills/src/archive.ts:5) has no JSDoc prose.
+    at report (D:\deepseek-harness\scripts\gen-config-catalog.ts:108:9)
+    at collectConfigCatalog (D:\deepseek-harness\scripts\gen-config-catalog.ts:875:3)
+    at computeConfigCatalogOutputs (D:\deepseek-harness\scripts\gen-config-catalog.ts:1030:19)
+    at main (D:\deepseek-harness\scripts\gen-config-catalog.ts:1054:19)
+    at <anonymous> (D:\deepseek-harness\scripts\gen-config-catalog.ts:1071:3)
+    at ModuleJob.run (node:internal/modules/esm/module_job:437:25)
+    at async node:internal/modules/esm/loader:639:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.15.0
+[ELIFECYCLE] Command failed with exit code 1.
+run-gates: start persistence catalog
+run-gates: PASS npm dependency catalog (0.64s)
+run-gates: start persistence type history
+
+== FAILED skill plugin package list (1.79s) ==
+[ELIFECYCLE] Command failed with exit code 1.
+command: pnpm run verify-plugin-packages
+outcome: exit 1
+$ tsx scripts/gen-plugin-packages.ts --check
+D:\deepseek-harness\scripts\gen-config-catalog.ts:108
+  throw new Error(
+        ^
+
+Error: gen-config-catalog: 9 violation(s):
+  config field 'Config.refreshIntervalMs' (packages/client/ui-enterprise-connectors/src/index.ts:15) has no JSDoc prose.
+  config field 'Config.dataDirectory' (packages/client/ui-enterprise-connectors/src/index.ts:15) has no JSDoc prose.
+  config field 'Config.requestTimeoutMs' (packages/client/ui-enterprise-connectors/src/index.ts:15) has no JSDoc prose.
+  config field 'Config.maxConfigBytes' (packages/client/ui-enterprise-connectors/src/index.ts:15) has no JSDoc prose.
+  config field 'Config.dataDirectory' (packages/client/ui-enterprise-skills/src/index.ts:20) has no JSDoc prose.
+  config field 'Config.refreshIntervalMs' (packages/client/ui-enterprise-skills/src/index.ts:20) has no JSDoc prose.
+  config field 'Limits.maxArchiveBytes' (packages/client/ui-enterprise-skills/src/archive.ts:5) has no JSDoc prose.
+  config field 'Limits.maxUnpackedBytes' (packages/client/ui-enterprise-skills/src/archive.ts:5) has no JSDoc prose.
+  config field 'Limits.maxFiles' (packages/client/ui-enterprise-skills/src/archive.ts:5) has no JSDoc prose.
+    at report (D:\deepseek-harness\scripts\gen-config-catalog.ts:108:9)
+    at collectConfigCatalog (D:\deepseek-harness\scripts\gen-config-catalog.ts:875:3)
+    at main (D:\deepseek-harness\scripts\gen-plugin-packages.ts:61:26)
+    at <anonymous> (D:\deepseek-harness\scripts\gen-plugin-packages.ts:82:3)
+    at ModuleJob.run (node:internal/modules/esm/module_job:437:25)
+    at async node:internal/modules/esm/loader:639:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.15.0
+run-gates: start released persistence history
+run-gates: PASS released persistence history (2.23s)
+run-gates: start Session format references
+
+== FAILED translation pairing (20.14s) ==
+command: pnpm run verify-translation-pairing
+outcome: exit 1
+$ tsx scripts/verify-translation-pairing.ts
+verify-translation-pairing: bilingual pairing rules violated (see docs/i18n/README.md):
+  LFClaw/01-客户端/README.md: in-scope documentation must merge bilingual (docs/i18n/README.md); add the counterpart and record the pair
+  LFClaw/02-管理端/README.md: in-scope documentation must merge bilingual (docs/i18n/README.md); add the counterpart and record the pair
+  LFClaw/02-管理端/admin-web/README.md: in-scope documentation must merge bilingual (docs/i18n/README.md); add the counterpart and record the pair
+  LFClaw/02-管理端/server/README.md: in-scope documentation must merge bilingual (docs/i18n/README.md); add the counterpart and record the pair
+  LFClaw/03-需求文档/README.md: in-scope documentation must merge bilingual (docs/i18n/README.md); add the counterpart and record the pair
+  LFClaw/04-UI设计/README.md: in-scope documentation must merge bilingual (docs/i18n/README.md); add the counterpart and record the pair
+  LFClaw/04-UI设计/brand/README.md: in-scope documentation must merge bilingual (docs/i18n/README.md); add the counterpart and record the pair
+  LFClaw/05-模块计划/README.md: in-scope documentation must merge bilingual (docs/i18n/README.md); add the counterpart and record the pair
+  LFClaw/06-架构设计/README.md: in-scope documentation must merge bilingual (docs/i18n/README.md); add the counterpart and record the pair
+  LFClaw/07-工作日志/README.md: in-scope documentation must merge bilingual (docs/i18n/README.md); add the counterpart and record the pair
+  LFClaw/08-构建运行/README.md: in-scope documentation must merge bilingual (docs/i18n/README.md); add the counterpart and record the pair
+  LFClaw/09-资源/README.md: in-scope documentation must merge bilingual (docs/i18n/README.md); add the counterpart and record the pair
+  LFClaw/09-资源/技能/专家管理/README.md: in-scope documentation must merge bilingual (docs/i18n/README.md); add the counterpart and record the pair
+  LFClaw/README.md: in-scope documentation must merge bilingual (docs/i18n/README.md); add the counterpart and record the pair
+  packages/client/ui-activation/README.md: in-scope documentation must merge bilingual (docs/i18n/README.md); add the counterpart and record the pair
+  packages/client/ui-lfclaw/README.md: in-scope documentation must merge bilingual (docs/i18n/README.md); add the counterpart and record the pair
+  packages/client/ui-session-actions/README.md: in-scope documentation must merge bilingual (docs/i18n/README.md); add the counterpart and record the pair
+  README.md ↔ README.zh.md: README.md has 10 heading(s) but README.zh.md has 43
+  docs/upgrade-guide/v0.2.1-alpha.2/lfclaw-desktop-activation/guide.zh.md:18: link target "../../../../LFClaw/02-管理端/server/README.md#商场楼层权限与即时失效" uses the wrong locale; expected "../../../../LFClaw/02-管理端/server/README.zh.md#商场楼层权限与即时失效"
+  packages/api/session-controller/README.i18n.yaml: out of sync — section /session-controller/known-limitations-and-deferred-work/dev-note changed since confirmation (en) (bring the other side along, then re-record with --write)
+  packages/client/ui-commands/README.i18n.yaml: out of sync — section /deepseek-ai-dsh-client-ui-commands/known-limitations-and-deferred-work/dev-note changed since confirmation (en, zh) (bring the other side along, then re-record with --write)
+[ELIFECYCLE] Command failed with exit code 1.
+  packages/client/ui-enterprise-skills/README.i18n.yaml: out of sync — section /deepseek-ai-dsh-client-ui-enterprise-skills/summary changed since confirmation (en, zh) (bring the other side along, then re-record with --write)
+  packages/client/ui-primitives/README.i18n.yaml: out of sync — section /deepseek-ai-dsh-client-ui-primitives/known-limitations-and-deferred-work/dev-note changed since confirmation (en, zh) (bring the other side along, then re-record with --write)
+  packages/client/ui-schedule/README.md ↔ packages/client/ui-schedule/README.zh.md: packages/client/ui-schedule/README.md has 11 heading(s) but packages/client/ui-schedule/README.zh.md has 12
+  packages/client/ui-sidebar/README.i18n.yaml: out of sync — section /deepseek-ai-dsh-client-ui-sidebar/summary changed since confirmation (en, zh) (bring the other side along, then re-record with --write)
+  packages/session/session-persistence-jsonl/README.i18n.yaml: out of sync — section /deepseek-ai-dsh-session-persistence-jsonl/known-limitations-and-deferred-work/dev-note changed since confirmation (en) (bring the other side along, then re-record with --write)
+  packages/session/session-persistence/README.i18n.yaml: out of sync — section /deepseek-ai-dsh-session-persistence/known-limitations-and-deferred-work/dev-note changed since confirmation (en) (bring the other side along, then re-record with --write)
+run-gates: start Session format catalog
+run-gates: PASS Session format catalog (0.68s)
+run-gates: start public repository links
+
+== FAILED Session format references (6.02s) ==
+command: pnpm run verify-persistence-formats
+outcome: exit 1
+$ tsx scripts/persistence-formats.ts
+Stale persistence format facts: docs/persistence-changes/historical-formats/README.md, docs/persistence-changes/historical-formats/README.zh.md, docs/persistence-changes/historical-formats/README.i18n.yaml. Run pnpm run verify-persistence-formats --write.
+[ELIFECYCLE] Command failed with exit code 1.
+run-gates: start repository references
+run-gates: PASS persistence type history (9.42s)
+run-gates: start concrete terms
+run-gates: PASS public repository links (4.64s)
+run-gates: start doc refs
+run-gates: PASS concrete terms (2.37s)
+run-gates: start subsystem pages
+run-gates: PASS subsystem pages (0.85s)
+run-gates: start package paths
+run-gates: PASS doc refs (1.74s)
+run-gates: start tsconfig paths
+run-gates: PASS tsconfig paths (0.61s)
+run-gates: start config source ownership
+run-gates: PASS persistence catalog (14.22s)
+run-gates: start package README Summaries
+run-gates: PASS config source ownership (0.60s)
+run-gates: start package README model experience
+
+== FAILED package README Summaries (0.61s) ==
+command: pnpm run verify-package-readme-summaries
+outcome: exit 1
+$ tsx scripts/verify-package-readme-summaries.ts
+verify-package-readme-summaries: violations found:
+  packages/client/ui-activation/README.md: missing `## Summary`
+  packages/client/ui-enterprise-connectors/README.md: missing `## Summary`
+  packages/client/ui-session-actions/README.md: missing `## Summary`
+[ELIFECYCLE] Command failed with exit code 1.
+run-gates: start agent note classification
+run-gates: PASS package paths (2.23s)
+run-gates: start agent note format
+run-gates: PASS agent note classification (0.63s)
+run-gates: start archived agent notes
+run-gates: PASS agent note format (0.66s)
+run-gates: start skill invocation metadata
+run-gates: PASS skill invocation metadata (0.55s)
+run-gates: start translation prompt
+run-gates: PASS archived agent notes (0.84s)
+run-gates: start doc budgets
+run-gates: PASS translation prompt (0.57s)
+run-gates: start upgrade guides
+run-gates: PASS doc budgets (0.57s)
+run-gates: start documentation standard tests
+run-gates: PASS upgrade guides (0.69s)
+run-gates: start documentation site checks
+
+== FAILED documentation standard tests (1.45s) ==
+command: pnpm exec vitest run scripts/doc-standard.spec.ts
+outcome: exit 1
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ RUN  v4.1.11 D:/deepseek-harness
+
+ ❯ |thread-safe| scripts/doc-standard.spec.ts (22 tests | 3 failed) 154ms
+     × maps package README kinds to their documentation standards 63ms
+     × keeps every package README on the summary, contents, and Dev Note skeleton 41ms
+     × keeps exact English/Chinese physical line alignment 1ms
+ FAIL  |thread-safe| scripts/doc-standard.spec.ts > dsh-doc skill consolidation > maps package README kinds to their documentation standards
+AssertionError: packages/client/ui-activation/README.md: YAML frontmatter: expected null not to be null
+ ❯ readFrontmatter scripts/doc-standard.spec.ts:111:50
+    109|   const source = readFileSync(resolve(root, file), 'utf8')
+    110|   const match = /^---\n([\s\S]*?)\n---\n/u.exec(source)
+    111|   expect(match, `${file}: YAML frontmatter`).not.toBeNull()
+       |                                                  ^
+    112|   const metadata = load(match?.[1] ?? '')
+    113|   expect(metadata, `${file}: frontmatter object`).toBeTypeOf('object')
+ ❯ scripts/doc-standard.spec.ts:351:24
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  |thread-safe| scripts/doc-standard.spec.ts > dsh-doc skill consolidation > keeps every package README on the summary, contents, and Dev Note skeleton
+AssertionError: packages/client/ui-activation/README.md: expected [ 'missing Summary', …(1) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "missing Summary",
++   "missing Table of Contents",
++ ]
+
+ ❯ scripts/doc-standard.spec.ts:402:64
+    400|     for (const file of packageReadmes().filter(file => file.split('/')…
+    401|       const source = readFileSync(resolve(root, file), 'utf8')
+    402|       expect(packageReadmeStructureErrors(file, source), file).toEqual…
+       |                                                                ^
+    403|     }
+    404|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  |thread-safe| scripts/doc-standard.spec.ts > reference-example README pair > keeps exact English/Chinese physical line alignment
+AssertionError: expected 180 to be 178 // Object.is equality
+
+- Expected
++ Received
+
+- 178
++ 180
+
+ ❯ scripts/doc-standard.spec.ts:447:25
+    445|     const sourceLines = readFileSync(resolve(root, dir, 'README.md'), …
+    446|     const zhLines = readFileSync(resolve(root, dir, 'README.zh.md'), '…
+    447|     expect(sourceLines).toBe(zhLines)
+       |                         ^
+    448|   })
+    449|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 19 passed (22)
+   Start at  09:45:56
+   Duration  378ms (transform 49ms, setup 44ms, import 26ms, tests 154ms, environment 0ms)
+
+run-gates: start package README limitations
+
+== FAILED package README model experience (5.26s) ==
+[ELIFECYCLE] Command failed with exit code 1.
+command: pnpm run verify-package-readme-model-experience
+outcome: exit 1
+$ tsx scripts/verify-package-readme-model-experience.ts
+verify-package-readme-model-experience failed:
+  packages\client\ui-activation\README.md: ## Model Experience and ## Known Limitations and Deferred Work must be the final two H2 sections, in that order
+  packages\client\ui-chat\README.md: line 172: non-canonical Model Experience heading "## Model Experience\r"; use exactly "## Model Experience"
+  packages\client\ui-conversation\README.md: line 158: non-canonical Model Experience heading "## Model Experience\r"; use exactly "## Model Experience"
+  packages\client\ui-enterprise-connectors\README.md: must contain one or more complete model-context entries
+  packages\client\ui-enterprise-skills\README.md: line 45: non-canonical Model Experience heading "## Model Experience\r"; use exactly "## Model Experience"
+  packages\client\ui-session-actions\README.md: missing ## Model Experience
+  packages\client\ui-skill\README.md: line 79: non-canonical Model Experience heading "## Model Experience\r"; use exactly "## Model Experience"
+  packages\client\ui-workspace\README.md: line 200: non-canonical Model Experience heading "## Model Experience\r"; use exactly "## Model Experience"
+
+== FAILED package README limitations (5.39s) ==
+[ELIFECYCLE] Command failed with exit code 1.
+command: pnpm run verify-package-readme-limitations
+outcome: exit 1
+$ tsx scripts/verify-package-readme-limitations.ts
+verify-package-readme-limitations: violations found:
+  packages/client/ui-activation/README.md:35: the `## Known Limitations and Deferred Work` section has no top-level `- ` bullet — state the limitations, or whitelist the package if there are genuinely none
+  packages/client/ui-enterprise-connectors/README.md:25: the `## Known Limitations and Deferred Work` section has no top-level `- ` bullet — state the limitations, or whitelist the package if there are genuinely none
+  packages/client/ui-enterprise-skills/README.md:54: the `## Known Limitations and Deferred Work` section has no top-level `- ` bullet — state the limitations, or whitelist the package if there are genuinely none
+  packages/client/ui-session-actions/README.md: missing the `## Known Limitations and Deferred Work` section (a package with genuinely nothing to declare joins NO_LIMITATIONS in scripts/verify-package-readme-limitations.ts instead)
+run-gates: PASS repository references (16.19s)
+run-gates: PASS documentation site checks (8.35s)
+
+run-gates: 26 passed, 17 failed, 0 skipped in 75.26s.
+run-gates: unsuccessful gates:
+  - FAILED doc-typecheck (13.63s, exit 2)
+    pnpm run doc-typecheck
+  - FAILED doc graphs (11.89s, exit 1)
+    pnpm run verify-doc-graphs
+  - FAILED markdown links (22.76s, exit 1)
+    pnpm run verify-md-links
+  - FAILED type equivalence (11.39s, exit 1)
+    pnpm run verify-type-equiv
+  - FAILED cordis catalog (12.14s, exit 1)
+    pnpm run verify-cordis-catalog
+  - FAILED Cordis inspect catalog (9.48s, exit 1)
+    pnpm run verify-cordis-inspect-catalog
+  - FAILED translation pairing (20.14s, exit 1)
+    pnpm run verify-translation-pairing
+  - FAILED markdown wrap (10.13s, exit 1)
+    pnpm run verify-md-wrap
+  - FAILED client catalog (3.27s, exit 1)
+    pnpm run verify-client-catalog
+  - FAILED export jsdoc (7.30s, exit 1)
+    pnpm run verify-export-jsdoc
+  - FAILED config catalog (1.82s, exit 1)
+    pnpm run verify-config-catalog
+  - FAILED skill plugin package list (1.79s, exit 1)
+    pnpm run verify-plugin-packages
+  - FAILED Session format references (6.02s, exit 1)
+    pnpm run verify-persistence-formats
+  - FAILED package README Summaries (0.61s, exit 1)
+    pnpm run verify-package-readme-summaries
+  - FAILED package README model experience (5.26s, exit 1)
+    pnpm run verify-package-readme-model-experience
+  - FAILED documentation standard tests (1.45s, exit 1)
+    pnpm exec vitest run scripts/doc-standard.spec.ts
+  - FAILED package README limitations (5.39s, exit 1)
+    pnpm run verify-package-readme-limitations
+[ELIFECYCLE] Command failed with exit code 1.

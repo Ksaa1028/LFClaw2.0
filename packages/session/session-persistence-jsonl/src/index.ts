@@ -22,7 +22,7 @@ import { createHash, randomBytes } from 'node:crypto'
 import {
   SessionPersistence, SessionPersistenceRevision, SessionFormatUnsupportedError,
   SessionPersistenceCorruptionError,
-  SessionAlreadyExistsError, SessionPersistenceNotFoundError,
+  SessionAlreadyExistsError, SessionAlreadyOwnedError, SessionPersistenceNotFoundError,
   assertStoredId, materializeCreateHeader, sessionFormatVersionRefusal, validateStoredEvents,
   type SessionAccess, type SessionHandle,
   type SessionHandleReadResult,
@@ -326,7 +326,8 @@ class JsonlSessionPersistence extends SessionPersistence {
     const inheritedEventCount = SessionLogOffset(options?.inheritedEventCount ?? 0)
     await this.ensureRootEncoding()
     options?.signal?.throwIfAborted()
-    if (this.tracker.hasPending(snapshot.id) || await this.findLog(snapshot.id, options?.signal) !== undefined) {
+    if (await this.isDeleted(snapshot.id) || this.tracker.hasPending(snapshot.id)
+      || await this.findLog(snapshot.id, options?.signal) !== undefined) {
       throw new SessionAlreadyExistsError(snapshot.id)
     }
     options?.signal?.throwIfAborted()
@@ -1467,6 +1468,7 @@ class JsonlSessionPersistence extends SessionPersistence {
       throw error
     }
     signal?.throwIfAborted()
+    if (entries.some(entry => entry.name === 'session.deleted')) return undefined
     const generations: Array<{ readonly path: string; readonly version: number }> = []
     const opposite: string[] = []
     for (const entry of entries) {
@@ -1490,6 +1492,39 @@ class JsonlSessionPersistence extends SessionPersistence {
         generationLogFilename(sessionFormatCatalog.currentVersion, this.compression),
       ),
     }
+  }
+
+  /**
+   * Durably remove a closed Session from application access, retaining its raw generations for recovery.
+   * @param id - Session whose live owners and readers have released their handles.
+   * @returns resolution after the deletion marker is synced; an unknown id is a no-op.
+   */
+  override async delete(id: SessionId): Promise<void> {
+    if ([...this.tracker.openHandles].some(handle => handle.id === id)) {
+      throw new SessionAlreadyOwnedError(id)
+    }
+    const selected = await this.findLog(id)
+    if (!selected) return
+    const dir = dirname(selected.sourcePath)
+    const lease = await this.acquireLease(id, undefined, dir)
+    try {
+      if ([...this.tracker.openHandles].some(handle => handle.id === id)) throw new SessionAlreadyOwnedError(id)
+      const marker = join(dir, 'session.deleted')
+      const tmp = await this.writeSyncedTempFile(marker, '')
+      try { await link(tmp, marker) }
+      finally { await rm(tmp, { force: true }) }
+      if (process.platform !== 'win32') await this.syncDirPosix(dir)
+      this.coldLogMemo.delete(id)
+    } finally { await lease.release() }
+  }
+
+  /** Deleted identities cannot be reused under another project directory. */
+  private async isDeleted(id: SessionId): Promise<boolean> {
+    for (const project of await this.listProjectDirs()) {
+      try { await stat(join(project, encodeSegment(id), 'session.deleted')); return true }
+      catch (error) { if (!isENOENT(error)) throw error }
+    }
+    return false
   }
 
   /** Find the unique authoritative generation for an id across project directories. */

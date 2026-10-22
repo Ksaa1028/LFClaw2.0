@@ -1040,6 +1040,21 @@ describe('user-explicit invocation injection', () => {
     expect(block.text).not.toContain('what does this do')
   })
 
+  it('records a display name without changing the unique invoked skill key', async () => {
+    const { ctx, agent } = await invokeHarness()
+    ctx.skills.register({ name: 'enterprise-skill-creator-0f05c7', displayName: '技能创建',
+      description: 'Create skills', source: 'enterprise', content: 'Create a reusable skill.' })
+    const decision = await proposeStep(ctx, agent, [gesture('/enterprise-skill-creator-0f05c7 请创建日报技能')])
+    if (decision.kind !== 'enter') throw new Error('expected enter')
+    const injection = decision.messages.find(message =>
+      (message.source as { kind?: string }).kind === 'skill-invocation')
+    expect(injection?.source).toMatchObject({ kind: 'skill-invocation',
+      name: 'enterprise-skill-creator-0f05c7', displayName: '技能创建' })
+    const block = injection?.content[0]
+    if (block?.type !== 'text') throw new Error('expected text injection')
+    expect(block.text).toContain('Create a reusable skill.')
+  })
+
   it('injects an ordinary skill the same way (one uniform user-explicit path)', async () => {
     const { ctx, agent } = await invokeHarness()
     const decision = await proposeStep(ctx, agent, [gesture('/shared-skill go')])

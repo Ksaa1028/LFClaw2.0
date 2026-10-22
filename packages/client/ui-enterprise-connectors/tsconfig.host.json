@@ -1,0 +1,14 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": { "rootDir": "src", "outDir": "lib/types", "tsBuildInfoFile": "lib/tsconfig.host.tsbuildinfo" },
+  "files": ["src/index.ts", "src/catalog.ts", "src/tools.ts", "src/tool-catalog.ts", "src/personal.ts", "src/personal-store.ts", "src/personal-oauth.ts", "src/enterprise-oauth.ts"],
+  "references": [
+    { "path": "../connection/tsconfig.host.json" },
+    { "path": "../ui-activation/tsconfig.host.json" },
+    { "path": "../../mcp/mcp-client" },
+    { "path": "../../core/tools" },
+    { "path": "../../subprocess/subprocess" },
+    { "path": "../../../vendor/schemastery" },
+    { "path": "../../../vendor/cordis" }
+  ]
+}

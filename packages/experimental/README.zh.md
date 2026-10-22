@@ -34,6 +34,8 @@ kind: "package-group"
 <a id="packages"></a>
 ## 包
 
+新建 Web 和桌面 Profile 默认启用语音输入并自动准备本地模型；其他实验性 Bundle 需要显式选择。语音输入仍属于实验性功能。
+
 | 包 | 职责 | ctx 键 |
 |---|---|---|
 | [`tool-session-query`](tool-session-query/README.zh.md) | 按工作区授权的模型会话搜索、追踪与事件读取 | — |

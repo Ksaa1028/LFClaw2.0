@@ -1,0 +1,7 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write LFClaw/04-UI设计/brand/README.md
+/lfclaw-brand-icons:
+  en: 55d9c5b2908849b2
+  zh: 8d15bc5c2f9d551b

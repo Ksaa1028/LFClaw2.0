@@ -635,14 +635,14 @@ Source: [`packages/workspace/workspace/src/index.ts`](../../packages/workspace/w
 
 #### `workspace/session-stop` — parallel
 
-Stop a session's running work because the caller archived it with `stopActivity`; the archive set is durable when this dispatches. Each provider stops its own families — cancelling a turn, its subagent descendants, owned jobs, or active schedules — through the same cancel paths the user's own stop actions use, so the session log ends every open turn regularly and a later unarchive can continue the conversation. Listeners issue their stop requests without waiting for running work to settle; a listener may await its own durability barrier. A rejection is logged by the registry and does not undo the archive.
+Stop a session's running work because the caller archived or is deleting it. The archive set is durable for archive dispatches. Each provider stops its own families — cancelling a turn, its subagent descendants unless excluded, owned jobs, or active schedules — through the same cancel paths the user's own stop actions use, so the session log ends every open turn regularly and a later unarchive can continue the conversation. Listeners issue their stop requests without waiting for running work to settle; a listener may await its own durability barrier. A rejection is logged by the registry and does not undo the archive.
 
 ```ts cordis-catalog
 /**
- * Stop a session's running work because the caller archived it with
- * `stopActivity`; the archive set is durable when this dispatches. Each
+ * Stop a session's running work because the caller archived or is deleting
+ * it. The archive set is durable for archive dispatches. Each
  * provider stops its own families — cancelling a turn, its subagent
- * descendants, owned jobs, or active schedules — through the same cancel
+ * descendants unless excluded, owned jobs, or active schedules — through the same cancel
  * paths the user's own stop actions use, so the session log ends every
  * open turn regularly and a later unarchive can continue the
  * conversation. Listeners issue their stop requests without waiting for

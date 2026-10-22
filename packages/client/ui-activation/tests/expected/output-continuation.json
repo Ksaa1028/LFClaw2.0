@@ -1,0 +1,59 @@
+[
+  {
+    "type": "user/message",
+    "source": {
+      "kind": "user"
+    },
+    "content": [
+      {
+        "type": "text",
+        "text": "完成任务"
+      }
+    ]
+  },
+  {
+    "type": "assistant/message",
+    "content": [
+      {
+        "type": "text",
+        "text": "第一部分"
+      }
+    ]
+  },
+  {
+    "type": "turn/end",
+    "reason": {
+      "kind": "max-tokens"
+    }
+  },
+  {
+    "type": "user/message",
+    "source": {
+      "kind": "lfclaw-output-continuation",
+      "attempt": 1,
+      "form": "notice",
+      "summary": "输出达到上限，正在自动继续"
+    },
+    "content": [
+      {
+        "type": "text",
+        "text": "上一条模型输出因单次输出 token 上限被截断。请从中断处继续完成用户当前任务，保留已完成的工作，不重复已有内容，不重新执行已完成的工具操作；若任务已经完成，直接简洁说明结果。"
+      }
+    ]
+  },
+  {
+    "type": "assistant/message",
+    "content": [
+      {
+        "type": "text",
+        "text": "剩余内容"
+      }
+    ]
+  },
+  {
+    "type": "turn/end",
+    "reason": {
+      "kind": "completed"
+    }
+  }
+]

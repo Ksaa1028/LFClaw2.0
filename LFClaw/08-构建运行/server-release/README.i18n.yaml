@@ -1,0 +1,25 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write LFClaw/08-构建运行/server-release/README.md
+/standalone-administration-deployment:
+  en: 4e61eafc9e6e32e5
+  zh: 3af36c48c8b56ae0
+/standalone-administration-deployment/1-build-locally:
+  en: 96b0e3235f6c09a4
+  zh: 98b50ffe7b054f2e
+/standalone-administration-deployment/2-upload-one-file:
+  en: 513f3bf853293e6c
+  zh: eb8ed7768938f372
+/standalone-administration-deployment/3-initial-installation:
+  en: bcd9b8459d50b254
+  zh: cf25e1523663bd53
+/standalone-administration-deployment/4-verify-access:
+  en: 1882862191f56048
+  zh: 7f37061535ed17b6
+/standalone-administration-deployment/5-subsequent-updates:
+  en: 8bf445481b0dfbde
+  zh: 0eaacf4d7eb44575
+/standalone-administration-deployment/scope-and-verification-limits:
+  en: ccb3b2cac911a513
+  zh: 78f30cd65704cc2a

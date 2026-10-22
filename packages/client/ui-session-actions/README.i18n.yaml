@@ -1,0 +1,43 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write packages/client/ui-session-actions/README.md
+/:
+  en: f1960139924a87d7
+  zh: ef69c7dd807d1173
+/deepseek-ai-dsh-client-ui-session-actions:
+  en: e2e118da40c3c3d5
+  zh: 59106c0a8b937ed5
+/deepseek-ai-dsh-client-ui-session-actions/summary:
+  en: 145e1af021ce7382
+  zh: 946bd75303351ca7
+/deepseek-ai-dsh-client-ui-session-actions/table-of-contents:
+  en: a17f33fc984a20f1
+  zh: e27b432b12dd516d
+/deepseek-ai-dsh-client-ui-session-actions/use-this-package:
+  en: 3af5c723a9c99689
+  zh: 1a23b5ad4b5764bd
+/deepseek-ai-dsh-client-ui-session-actions/implementation:
+  en: 34839776e3b83654
+  zh: 4663f22313f5cf61
+/deepseek-ai-dsh-client-ui-session-actions/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-client-ui-session-actions/model-experience/session-deletion:
+  en: 88d2b7ef8425c301
+  zh: 36fb191f99507079
+/deepseek-ai-dsh-client-ui-session-actions/model-experience/session-deletion/what-the-model-sees:
+  en: 7dd4fb6dbb48da70
+  zh: dde41b61d4969001
+/deepseek-ai-dsh-client-ui-session-actions/model-experience/session-deletion/token-effect:
+  en: d0df5cd354ec0b45
+  zh: ffb7dfba0271d9d8
+/deepseek-ai-dsh-client-ui-session-actions/model-experience/session-deletion/kv-cache-effect:
+  en: e310790c5f58734c
+  zh: e5dd18185b4b25ef
+/deepseek-ai-dsh-client-ui-session-actions/known-limitations-and-deferred-work:
+  en: 58c79c17847982b7
+  zh: dbe542ce208eca4b
+/deepseek-ai-dsh-client-ui-session-actions/known-limitations-and-deferred-work/dev-note:
+  en: d3b32386ddc5663f
+  zh: 91fe4773d826988b

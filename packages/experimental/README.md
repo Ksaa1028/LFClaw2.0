@@ -34,6 +34,8 @@ Promotion requires a named product role, documented public behavior and limitati
 <a id="packages"></a>
 ## Packages
 
+New Web and Desktop profiles enable Voice Input with automatic local model preparation; other experimental bundles require explicit selection. Voice Input remains experimental.
+
 | Package | Role | ctx key |
 |---|---|---|
 | [`tool-session-query`](tool-session-query/README.md) | Workspace-authorized model session search, trace, and event reads | — |

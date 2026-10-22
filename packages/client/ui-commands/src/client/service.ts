@@ -69,6 +69,7 @@ function submittedCommandName(line: string): string {
 interface LiveState {
   readonly contributions: Map<string, CommandContribution>
   readonly decorations: Map<string, CommandDecoration>
+  readonly hiddenMenuNames: Set<string>
   readonly popups: WeakMapWithValues<SessionBinding, PopupSelectController<ClientSessionContext>>
 }
 
@@ -80,6 +81,7 @@ export class CommandUiRuntime extends Service implements CommandUiContract {
   private readonly live: LiveState = {
     contributions: new Map(),
     decorations: new Map(),
+    hiddenMenuNames: new Set(),
     popups: new WeakMapWithValues(),
   }
   /** `command`-namespace translator (composer refusal notices). */
@@ -166,6 +168,19 @@ export class CommandUiRuntime extends Service implements CommandUiContract {
   }
 
   /**
+   * Hide one redundant command from the suggestion menu while keeping typed invocation intact.
+   * @param name - Host or client command name.
+   * @returns disposer restoring the menu entry.
+   */
+  hideFromMenu(name: string): () => void {
+    const dispose = this.ctx.effect(() => {
+      this.live.hiddenMenuNames.add(name)
+      return () => { this.live.hiddenMenuNames.delete(name) }
+    }, 'command.hideFromMenu()')
+    return () => { void dispose() }
+  }
+
+  /**
    * Close every open popup for a command whose options have become stale.
    * Pending loads and confirmations lose their binding; drafts stay intact.
    * @param name - command name without the leading slash.
@@ -244,7 +259,7 @@ export class CommandUiRuntime extends Service implements CommandUiContract {
         ...(contribution.icon === undefined ? {} : { icon: contribution.icon }),
       })
     }
-    const visible = rows.filter(c => req.position === 'leading' || c.hint === undefined)
+    const visible = rows.filter(c => !this.live.hiddenMenuNames.has(c.name) && (req.position === 'leading' || c.hint === undefined))
     return req.query === '' ? sectionRows(visible, this.t) : rankByName(visible, req.query)
   }
 

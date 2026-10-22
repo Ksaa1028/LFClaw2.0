@@ -575,7 +575,7 @@ describe('ModelSelect catalog size', () => {
       load={vi.fn()} select={vi.fn()} t={t} />)
     const trigger = screen.getByRole('button', { name: /选择模型/ })
     fireEvent.click(trigger)
-    if (count > 0) fireEvent.click(screen.getByRole('menuitem', { name: /^模型/ }))
+    if (count === 1) fireEvent.click(screen.getByRole('menuitem', { name: /^模型/ }))
     const rows = screen.queryAllByRole('menuitemradio')
     expect(rows).toHaveLength(count)
     if (count > 4) {
@@ -610,7 +610,6 @@ describe('ModelSelect catalog size', () => {
     const directory = createSnapshotStore(state({ groups: modelGroups(5), current }))
     render(<ModelSelect locked={false} available directory={directory} load={vi.fn()} select={vi.fn()} t={t} />)
     fireEvent.click(screen.getByRole('button', { name: /选择模型/ }))
-    if (checked) fireEvent.click(screen.getByRole('menuitem', { name: /^模型/ }))
     const search = screen.getByRole('searchbox')
     fireEvent.change(search, { target: { value: 'Model 5' } })
     expect(screen.getAllByRole('menuitemradio')).toHaveLength(1)
@@ -640,7 +639,6 @@ describe('ModelSelect catalog size', () => {
       load={vi.fn()} select={select} t={t} />)
     const trigger = screen.getByRole('button', { name: /选择模型/ })
     fireEvent.click(trigger)
-    fireEvent.click(screen.getByRole('menuitem', { name: /^模型/ }))
     const rows = screen.getAllByRole('menuitemradio')
     expect(document.activeElement).toBe(rows[1])
     expect(fireEvent.keyDown(rows[1]!, { key: 'ArrowDown' })).toBe(false)
@@ -760,7 +758,6 @@ describe('ModelSelect search', () => {
     }))
     render(<ModelSelect locked={false} available directory={directory} load={vi.fn()} select={select} t={t} />)
     fireEvent.click(screen.getByRole('button', { name: /选择模型/ }))
-    fireEvent.click(screen.getByRole('menuitem', { name: /模型/ }))
     const search = screen.getByRole('searchbox')
     expect(search).toBeInstanceOf(HTMLInputElement)
     const [alpha, beta, delta, epsilon, gamma] = screen.getAllByRole('menuitemradio')
@@ -917,4 +914,28 @@ it('restores the account model name after login without changing the saved route
   act(() => { directory.update((snapshot) => { snapshot.groups = groups; snapshot.routable = true }) })
   expect(screen.getByRole('button', { name: /选择模型，当前/ }).textContent).toBe('DeepSeek FlashHigh')
   expect(directory.getSnapshot().current).toEqual(selected)
+})
+
+it.each(['Escape', 'Tab', 'outside'])('opens configured models directly and dismisses with %s', async (dismiss) => {
+  const groups = [{ id: 'enterprise', name: 'Enterprise', models: [
+    { id: 'qwen', name: 'qwen3.8-flash' }, { id: 'kimi', name: 'kimi-k2.6' },
+  ] }]
+  const select = vi.fn().mockResolvedValue({ ok: true, value: undefined })
+  render(<ModelSelect locked={false} available
+    directory={createSnapshotStore(state({ groups, current: { provider: 'enterprise', model: 'qwen' } }))}
+    load={vi.fn()} select={select} t={t} />)
+  const trigger = screen.getByRole('button', { name: /选择模型/ })
+  fireEvent.click(trigger)
+  expect(screen.queryByRole('menuitem', { name: /模型/ })).toBeNull()
+  const rows = screen.getAllByRole('menuitemradio')
+  expect(rows.map(row => row.textContent)).toEqual(['qwen3.8-flash', 'kimi-k2.6'])
+  expect(document.activeElement).toBe(rows[0])
+  await expect(rows.map(row => row.textContent).join('\n') + '\n').toMatchFileSnapshot('./expected/direct-models.txt')
+  if (dismiss === 'outside') fireEvent.mouseDown(document.body)
+  else fireEvent.keyDown(rows[0]!, { key: dismiss, shiftKey: dismiss === 'Tab' })
+  expect(screen.queryByRole('menu')).toBeNull()
+  fireEvent.click(trigger)
+  fireEvent.click(screen.getByRole('menuitemradio', { name: 'kimi-k2.6' }))
+  await waitFor(() => { expect(screen.queryByRole('menu')).toBeNull() })
+  expect(select).toHaveBeenCalledWith({ provider: 'enterprise', model: 'kimi' })
 })

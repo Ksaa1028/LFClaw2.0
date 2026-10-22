@@ -1,0 +1,96 @@
+{
+  "formatVersion": 2,
+  "roots": [
+    {
+      "key": "event:lfclaw/share-received",
+      "kind": "event",
+      "event": "lfclaw/share-received",
+      "surface": false,
+      "digest": "a2f0250913d34f97f16f532da574329eb247be8f23f3088cc875b462372a67fb",
+      "schema": {
+        "root": 0,
+        "nodes": [
+          {
+            "kind": "object",
+            "properties": [
+              {
+                "name": "data",
+                "type": 1,
+                "optional": false
+              },
+              {
+                "name": "ignorable",
+                "type": 4,
+                "optional": true
+              },
+              {
+                "name": "seq",
+                "type": 3,
+                "optional": false
+              },
+              {
+                "name": "time",
+                "type": 3,
+                "optional": false
+              },
+              {
+                "name": "type",
+                "type": 5,
+                "optional": false
+              }
+            ],
+            "indices": []
+          },
+          {
+            "kind": "object",
+            "properties": [
+              {
+                "name": "senderId",
+                "type": 2,
+                "optional": false
+              },
+              {
+                "name": "senderName",
+                "type": 2,
+                "optional": false
+              },
+              {
+                "name": "shareId",
+                "type": 2,
+                "optional": false
+              },
+              {
+                "name": "sharedAt",
+                "type": 3,
+                "optional": false
+              },
+              {
+                "name": "title",
+                "type": 2,
+                "optional": false
+              }
+            ],
+            "indices": []
+          },
+          {
+            "kind": "primitive",
+            "type": "string"
+          },
+          {
+            "kind": "primitive",
+            "type": "number"
+          },
+          {
+            "kind": "literal",
+            "value": true
+          },
+          {
+            "kind": "literal",
+            "value": "lfclaw/share-received"
+          }
+        ]
+      }
+    }
+  ],
+  "types": []
+}

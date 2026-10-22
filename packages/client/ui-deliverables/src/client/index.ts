@@ -17,6 +17,14 @@ import type {} from '@deepseek-ai/dsh-client-locale/client'
 import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
 import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
 import type {} from '@deepseek-ai/dsh-client-ui-sidebar-right/client'
+import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
+import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
+import type {} from '@deepseek-ai/dsh-client-ui-workspace/client'
+import type { MainPanelId } from '@deepseek-ai/dsh-client-ui-layout/client'
+import type { PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
+import { IconFolderOpenOutlineRegular } from '@deepseek-ai/dsh-client-ui-primitives'
+import { fileAddressFor } from '@deepseek-ai/dsh-util-workspace-path'
+import { createElement, type ReactNode } from 'react'
 import type {} from '@deepseek-ai/dsh-client-ui-settings/client'
 import { changesReviewAddress } from '../changes.ts'
 import { ChangesDiffStore } from './changes-diff.ts'
@@ -27,6 +35,7 @@ import { DeliverablesTail, type DeliverablesInjected } from './Deliverables.tsx'
 import { ReviewTab, type ReviewInjected } from './ReviewTab.tsx'
 import { CHANGES_REVIEW_ID, changesReviewDefinition } from './review-definition.ts'
 import { createReviewStore } from './review-store.ts'
+import { CatalogPage, type CatalogInjected } from './CatalogPage.tsx'
 import { en, NS, zh, type DeliverablesKey } from './locales.ts'
 import {
   deliverablesDefinition, presentedForClosing, producedFileMentions, selectProducedFiles,
@@ -40,7 +49,14 @@ declare module '@deepseek-ai/dsh-client-ui-slots' {
 }
 
 /** Required services for the tail-slot and tab-type registrations and their dictionaries. */
-export const inject = ['slots', 'locale', 'uiConversation', 'remote', 'remote.session', 'sidebarRightTabs', 'sidebarRight', 'configForms']
+export const inject = ['slots', 'locale', 'uiConversation', 'remote', 'remote.session', 'sidebarRightTabs', 'sidebarRight', 'configForms', 'uiWorkspace']
+
+const CATALOG_PANEL = 'deliverables' as MainPanelId
+
+/** Decorative icon for the global deliverables page. */
+function CatalogIcon({ size }: PropsRuntime<'sidebar.panellist'>): ReactNode {
+  return createElement(IconFolderOpenOutlineRegular, { size })
+}
 
 /**
  * Client plugin body: register the dictionaries, the turn-tail entry, and the comparison tab type.
@@ -58,6 +74,45 @@ export function apply(ctx: ClientContext): void {
   })
   ctx.uiConversation.events.register(deliverablesDefinition)
   ctx.effect(() => ctx.locale.register(NS, { zh, en }), 'ui-deliverables: dictionaries')
+  ctx.slots.inject('main', () => ctx.slots.register({
+    name: 'main', key: CATALOG_PANEL, locale: NS,
+    inject: (): CatalogInjected => ({
+      openPreview: async (file) => {
+        try { ctx.uiWorkspace.openSession(file.sessionId) } catch { return false }
+        return new Promise<boolean>((resolve) => {
+          let frame = 0
+          let settled = false
+          const finish = (ok: boolean): void => {
+            if (settled) return
+            settled = true
+            clearTimeout(timeout)
+            cancelAnimationFrame(frame)
+            unsubscribe()
+            resolve(ok)
+          }
+          const check = (): void => {
+            if (settled || ctx.sidebarRight.mounted.getSnapshot() !== file.sessionId) return
+            cancelAnimationFrame(frame)
+            frame = requestAnimationFrame(() => {
+              if (settled || ctx.sidebarRight.mounted.getSnapshot() !== file.sessionId) return
+              try {
+                ctx.sidebarRight.openResource(fileAddressFor(file.sessionId, file.cwd, file.path))
+                finish(true)
+              } catch { finish(false) }
+            })
+          }
+          const unsubscribe = ctx.sidebarRight.mounted.subscribe(check)
+          const timeout = setTimeout(() => { finish(false) }, 10_000)
+          check()
+        })
+      },
+      openSession: (sessionId) => { ctx.uiWorkspace.openSession(sessionId) },
+      openNative: async file => (await opener.open(file.sessionId, file.seq, file.index)) === null,
+    }),
+  }, CatalogPage))
+  ctx.slots.inject('sidebar.panellist', () => ctx.slots.register({
+    name: 'sidebar.panellist', id: CATALOG_PANEL, order: 60, label: () => ctx.locale.bind(NS)('catalog.title'), locale: NS,
+  }, CatalogIcon))
   ctx.slots.inject(
     'conversation.chat.turnTail',
     () => ctx.slots.register({

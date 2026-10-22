@@ -22,8 +22,9 @@ function viewNode(kind: string, seq: number, data: Record<string, unknown>): Cha
 }
 const user = (seq: number, text: string) =>
   viewNode('user', seq, { content: [{ type: 'text', text }], source: { kind: 'user' } })
-const skill = (seq: number, name: string) =>
-  viewNode('context', seq, { content: [], source: { kind: 'skill-invocation', name, form: 'instructions' } })
+const skill = (seq: number, name: string, displayName?: string) =>
+  viewNode('context', seq, { content: [], source: { kind: 'skill-invocation', name, form: 'instructions',
+    ...(displayName === undefined ? {} : { displayName }) } })
 const instructions = (seq: number) =>
   viewNode('context', seq, { content: [], source: { kind: 'agent-instructions', changes: [] } })
 const assistant = (seq: number, text = 'answer') => viewNode('assistant-step', seq, { text })
@@ -47,6 +48,8 @@ function storeOf(nodes: readonly ChatConversationViewNode[]): ChatNodeStore & { 
 
 const names = (node: ChatConversationViewNode | undefined) =>
   (node?.data as { skillNames?: readonly string[] } | undefined)?.skillNames
+const labels = (node: ChatConversationViewNode | undefined) =>
+  (node?.data as { skillLabels?: Readonly<Record<string, string>> } | undefined)?.skillLabels
 
 describe('SkillNameProjector', () => {
   it('attaches a batch\'s injected skill names on replace and leaves other Nodes untouched', () => {
@@ -56,6 +59,22 @@ describe('SkillNameProjector', () => {
     expect(names(out[0])).toEqual(['demo'])
     expect(names(out[4])).toBeUndefined()
     expect(out[3]).toBe(answer)
+  })
+
+  it('attaches the durable display name to the matching invocation only', () => {
+    const projector = new SkillNameProjector()
+    const invocation = 'enterprise-skill-creator-0f05c7'
+    const out = projector.replace([user(2, `/${invocation} 你是干嘛的`), skill(3, invocation, '技能创建'), assistant(4)])
+    expect(names(out[0])).toEqual([invocation])
+    expect(labels(out[0])).toEqual({ [invocation]: '技能创建' })
+    expect(labels(out[2])).toBeUndefined()
+  })
+
+  it('hides the internal suffix in older enterprise messages without a saved label', () => {
+    const projector = new SkillNameProjector()
+    const key = 'enterprise-skill-creator-0f05c7'
+    const out = projector.replace([user(2, `/${key} 你是干嘛的`), skill(3, key), assistant(4)])
+    expect(labels(out[0])).toEqual({ [key]: 'skill-creator' })
   })
 
   it('an assistant-only apply neither scans the store nor re-emits message Nodes', () => {

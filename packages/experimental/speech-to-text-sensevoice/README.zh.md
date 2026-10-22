@@ -9,7 +9,7 @@ kind: "package-reference"
 
 ## 概述
 
-此 Provider 在 Host CPU 上使用 SenseVoiceSmall ONNX 与 Silero VAD 识别语音。各平台的 sherpa-onnx Node 包包含 ONNX Runtime；用户无需 Python、编译器或模型转换。启用时检查缓存资源，不加载模型或下载资源。
+此 Provider 在 Host CPU 上使用 SenseVoiceSmall ONNX 与 Silero VAD 识别语音。各平台的 sherpa-onnx Node 包包含 ONNX Runtime；用户无需 Python、编译器或模型转换。默认启用时只检查缓存；`autoPrepare: true` 会启动一次后台准备，复用已校验文件，并公布进度或失败供手动重试。语音 Bundle 启用此选项。
 
 ## 目录
 

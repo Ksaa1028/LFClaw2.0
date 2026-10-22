@@ -28,6 +28,11 @@
     // not declaration path aliases, keep each package/vendor source compiled
     // under its own tsconfig boundary.
     "paths": {
+      "@deepseek-ai/dsh-client-ui-enterprise-connectors": ["./packages/client/ui-enterprise-connectors/src/index.ts"],
+      "@deepseek-ai/dsh-client-ui-enterprise-connectors/client": ["./packages/client/ui-enterprise-connectors/src/client/index.ts"],
+      "@deepseek-ai/dsh-client-ui-enterprise-skills": ["./packages/client/ui-enterprise-skills/src/index.ts"],
+      "@deepseek-ai/dsh-client-ui-enterprise-skills/client": ["./packages/client/ui-enterprise-skills/src/client/index.ts"],
+      "@deepseek-ai/dsh-client-ui-enterprise-skills/archive": ["./packages/client/ui-enterprise-skills/src/archive.ts"],
       "@deepseek-ai/dsh-experimental-session-search": ["./packages/experimental/session-search/src/index.ts"],
       "@deepseek-ai/dsh-experimental-ralph-bundle": ["./packages/experimental/ralph-bundle/src/index.ts"],
       "@deepseek-ai/dsh-experimental-terminal-bundle": ["./packages/experimental/terminal-bundle/src/index.ts"],
@@ -90,6 +95,12 @@
       "@deepseek-ai/dsh-computer-use/brand": ["./packages/computer-use/computer-use/src/brand.ts"],
       "@deepseek-ai/dsh-experimental-computer-use-cua-driver-mcp": ["./packages/experimental/computer-use-cua-driver-mcp/src/index.ts"],
       "@deepseek-ai/dsh-experimental-computer-use-cua-driver-native": ["./packages/experimental/computer-use-cua-driver-native/src/index.ts"],
+      "@deepseek-ai/dsh-client-ui-activation": ["./packages/client/ui-activation/src/index.ts"],
+      "@deepseek-ai/dsh-client-ui-activation/client": ["./packages/client/ui-activation/src/client/index.ts"],
+      "@deepseek-ai/dsh-client-ui-lfclaw": ["./packages/client/ui-lfclaw/src/index.ts"],
+      "@deepseek-ai/dsh-client-ui-lfclaw/client": ["./packages/client/ui-lfclaw/src/client/index.ts"],
+      "@deepseek-ai/dsh-client-ui-session-actions": ["./packages/client/ui-session-actions/src/index.ts"],
+      "@deepseek-ai/dsh-client-ui-session-actions/client": ["./packages/client/ui-session-actions/src/client/index.ts"],
       "@deepseek-ai/cordis": ["./vendor/cordis/src"],
       "@deepseek-ai/cosmokit": ["./vendor/cosmokit/src"],
       "@deepseek-ai/schemastery": ["./vendor/schemastery/src"],

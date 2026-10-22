@@ -229,6 +229,23 @@ export class SessionController extends TypertRemoteService {
   }
 
   /**
+   * Delete the selected Session without requesting descendant stops or changing their persistence.
+   * @param sessionId - Session explicitly selected for deletion.
+   * @returns resolution after durable deletion and list notification.
+   */
+  async deleteSession(sessionId: SessionId): Promise<void> {
+    const persistence = this.ctx.get('sessionPersistence')
+    if (!persistence) throw new Error('当前部署不支持删除会话')
+    const snapshot = this.ctx.sessions.get(sessionId)?.header ?? (await persistence.stat(sessionId))?.header
+    if (!snapshot) return
+    await this.agents.deleteSession(sessionId, async () => {
+      await this.ctx.parallel('workspace/session-stop', { sessionId, includeDescendants: false })
+      await persistence.delete(sessionId)
+    })
+    this.ctx.emit('api-session/removed', sessionId)
+  }
+
+  /**
    * Inspect one attached or persisted Session without activating its Agent.
    * @param sessionId - durable Session identity.
    * @param signal - optional caller cancellation for persistence reads.

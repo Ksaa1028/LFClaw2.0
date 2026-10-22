@@ -19,14 +19,11 @@
   min-height: 0;
 }
 
-/* The mock's `.page-scroll` with `.automation-content` inside it: the content
-   column takes the whole scroll viewport so the mock's centered 960px column
-   reaches the scrollbar, while the heading, the filters, the search field, the
-   catalog notices, and the rows scroll as one region. */
 .pageScroll {
   flex: 1;
   min-height: 0;
-  overflow: auto;
+  overflow: hidden;
+  display: flex;
   scrollbar-gutter: stable;
   /* A 9px rail carries the 5px thumb inset 2px from the pane edge (rendered by
      ui-theme styles/scrollbar.css). */
@@ -38,6 +35,12 @@
    clamp(24-48px) inline / 48px bottom inset, so sibling first-level pages
    share one content frame at every width. */
 .pageContent {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   max-width: 960px;
   margin: 0 auto;
   /* Inline and bottom insets only: the 28px top inset belongs to the heading
@@ -216,6 +219,11 @@
 /* The mock's `#rule-list`: the catalog notices and the rows share one column
    with no box of their own. */
 .list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
   display: block;
 }
 
@@ -1470,3 +1478,6 @@
     gap: 0;
   }
 }
+
+.pageContent > * { flex-shrink: 0; }
+.pager { display: flex; justify-content: center; align-items: center; gap: 12px; padding-top: 20px; font-size: 13px; }

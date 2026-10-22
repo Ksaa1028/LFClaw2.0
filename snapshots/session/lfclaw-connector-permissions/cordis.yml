@@ -1,0 +1,13 @@
+- insert:
+    - id: lfclaw-permission-session-fixture
+      name: '../../../packages/client/ui-enterprise-connectors/tests/permission-session-fixture.ts'
+
+- id: tool-bash
+  disabled: true
+
+- id: tool-pwsh
+  disabled: true
+
+- id: system-prompt
+  config:
+    personaPrefix: 查询员工获授权的商场数据。

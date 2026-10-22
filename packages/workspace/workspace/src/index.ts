@@ -94,9 +94,11 @@ export class WorkspaceOrderInvalidError extends Error {
 }
 
 
-/** The session an archive request is about to write into the archive set. */
+/** The session whose active work a caller inspects or stops. */
 export interface SessionActivityRequest {
   readonly sessionId: SessionId
+  /** Skip descendant work when stopping only the selected Session for deletion; archiving includes descendants. */
+  readonly includeDescendants?: boolean
 }
 
 /** Caller choices for {@link WorkspaceRegistry.archiveSession}. */
@@ -131,10 +133,10 @@ declare module '@deepseek-ai/cordis' {
       next: () => Promise<readonly SessionActivity[]>,
     ): Promise<readonly SessionActivity[]>
     /**
-     * Stop a session's running work because the caller archived it with
-     * `stopActivity`; the archive set is durable when this dispatches. Each
+     * Stop a session's running work because the caller archived or is deleting
+     * it. The archive set is durable for archive dispatches. Each
      * provider stops its own families — cancelling a turn, its subagent
-     * descendants, owned jobs, or active schedules — through the same cancel
+     * descendants unless excluded, owned jobs, or active schedules — through the same cancel
      * paths the user's own stop actions use, so the session log ends every
      * open turn regularly and a later unarchive can continue the
      * conversation. Listeners issue their stop requests without waiting for

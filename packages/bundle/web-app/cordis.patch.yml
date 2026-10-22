@@ -16,8 +16,8 @@
 
 - id: system-prompt
   config:
-    personaPrefix: >-
-      You are a coding agent powered by the {{model}} model.
+    personaPrefix: ''
+    includeHarnessIdentity: false
 
 # Full-text session search is opt-in (the base row's `openAt: never`). This
 # restatement keeps the Web values on one ephemeral in-memory index; a
@@ -74,6 +74,7 @@
     # Browser Session export: `/export` command plus the shared download dialog.
     - id: session-log-download
       name: '@deepseek-ai/dsh-session-log-export'
+      disabled: !!js "ctx.get('profileContext')?.name === 'desktop'"
 
     # Session-header "Open In..." split button over the host application
     # resolution (macOS/Windows/Linux; a host with no resolved application
@@ -143,6 +144,43 @@
     # reports an actionable error when its settings-domain provider is absent.
     - id: ui-settings-account
       name: '@deepseek-ai/dsh-client-ui-settings-account'
+      disabled: true
+
+    - id: ui-activation
+      name: '@deepseek-ai/dsh-client-ui-activation'
+      disabled: !!js "ctx.get('profileContext')?.name !== 'desktop'"
+      config:
+        serverUrl: !!js "process.env.LFCLAW_SERVER_URL || 'http://8.216.38.213:39811/lfclaw/api'"
+        allowInsecureHttp: true
+        timeoutMs: 150000
+        contextWindow: 32768
+        maxTokens: 8192
+        maxAutoContinuations: 3
+        maxNoProgressContinuations: 2
+        modelMaxRetries: 1
+        refreshIntervalMs: 30000
+
+    - id: ui-session-actions
+      name: '@deepseek-ai/dsh-client-ui-session-actions'
+
+    - id: ui-enterprise-skills
+      name: '@deepseek-ai/dsh-client-ui-enterprise-skills'
+      disabled: !!js "ctx.get('profileContext')?.name !== 'desktop'"
+      config:
+        dataDirectory: !!js dshHomePath('lfclaw/personal-skills')
+        refreshIntervalMs: 30000
+        maxArchiveBytes: 33554432
+        maxUnpackedBytes: 67108864
+        maxFiles: 20000
+
+    - id: ui-enterprise-connectors
+      name: '@deepseek-ai/dsh-client-ui-enterprise-connectors'
+      disabled: !!js "ctx.get('profileContext')?.name !== 'desktop'"
+      config:
+        dataDirectory: !!js dshHomePath('lfclaw/personal-connectors')
+        requestTimeoutMs: 30000
+        maxConfigBytes: 1048576
+        refreshIntervalMs: 30000
 
     - id: account-controller
       name: '@deepseek-ai/dsh-api-account-controller'
@@ -204,7 +242,7 @@
         openBrowser: !!js ctx.webStartup.openBrowser
         printUrl: true
         publicUrl: !!js ctx.webStartup.publicUrl
-        surfaceContext: true
+        surfaceContext: !!js "ctx.get('profileContext')?.name !== 'desktop'"
 
     # The client-plugin reload chain, always mounted: it is idle until a
     # rebuild watcher (pnpm run dev:web) actually rewrites client bundles. It
@@ -261,6 +299,16 @@
     - id: ui-layout
       name: '@deepseek-ai/dsh-client-ui-layout'
 
+    - id: ui-lfclaw
+      name: '@deepseek-ai/dsh-client-ui-lfclaw'
+      disabled: !!js "ctx.get('profileContext')?.name !== 'desktop'"
+      config:
+        sharedSessionDirectory: !!js dshHomePath('lfclaw/shared-sessions')
+
+    - id: im-connect
+      name: '@michengai/dsh-im-connect'
+      disabled: !!js "ctx.get('profileContext')?.name !== 'desktop'"
+
     - id: ui-renderer
       name: '@deepseek-ai/dsh-client-ui-renderer'
 
@@ -306,6 +354,7 @@
 
     - id: ui-settings-models
       name: '@deepseek-ai/dsh-client-ui-settings-models'
+      disabled: !!js "ctx.get('profileContext')?.name === 'desktop'"
 
     # Plugin management: the sidebar Plugins page installs, enables, disables,
     # and removes the profile's bundles through the `pluginManager` Remote.
@@ -398,6 +447,7 @@
     # acknowledgement toast, over the messageFeedback and sessionFeedback Remotes.
     - id: ui-message-feedback
       name: '@deepseek-ai/dsh-client-ui-message-feedback'
+      disabled: true
 
     # Model selection: the /model popupSelect + composer seat over session.models.
     - id: ui-model-selection
@@ -413,6 +463,7 @@
 
     - id: ui-settings-session-log
       name: '@deepseek-ai/dsh-client-ui-settings-session-log'
+      disabled: true
 
     # The Built-in plugins settings section: the navigation entry and the tab
     # row the inventory tab registers into. The official configuration pages
@@ -530,6 +581,7 @@
 - id: command-compact
   disabled: true
 
+
 - id: tool-result-pruner
   disabled: true
 
@@ -575,3 +627,17 @@
       name: '@deepseek-ai/dsh-agent-preset-registry'
       config:
         default: standard
+
+- id: llm-deepseek
+  disabled: !!js "ctx.get('profileContext')?.name === 'desktop'"
+
+# LFClaw 不提供原平台反馈入口，也不上传会话记录到原平台采集服务。
+- id: command-feedback
+  disabled: true
+
+- id: session-telemetry-otel
+  disabled: true
+- id: llm-deepseek-account
+  disabled: !!js "ctx.get('profileContext')?.name === 'desktop'"
+- id: llm-pi-ai
+  disabled: !!js "ctx.get('profileContext')?.name === 'desktop'"

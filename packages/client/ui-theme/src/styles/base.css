@@ -37,3 +37,13 @@ body {
 [data-dsh-automatic-focus]:focus:focus-visible {
   outline: none;
 }
+
+/* Monochrome UI marks follow the resolved palette; unmarked brand artwork stays gold. */
+img[data-lfclaw-logo='auto'] {
+  filter: brightness(0);
+}
+
+body[data-ds-dark-theme] img[data-lfclaw-logo='auto'],
+img[data-lfclaw-logo='inverse'] {
+  filter: brightness(0) invert(1);
+}

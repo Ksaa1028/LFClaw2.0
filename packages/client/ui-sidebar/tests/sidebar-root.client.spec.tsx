@@ -23,6 +23,7 @@ const t: SidebarRootComponentProps['t'] = makeTranslate({ ...commonEn, ...en })
 
 afterEach(() => {
   cleanup()
+  delete document.documentElement.dataset.windowsTitlebar
   delete document.documentElement.dataset.platform
   vi.unstubAllEnvs()
   vi.useRealTimers()
@@ -99,6 +100,17 @@ function mountShell({ collapsed = false, width = 300, shortcuts = [] }: {
 }
 
 describe('SidebarRoot shell', () => {
+  it('keeps one Windows settings seat outside the collapsing column with a stable label', () => {
+    document.documentElement.dataset.windowsTitlebar = ''
+    const shell = mountShell({})
+    const seat = screen.getByTestId('settings-seat').parentElement!
+    expect(seat.parentElement).toBe(document.body)
+    expect(shell.settingsOwner().wide).toBe(true)
+    shell.rerender({ collapsed: true, width: 0 })
+    expect(screen.getAllByTestId('settings-seat')).toHaveLength(1)
+    expect(screen.getByTestId('settings-seat').parentElement).toBe(seat)
+    expect(shell.settingsOwner().wide).toBe(true)
+  })
   it('advertises the effective new-session binding', () => {
     const shortcut: ShortcutCatalogEntry = { id: 'session.new' as ShortcutCommandId, label: 'New', aliases: [],
       binding: null, modified: true, conflicts: [], issue: null, keys: ['Ctrl', 'N'], aria: 'Control+N' }
@@ -148,15 +160,15 @@ describe('SidebarRoot shell', () => {
         options?.fallback ?? null) as SidebarRootComponentProps['renderSlot']}
     />)
 
-    expect(screen.getByText('DSH Local Build')).toBeTruthy()
-    expect(screen.getByText('1.2.3-rc.4-0123456-dirty')).toBeTruthy()
+    expect(screen.getByText('LFClaw')).toBeTruthy()
+    expect(screen.queryByText('1.2.3-rc.4-0123456-dirty')).toBeNull()
     expect(container.querySelector('svg')).not.toBeNull()
   })
 
   it.each([
     [{ DSH_CLIENT_VERSION: '1.2.3' }, '1.2.3'],
     [{ DSH_CLIENT_COMMIT_HASH: 'abcdef0', DSH_CLIENT_VERSION: '1.2.3' }, '1.2.3-abcdef0'],
-  ])('omits unavailable build-version suffixes from %j', (environment, expected) => {
+  ])('keeps build metadata out of the brand row for %j', (environment, expected) => {
     for (const [name, value] of Object.entries(environment)) vi.stubEnv(name, value)
     render(<SidebarRoot
       collapsed={false} width={300}
@@ -168,8 +180,8 @@ describe('SidebarRoot shell', () => {
         options?.fallback ?? null) as SidebarRootComponentProps['renderSlot']}
     />)
 
-    expect(screen.getByText('DSH Local Build')).toBeTruthy()
-    expect(screen.getByText(expected)).toBeTruthy()
+    expect(screen.getByText('LFClaw')).toBeTruthy()
+    expect(screen.queryByText(expected)).toBeNull()
   })
 
   it('retains the local-build fallback without complete build metadata', () => {
@@ -183,7 +195,7 @@ describe('SidebarRoot shell', () => {
         options?.fallback ?? null) as SidebarRootComponentProps['renderSlot']}
     />)
 
-    expect(screen.getByText('DSH Local Build')).toBeTruthy()
+    expect(screen.getByText('LFClaw')).toBeTruthy()
   })
 
   it('hands the region its wide flag and clamps expandSidebar to the collapsed state', () => {

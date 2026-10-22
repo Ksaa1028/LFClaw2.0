@@ -1,0 +1,10 @@
+{
+  "legacy": {
+    "contextWindow": 32768,
+    "maxTokens": 8192
+  },
+  "configured": {
+    "contextWindow": 131072,
+    "maxTokens": 32768
+  }
+}

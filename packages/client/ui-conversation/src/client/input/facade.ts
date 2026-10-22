@@ -158,6 +158,7 @@ export class SessionInputShell implements SessionInput {
   /** Revision of the last automatic failure restoration. */
   private failedRestoreRev: number | undefined
   private restoringFailures = false
+  private submittedSkillLabels: InputState['submittedSkillLabels']
   private attachmentFlightSeq = 0
   /** Attachment-only sends retained until admission settles or scope disposal releases their attachments. */
   private readonly attachmentFlights = new Map<number, {
@@ -558,6 +559,7 @@ export class SessionInputShell implements SessionInput {
       flight.controller.abort()
     }
     this.disposed = true
+    this.submittedSkillLabels = undefined
     this.dispatchRun(({ type: 'release' }))
     this.unsubscribeInbox?.()
     this.unregister()
@@ -724,6 +726,15 @@ export class SessionInputShell implements SessionInput {
           cursor = part.offset + part.length
         }
         out += draft.slice(cursor)
+        const skillLabels = Object.fromEntries(occurrences.flatMap((occurrence, index) => {
+          if (occurrence.source !== 'skill' || !/^\/\S+$/u.test(occurrence.ref)
+            || parts[index]?.text !== occurrence.ref) return []
+          return [[occurrence.ref.slice(1), occurrence.label]]
+        }))
+        if (Object.keys(skillLabels).length > 0) {
+          this.submittedSkillLabels = { ...this.submittedSkillLabels, [out.trim()]: skillLabels }
+          this.publish()
+        }
         this.settleSink(attempt, this.deps.defaultSink(out.trim(), attachmentIds, mode, attempt.signal))
       },
       (error: unknown) => {
@@ -887,6 +898,7 @@ export class SessionInputShell implements SessionInput {
       ...(core.claim !== undefined ? { claim: core.claim } : {}),
       occurrences: this.projection.occurrences,
       queue: this.deps.inbox?.getSnapshot()?.['next-turn'] ?? EMPTY_QUEUE,
+      ...(this.submittedSkillLabels === undefined ? {} : { submittedSkillLabels: this.submittedSkillLabels }),
     }
   }
 

@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`offers creation and editing of saved configurations without an import action 1`] = `"工具连接连接企业服务与个人工作工具刷新列表新建连接企业连接器我的连接器微软文档测试streamable-http · 连接正常0 个可用工具查看详情"`;

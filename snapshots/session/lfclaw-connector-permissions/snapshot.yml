@@ -1,0 +1,8 @@
+version: 1
+scenario: lfclaw-connector-permissions
+profile: headless
+composition: lfclaw-connector-permissions
+recording: authored
+header:
+  class: lfclaw-connector-permissions
+  pin: true

@@ -85,6 +85,8 @@ This section explains how the service is built and where the observable behavior
 - **Fulfillment is publication.** `startActivation()` returns only after the child is accepted and its handle can cancel that exact execution.
 - **Trusted same-process values.** Requests, descriptors, and results are borrowed immutable; serialization and hostile-input validation belong at process and wire boundaries.
 
+`workspace/session-stop` leaves descendants running when `includeDescendants` is false, as used when deleting only the selected Session.
+
 ### Source map
 
 | File | Role |

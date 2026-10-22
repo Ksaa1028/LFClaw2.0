@@ -87,6 +87,8 @@ export interface SkillCandidate extends SkillSummary {
 export interface SkillDefinition extends SkillSummary {
   /** Markdown instruction body after any provider-specific metadata removal. */
   readonly content: string
+  /** Human-facing name recorded with an explicit invocation; absent for ordinary skills. */
+  readonly displayName?: string
   /** Parsed optional metadata object from frontmatter. */
   readonly metadata?: Readonly<Record<string, unknown>>
 }
@@ -147,6 +149,8 @@ export interface SkillInvocationSource {
   readonly kind: 'skill-invocation'
   /** Invoked skill name, validated user-invocable at the injecting boundary. */
   readonly name: string
+  /** Name shown in transcripts while `name` remains the unique loader key. */
+  readonly displayName?: string
   /** Injected skill bodies are instructions for the model to follow. */
   readonly form: 'instructions'
 }

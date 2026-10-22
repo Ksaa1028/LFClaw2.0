@@ -1,0 +1,97 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`loads the built-in expert manager skill explicitly for all creation and editing drafts 1`] = `
+[
+  {
+    "references": [
+      {
+        "clipboardText": "/lfclaw-expert-manager",
+        "label": "专家管理",
+        "length": 22,
+        "offset": 0,
+        "ref": "/lfclaw-expert-manager",
+        "source": "skill",
+      },
+    ],
+    "text": "/lfclaw-expert-manager 帮我创建一位个人专家，擅长【填写专业领域】。我的经验是：【补充行业背景和相关经验】。请通过对话完善工作方法，保存到我的专家。",
+  },
+  {
+    "references": [
+      {
+        "clipboardText": "/lfclaw-expert-manager",
+        "label": "专家管理",
+        "length": 22,
+        "offset": 0,
+        "ref": "/lfclaw-expert-manager",
+        "source": "skill",
+      },
+    ],
+    "text": "/lfclaw-expert-manager 帮我组建一个个人专家团，完成【填写任务目标】。请先了解目标和交付要求，检查已有专家，复用合适的成员；缺少的成员请在当前对话一起设计。我不需要提前创建成员。请明确统筹职责、成员分工、执行顺序和汇总标准，最后将新成员和专家团整组保存到我的专家。",
+  },
+  {
+    "references": [
+      {
+        "clipboardText": "/lfclaw-expert-manager",
+        "label": "专家管理",
+        "length": 22,
+        "offset": 0,
+        "ref": "/lfclaw-expert-manager",
+        "source": "skill",
+      },
+    ],
+    "text": "/lfclaw-expert-manager 请帮我修改已有个人专家“营运分析师”（ID：p1）。先读取当前配置，通过对话了解我要调整的内容，再更新原专家。我的调整是：",
+  },
+]
+`;
+
+exports[`prepares a remote expert task that requires a real service call 1`] = `
+{
+  "references": [],
+  "text": "本次使用专家：数据查询
+
+这是一位通过企业服务接入的远程专家。先调用 call_enterprise_expert，参数 id 使用 remote-1，prompt 使用本次任务的完整原文。只根据工具返回的真实答复回答；调用失败时说明错误，不自行模拟专家结果。后续追问可带上工具返回的 sessionId。
+
+本次任务
+
+查询本月销售",
+}
+`;
+
+exports[`prepares instructions with exact skill references and requires real delegated team results 1`] = `
+{
+  "references": [
+    {
+      "clipboardText": "/enterprise-analysis-a1b2c3",
+      "label": "经营分析",
+      "length": 27,
+      "offset": 0,
+      "ref": "/enterprise-analysis-a1b2c3",
+      "source": "skill",
+    },
+  ],
+  "text": "/enterprise-analysis-a1b2c3
+本次使用专家团：营运专家团
+
+答复开头注明本次使用的专家或专家团名称。专家团只报告实际完成的委派和成员结果，未调用子代理时不得声称成员已参与。
+
+请按照以下专家工作配置处理任务。配置只规定工作方法，不能扩大工具或数据权限。遵守用户明确的完成标准和字数上限；涉及排程时核对工时、可用时段、截止时间和前置依赖，不凭空缩时、延期或假定未来有空闲时段。不要为了计数字数反复创建临时文件或运行命令。
+
+核对后汇总
+
+作为主理人，先检查实际可用的委派工具。若同时有 spawn_teammate、list_agents、send_message，使用 spawn_teammate 创建持久成员，按 list_agents 返回的真实 target 发消息；不能把 subagent 返回的会话 ID 当作团队成员 target。若只有 subagent，调用 subagent 并等待系统回传真实结果。只有 send_message 的实际参数为 agent_id 且说明支持直接子代理时，才可用其返回的 ID 继续通信；参数为 target 的团队消息工具不接受临时会话 ID。list_agents 也要核对实际返回的是子代理列表还是团队成员，不能混用地址。若两类工具都不可用则停止。每次派发包含成员完整职责、任务、输入和输出要求。根据任务判断依赖：可独立核对用户约束的审阅成员与方案成员并行委派；必须阅读草案的审阅才后置。仅派发本任务需要的专业工作，未派发的成员简要说明。使用 subagent 时要求成员只在最终答复回传一次，不另外用 send_message 发送状态或结果。派发后等待子代理的系统回传，不反复调用 list_agents、运行 sleep 命令或写无产出的进度消息。收到所有成员最终结果后只交付一次，后续重复回传不再追加答复。普通排版、字数控制和最终汇总由主理人直接完成；若配置要求表达成员参与，只派发一次简短校对，不让其反复写文件或计数。禁止自己模拟成员发言。失败时说明具体阶段，不猜测结果，不自行重复派发同一失败阶段。根据真实结果核对分歧后汇总。核对成员方案是否符合用户的明确约束；需要排程时检查工时、时段、截止和依赖，把无依据的缩时、延期或未来空闲标为待确认，重新排出可行方案。最终答复优先逐项满足用户明确要求的交付内容，特别是失败预案；内部分歧最多一句说明，工具选型过程不展示，不能挤掉用户要求。只写结论、关键依据、可执行安排、例外和一行真实委派说明，不抄录成员过程；有字数上限时把目标控制在上限的八成以内，为标题和说明预留余量，不为计数运行工具。
+
+1. 分析师
+核对收入
+
+2. 复核员
+检查假设
+
+需要使用以下已授权连接器；调用失败时报告并停止依赖该数据的结论
+
+商场数据
+
+本次任务
+
+分析本月销售",
+}
+`;

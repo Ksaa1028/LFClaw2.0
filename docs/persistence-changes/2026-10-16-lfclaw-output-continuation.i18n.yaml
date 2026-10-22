@@ -1,0 +1,28 @@
+# Bilingual-pair consistency record for 2026-10-16-lfclaw-output-continuation.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write docs/persistence-changes/2026-10-16-lfclaw-output-continuation.md
+/:
+  en: 3d5a424ae7d7e46b
+  zh: c22a8e4a62d8cc1a
+/2026-10-16-lfclaw-output-continuation:
+  en: 2af1b9f49545fb97
+  zh: 0adb775d2a211284
+/2026-10-16-lfclaw-output-continuation/summary:
+  en: 6d2b225418e54416
+  zh: f15d62d77dfbee2a
+/2026-10-16-lfclaw-output-continuation/table-of-contents:
+  en: 6cf314a069ceb451
+  zh: 9adff678e9ecab3b
+/2026-10-16-lfclaw-output-continuation/declaration:
+  en: 6907136f28e48c90
+  zh: 02f8298485f3d8e7
+/2026-10-16-lfclaw-output-continuation/compatibility:
+  en: 72e820297f6119de
+  zh: 3402b2d06c0d70ad
+/2026-10-16-lfclaw-output-continuation/verification:
+  en: 6ec7e7b98f117116
+  zh: 4cd6a076650adb58
+/2026-10-16-lfclaw-output-continuation/dev-note:
+  en: b75c8458928b72b9
+  zh: 003ba4e17b4b5269

@@ -52,11 +52,15 @@ target package 通过 declaration merge 扩展 snapshot 与 Location data map，
 <a id="shell-and-standard-props"></a>
 ## Shell 与标准 props
 
+所选技能名称按序列化后的提示词保留在 Session 本地输入状态中，让 Chat 在 Host 加载技能前就能显示名称。这些名称仅用于展示，不改变提示词序列化或授权，随输入外壳释放。重新加载的历史使用持久化技能调用记录中的名称。
+
 共享图片插槽属性将展示选择与持久化引用分开：`thumbnail` 请求完整缩放的附件列表缩略图，`compact` 请求裁剪的图片方块。每张图片可通过可选的 `label` 提供无障碍展示名称；加载和缓存标识仍使用原始附件引用。[ui-attachment](../ui-attachment/README.zh.md) 负责渲染与灯箱。
 
 控件组的尺寸、内容、可见性或字体加载状态变化后，composer 测量展开状态下的控件组。若无法排在同一行，控制栏为模型位设置 `--dsh-composer-model-text-display: none` 和 `--dsh-composer-model-icon-display: block`；两者默认值分别为 `block` 和 `none`。若连图标也放不下，仍允许换行。
 
 上下文占用按钮在输入卡片下方、会话统计右侧显示圆环和百分比。点击按钮可在视口内的面板查看 token 构成，没有统计项时面板也不会越界；上下文用量和容量尚不可用时，按钮保持隐藏。
+
+可选的 `conversation.context.capacity` 插槽在会话内提供当前模型容量，起始页不挂载该插槽。占用者以该容量渲染仪表，不可用时传入 null；没有占用者时使用记录中的容量。用量和构成保留会话最近的测量值，直到后续请求更新。
 
 关闭代码工作工具时，外壳仅隐藏 Trajectory；其他插件贡献的 View 仍然可用。可用 View 少于两个时隐藏 View 标签栏。在 Trajectory 激活时关闭代码工作工具会返回 Chat；已保存的 View 偏好和 Session 记录保持不变。开启后，Trajectory 恢复可用。View 所有者接收可用列表，使导航操作跟随相同的可见性。
 
@@ -180,3 +184,9 @@ selector 必须是 owner currency 的纯函数。非 null 返回值作为 `match
 无。
 
 </details>
+
+新建会话欢迎区默认显示 `./assets/lfclaw-logo.svg` 透明金色图标；品牌插槽仍允许部署替换图案。
+
+根作用域的单一插槽 `conversation.hero.brand.text` 同时替换欢迎标题和标签；可选的 owner 属性 `badgeClassName` 提供 shell 的标签样式。没有贡献者时，shell 显示本地化标题和预览版标签。
+
+草稿初始化接受普通文字或显式引用文档；恢复时保留引用的展示名称和准确调用标识。

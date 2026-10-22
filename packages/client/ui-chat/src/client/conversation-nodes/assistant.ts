@@ -266,6 +266,13 @@ function projectAssistant(context: ConversationNodeContext<AssistantState>): Ass
   const anchorSeq = (settled?.interrupted === true ? settled.seq : state.firstVisibleSeq ?? settled?.seq)
     ?? context.matches[0]?.event.seq ?? 0
   const time = settled?.time ?? state.firstVisibleTime ?? context.matches[0]?.event.time ?? 0
+  const source = state.final?.event.type === 'assistant/message' ? state.final.event.data.message.source : undefined
+  const replay = source?.replayState
+  const response = replay !== null && typeof replay === 'object' && 'response' in replay ? replay.response : undefined
+  const responseModel = response !== null && typeof response === 'object' && 'responseModel' in response
+    && typeof response.responseModel === 'string' && response.responseModel.trim() !== ''
+    ? response.responseModel : undefined
+  const modelId = responseModel ?? source?.model
   return {
     anchorSeq,
     visible,
@@ -276,6 +283,7 @@ function projectAssistant(context: ConversationNodeContext<AssistantState>): Ass
       step: state.step,
       blocks,
       time,
+      ...modelId === undefined ? {} : { modelId },
       ...state.usage === undefined ? {} : { usage: state.usage },
       ...settled === undefined ? {} : { finalNode: settled },
     },

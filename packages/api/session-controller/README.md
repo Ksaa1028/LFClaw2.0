@@ -10,6 +10,8 @@ Desktop analytics follows the [product collection policy](../../client/product-a
 
 ## Summary
 
+Model catalog entries expose optional `contextWindow` from the adapter's current exact-route metadata. Catalog refreshes can update capacity without changing persisted request records or the selected model.
+
 `@deepseek-ai/dsh-api-session-controller` owns the Host `ctx.sessionController` service and the generated Client `session`, `skills`, and `fileReferences` Remote namespaces. It serves Session lifecycle and history, the Host-generation model catalog, human background-job kill, workspace-path opening, user-invocable skill discovery, and Agent-scoped file references. Use it through API Gateway when a Client needs operations addressed by a Session.
 
 ## Table of Contents
@@ -71,6 +73,10 @@ Queue edits replace pending content with non-empty text only.
 Attachment authorization reads declared content fields of built-in Session events and completed assistant stream blocks, including flat V4 tool-role messages. Unknown event payloads and unrelated fields cannot authorize attachment reads.
 
 The controller composes `ArchivedSessionGate` through `ctx.plugin`: it loads once the Agent registry, Session store, and Workspace registry exist and unwinds with the controller. Its `agent/pre-step` listener rejects a step proposed for an archived Session or for a subagent descendant of one — read from the Session header's lineage fields, never a fork — so a late waking delivery ends its turn as `blocked` without a model request; unarchiving lifts the gate for the whole lineage. The work an archived Session still runs is reported and stopped by its owners through the Workspace registry's archive admission ([seam](../../workspace/workspace/README.md)): the running turn by the [Agent registry](../../core/agent/README.md), owned jobs by the [job registry seam](../../jobs/jobs/README.md), subagent descendants by the [Subagent](../../subagent/subagent/README.md) runtime, reminders by the [Schedule](../../schedule/schedule/README.md) plugin; this controller reports nothing itself.
+
+API-created forks retain a controller-owned Agent handle like ordinary Sessions; deletion releases that handle without changing the source Session.
+
+The Host `deleteSession(id)` method stops the selected Session's activity, releases its controller-owned Agent, writes a persistence deletion marker, and notifies the list. Forks and subagent children do not block deletion or receive descendant stop requests; a live child may still depend on its deleted parent's runtime. An Agent owned by another runtime component still blocks deletion until its owner releases it. Workspace files remain. Host UI extensions call this method; it adds no public Remote method.
 
 <a id="client-references"></a>
 ## Client references

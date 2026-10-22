@@ -159,6 +159,13 @@ export function apply(ctx: ClientContext): void {
   const source: InputTriggerSource = {
     trigger: '/',
     name: 'skill',
+    codec: {
+      clipboardText: ref => ref,
+      serialize: (ref, signal) => Promise.resolve().then(() => {
+        signal.throwIfAborted()
+        return ref
+      }),
+    },
     order: 2,
     async candidates(session, { query, signal }) {
       if (sessions.subagentAddress(session.sessionId) !== undefined) return []
@@ -227,6 +234,7 @@ export function apply(ctx: ClientContext): void {
   const inputTriggers = ctx.get('inputTriggers') as InputTriggerServiceContract
   // A preset decides which skill providers an agent reads, so a switched
   // session's cached catalog belongs to the composition it no longer runs.
+  ctx.remote.$on('skills/change', clearAll)
   ctx.remote.$on('agent-preset/selected', invalidate)
   ctx.on('connection/reset', clearAll)
   ctx.effect(() => {

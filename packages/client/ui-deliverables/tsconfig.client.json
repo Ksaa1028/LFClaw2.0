@@ -9,6 +9,9 @@
     "src/client",
     "src/changes.ts",
     "src/presented.ts",
+    "src/catalog.ts",
+    "src/catalog-removals.ts",
+    "src/catalog-route.ts",
     "src/css-modules.d.ts"
   ],
   "references": [
@@ -48,6 +51,9 @@
     {
       "path": "../ui-sidebar-right"
     },
+    { "path": "../ui-sidebar" },
+    { "path": "../ui-layout" },
+    { "path": "../ui-workspace" },
     {
       "path": "../ui-slots"
     },
@@ -68,6 +74,9 @@
     },
     {
       "path": "../../util/workspace-path"
+    },
+    {
+      "path": "../../storage/storage-domain"
     }
   ]
 }
