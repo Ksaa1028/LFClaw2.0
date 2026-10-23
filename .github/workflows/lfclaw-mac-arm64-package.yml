@@ -71,10 +71,12 @@ jobs:
       - name: Check packaging configuration and toolchain
         env:
           PACKAGE_VERSION: ${{ steps.version.outputs.version }}
+          LFCLAW_DESKTOP_UPDATE_URL: http://8.216.38.213:39811/lfclaw-updates/mac-arm64/
         run: pnpm run package:desktop:mac:arm64:unsigned --check --build-version "$PACKAGE_VERSION"
       - name: Build Apple Silicon test DMG
         env:
           PACKAGE_VERSION: ${{ steps.version.outputs.version }}
+          LFCLAW_DESKTOP_UPDATE_URL: http://8.216.38.213:39811/lfclaw-updates/mac-arm64/
         run: pnpm run package:desktop:mac:arm64:unsigned --build-version "$PACKAGE_VERSION"
       - name: Retain packaging diagnostics
         if: always() && steps.checkout.outcome == 'success'
@@ -99,4 +101,4 @@ jobs:
           ARTIFACT_URL: ${{ steps.dmg.outputs.artifact-url }}
         run: |
           printf '\n[Download Apple Silicon DMG artifact](%s)\n\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
-          printf '%s\n' 'Extract the artifact ZIP, open the DMG, and copy the app to your Mac.' 'This test build has no Developer ID signing, Apple notarization, or automatic updates. Artifacts expire after 14 days.' >> "$GITHUB_STEP_SUMMARY"
+          printf '%s\n' 'Extract the artifact ZIP, open the DMG, and copy the app to your Mac.' 'This test build has no Developer ID signing, Apple notarization, or in-place installation. Published updates appear in the app for verified DMG download and manual installation. Artifacts expire after 14 days.' >> "$GITHUB_STEP_SUMMARY"

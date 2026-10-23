@@ -3,6 +3,7 @@ import { WINDOWS_TITLEBAR_HEIGHT } from './windows-layout.ts'
 /** Electron shell: desktop project ownership, custom protocol, windows, and lifecycle. */
 
 import { readFile, writeFile } from 'node:fs/promises'
+import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import {
@@ -33,6 +34,7 @@ import { readDeviceInfo } from './device-info.ts'
 import { desktopUpdateReadyConfirmation, formatDesktopMessage, resolveDesktopLocale, resolveDesktopStartupLocale } from './locale.ts'
 import { claimDesktopSingleInstance } from './single-instance.ts'
 import { DesktopUpdateCoordinator } from './update-coordinator.ts'
+import { LFClawMacUpdateCoordinator } from './lfclaw-mac-update-coordinator.ts'
 import { DesktopCommandManager } from './command-management.ts'
 import { serveWebDocument, authenticateWebHost, forwardWebRequest } from './web-document.ts'
 import { DesktopFatalRecovery } from './fatal-recovery.ts'
@@ -587,7 +589,14 @@ async function main(): Promise<void> {
     return startup
   }
 
-  const updates = new DesktopUpdateCoordinator(
+  const packagedManifest = join(app.getAppPath(), 'package.json')
+  const updateMetadata: unknown = app.isPackaged && process.platform === 'darwin' && existsSync(packagedManifest)
+    ? JSON.parse(readFileSync(packagedManifest, 'utf8')) : undefined
+  const macUpdateSource = typeof updateMetadata === 'object' && updateMetadata !== null
+    && 'lfclawUpdateUrl' in updateMetadata && 'lfclawUpdatePublicKey' in updateMetadata
+    && typeof updateMetadata.lfclawUpdateUrl === 'string' && typeof updateMetadata.lfclawUpdatePublicKey === 'string'
+    ? { url: updateMetadata.lfclawUpdateUrl, key: updateMetadata.lfclawUpdatePublicKey } : undefined
+  const createStandardUpdates = (): DesktopUpdateCoordinator => new DesktopUpdateCoordinator(
     publishUpdate,
     async () => {
       await commandManager.idle()
@@ -642,6 +651,16 @@ async function main(): Promise<void> {
     (success, reason) => { void track('desktop_upgrade_download_result', { is_success: success, ...reason === undefined ? {} : { error_reason: reason } }) },
 
   )
+  const updates: DesktopUpdateCoordinator | LFClawMacUpdateCoordinator = macUpdateSource === undefined
+    ? createStandardUpdates() : new LFClawMacUpdateCoordinator(publishUpdate, async () => {
+      const parent = currentDialogWindow()
+      if (parent === undefined) return false
+      const result = await updateDialog.show(parent, { type: 'info', title: locale.messages.updateTitle,
+        message: formatDesktopMessage(locale.messages.updateDownloadedTitle, { version: updates.state.version ?? '' }),
+        detail: locale.messages.updateDownloadedDetailMacManual,
+        buttons: [locale.messages.openDownloadedDmg, locale.messages.later], defaultId: 0, cancelId: 1 })
+      return result.response === 0
+    }, macUpdateSource.url, macUpdateSource.key)
 
   const updateSchedule = new DesktopUpdateSchedule(updates, resolveDesktopUpdateScheduleConfig(process.env))
 

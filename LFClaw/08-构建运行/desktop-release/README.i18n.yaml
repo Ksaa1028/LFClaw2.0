@@ -3,8 +3,8 @@
 # After editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write LFClaw/08-构建运行/desktop-release/README.md
 /windows-desktop-update-publication:
-  en: 4fc6b8c004e9c3d8
-  zh: 9d6c8a285eb23b77
+  en: a0b41ff182254fc1
+  zh: 9a747cd08d9f8f59
 /windows-desktop-update-publication/knowledge-base-installer-synchronization:
   en: 85f0a8f6f3a5cf6b
   zh: eb5619b94d9838a9

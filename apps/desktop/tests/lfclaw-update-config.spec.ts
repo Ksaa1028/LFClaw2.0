@@ -10,7 +10,7 @@ describe('LFClaw update packaging', () => {
       'x64',
     )
     expect(config.publish).toEqual([{ provider: 'generic', url, channel: 'nightly' }])
-    expect(config.extraMetadata).toMatchObject({ lfclawUpdatePublicKey: expect.stringContaining('BEGIN PUBLIC KEY') })
+    expect(JSON.stringify(config.extraMetadata)).toContain('BEGIN PUBLIC KEY')
     expect(config.extraMetadata).not.toHaveProperty('dshMandatoryUpdatePolicy')
   })
   it('rejects a feed URL outside the LFClaw download route', () => {
@@ -25,5 +25,15 @@ describe('LFClaw update packaging', () => {
         'x64',
       ),
     ).toThrow('Invalid LFClaw update URL')
+  })
+  it('embeds the Mac feed and key into an unsigned Apple Silicon build', () => {
+    const url = 'http://8.216.38.213:39811/lfclaw-updates/mac-arm64/'
+    const config = createElectronBuilderConfig(
+      { DSH_DESKTOP_UNSIGNED: '1', DSH_DESKTOP_APP_ID: 'com.deepseek.harness', LFCLAW_DESKTOP_UPDATE_URL: url },
+      'darwin', 'arm64',
+    )
+    expect(config.publish).toEqual([{ provider: 'generic', url, channel: 'nightly' }])
+    expect(JSON.stringify(config.extraMetadata)).toContain(url)
+    expect(JSON.stringify(config.extraMetadata)).toContain('BEGIN PUBLIC KEY')
   })
 })

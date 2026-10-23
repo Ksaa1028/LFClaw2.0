@@ -13,27 +13,28 @@ if (!archive.startsWith(`${base}/packages/`)) throw new Error('归档必须位�
 const stage = mkdtempSync(join(base, 'packages/.desktop-stage-'))
 try {
   await tar.t({ file: archive, onReadEntry(entry) {
-    if (entry.type !== 'File' || !/^(release\.json|deploy\.mjs|nightly\.yml|update-public\.pem|LFClaw-\d{10}-windows-x64\.exe(?:\.blockmap)?)$/.test(entry.path)) throw new Error('归档包含非法条目')
+    if (entry.type !== 'File' || !/^(release\.json|deploy\.mjs|nightly\.yml|update-public\.pem|LFClaw-\d{10}-(?:windows-x64\.exe(?:\.blockmap)?|mac-arm64\.dmg))$/.test(entry.path)) throw new Error('归档包含非法条目')
   } })
   await tar.x({ file: archive, cwd: stage, strict: true })
   const manifest = JSON.parse(readFileSync(join(stage, 'release.json'), 'utf8'))
-  if (manifest.product !== 'LFClaw' || manifest.target !== 'win-x64' || !/^\d{10}$/.test(manifest.releaseId)) throw new Error('发布清单身份无效')
-  const expected = [`LFClaw-${manifest.releaseId}-windows-x64.exe`, `LFClaw-${manifest.releaseId}-windows-x64.exe.blockmap`, 'nightly.yml', 'update-public.pem']
+  if (manifest.product !== 'LFClaw' || !['win-x64', 'mac-arm64'].includes(manifest.target) || !/^\d{10}$/.test(manifest.releaseId)) throw new Error('发布清单身份无效')
+  const installerName = manifest.target === 'win-x64' ? `LFClaw-${manifest.releaseId}-windows-x64.exe` : `LFClaw-${manifest.releaseId}-mac-arm64.dmg`
+  const expected = [installerName, ...manifest.target === 'win-x64' ? [`${installerName}.blockmap`] : [], 'nightly.yml', 'update-public.pem']
   if (JSON.stringify(manifest.files.map(file => file.path).sort()) !== JSON.stringify([...expected].sort())) throw new Error('发布文件列表无效')
   for (const file of manifest.files) {
     const data = readFileSync(join(stage, file.path))
     if (data.length !== file.size || createHash('sha512').update(data).digest('hex') !== file.sha512) throw new Error(`文件校验失败：${file.path}`)
   }
   const feed = JSON.parse(readFileSync(join(stage, 'nightly.yml'), 'utf8'))
-  verifyLFClawUpdate(feed, readFileSync(join(stage, 'update-public.pem'), 'utf8'))
+  verifyLFClawUpdate(feed, readFileSync(join(stage, 'update-public.pem'), 'utf8'), manifest.target)
   const installer = readFileSync(join(stage, expected[0]))
   if (feed.version !== manifest.version || feed.files[0].url !== expected[0] || feed.files[0].size !== installer.length
     || feed.files[0].sha512 !== createHash('sha512').update(installer).digest('base64')) throw new Error('签名清单与安装包不一致')
-  const destination = join(base, 'desktop/win-x64')
+  const destination = join(base, 'desktop', manifest.target)
   mkdirSync(destination, { recursive: true })
   const current = join(destination, 'nightly.yml')
   if (existsSync(current) && !gt(feed.version, JSON.parse(readFileSync(current, 'utf8')).version)) throw new Error('发布版本必须递增')
-  for (const filename of expected.slice(0, 2)) {
+  for (const filename of expected.filter(name => name === installerName || name === `${installerName}.blockmap`)) {
     const target = join(destination, filename)
     if (existsSync(target)) {
       if (!readFileSync(target).equals(readFileSync(join(stage, filename)))) throw new Error('同一版本文件内容不同')
@@ -43,6 +44,6 @@ try {
   writeFileSync(join(destination, 'nightly.pending'), readFileSync(join(stage, 'nightly.yml')))
   renameSync(join(destination, 'nightly.pending'), current)
   console.log(`已发布 LFClaw ${feed.version}，安装包与清单校验通过`)
-  const retention = pruneDesktopReleases(base, 'win-x64', manifest.releaseId)
+  const retention = pruneDesktopReleases(base, manifest.target, manifest.releaseId)
   console.log(`保留版本：${retention.retained.join(', ')}；已清理 ${retention.removed.length} 个旧文件`)
 } finally { rmSync(stage, { recursive: true, force: true }) }

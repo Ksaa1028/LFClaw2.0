@@ -12,7 +12,9 @@
 
 一键构建通过真实界面检查后，执行 `node LFClaw/08-构建运行/desktop-release/pack.mjs <发布编号>`，输出单个 `lfclaw-win-x64-<发布编号>.tar.gz`。维护者上传到服务器 `/opt/lfclaw-enterprise/packages/`，先使用 `.uploading` 后缀并核对 SHA256，确认后改为正式归档名。从已校验归档提取 `deploy.mjs` 到临时文件并执行，传入归档绝对路径。部署器验证归档成员、文件大小、哈希、清单签名及版本递增，先发布不可变安装包，再原子替换更新清单。中断后不能覆盖同编号的不同文件；检查现状后再操作。
 
-服务器管理模块提供只读静态下载，默认位置是部署根目录的 `desktop/win-x64/`；可通过管理端配置的 `desktopDirectory` 设置专用根目录。该目录不放业务数据或凭据。发布成功后，Windows 与 macOS 分别只保留最新两个版本，删除更早的安装包、blockmap 和对应归档，不另存服务器历史备份。Windows 部署器自动调用 `retention.mjs`；macOS 发布须在 DMG 验证通过后调用同一辅助函数。清理拒绝删除当前或上一版清单引用的文件；请求已清理版本的客户端须刷新更新清单。运行 `node --test LFClaw/08-构建运行/desktop-release/retention.test.mjs` 验证保留规则。签名清单绑定版本、安装包名、大小和哈希；缺失签名、篡改内容、外站地址和未授权的差分包字段均被拒绝。
+服务器管理模块提供只读静态下载，默认位置是部署根目录的 `desktop/win-x64/` 和 `desktop/mac-arm64/`；可通过管理端配置的 `desktopDirectory` 设置专用根目录。该目录不放业务数据或凭据。发布成功后，Windows 与 macOS 分别只保留最新两个版本，删除更早的安装包、blockmap 和对应归档，不另存服务器历史备份。部署器校验安装包后对对应平台调用 `retention.mjs`。清理拒绝删除当前或上一版清单引用的文件；请求已清理版本的客户端须刷新更新清单。运行 `node --test LFClaw/08-构建运行/desktop-release/retention.test.mjs` 验证保留规则。签名清单绑定版本、安装包名、大小和哈希；缺失签名、篡改内容、外站地址和未授权的差分包字段均被拒绝。
+
+发布 Apple Silicon 版本时，从对应 GitHub Actions 产物下载 DMG 并核对其 SHA-256，然后执行 `node LFClaw/08-构建运行/desktop-release/pack-mac.mjs <发布编号> <已校验的DMG路径>`，生成 `lfclaw-mac-arm64-<发布编号>.tar.gz`。按 Windows 相同的归档校验和 `packages/` 部署流程传输发布。内置 LFClaw 更新地址的 Mac 包可发现签名清单中的较新版本，经用户确认后下载并校验 DMG，再打开供用户在 macOS 中手动安装。没有内置该地址的旧 Mac 包仍需手动安装一次。未签名 DMG 不支持原地自动安装。
 
 交付前运行签名及更新协调器测试、实际包界面检查，再运行 `node apps/desktop/scripts/qualify-lfclaw-update.mjs 2026.10.21-10 2026.10.21-9 --direct` 的真实 Electron 联网资格检查（参数依次为线上版本、模拟已安装版本；`--direct` 仅令隔离测试绕过系统代理），确认低版本能够发现线上新版、验证签名并完整下载。资格检查禁止执行安装器，不等同于用户数据保留的实际安装升级验收。
 

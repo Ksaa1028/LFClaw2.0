@@ -251,7 +251,7 @@ macOS arm64 命令要求 Apple Silicon。macOS x64 命令可以在 Intel macOS �
 
 [LFClaw macOS Apple Silicon DMG 工作流](../../.github/workflows/lfclaw-mac-arm64-package.yml) 在 GitHub 托管的 macOS ARM64 运行器上构建未签名测试安装包。将工作流及其打包脚本提交到仓库默认分支后，GitHub 才会显示 **Run workflow**。打开 **Actions → LFClaw macOS Apple Silicon DMG (unsigned test build) → Run workflow**，选择源码分支，填写 `YYYYMMDDxx` 格式的发布编号（`xx` 为 `01`–`99`），并确认完整 Desktop 版本。例如，Desktop 包版本为 `0.2.1-alpha.2` 时，`2026102101` 对应 `0.2.1-alpha.2.20261021.1`；在选定的检出目录执行 `node apps/desktop/scripts/lfclaw-release-id.mjs 2026102101` 可打印对应版本。
 
-运行成功后，使用运行摘要中的下载链接，或在 **Artifacts** 中下载 `lfclaw-mac-arm64-unsigned-<release_id>`。解压 ZIP 后，在 Apple Silicon Mac 上打开 DMG。产物保留 14 天；打包诊断日志在可用时单独保留，构建失败时也会保留。工作流无需 Apple 签名密钥，不会发布 GitHub Release 或自动更新。下文的未签名构建限制同样适用。
+运行成功后，使用运行摘要中的下载链接，或在 **Artifacts** 中下载 `lfclaw-mac-arm64-unsigned-<release_id>`。解压 ZIP 后，在 Apple Silicon Mac 上打开 DMG。产物保留 14 天；打包诊断日志在可用时单独保留，构建失败时也会保留。工作流无需 Apple 签名密钥，不会发布 GitHub Release。嵌入 LFClaw 更新地址的构建会检查已签名的 Mac 更新清单；用户确认后下载并校验完整 DMG，再打开供手动安装。服务器需通过 LFClaw Desktop 发布器另行发布清单与 DMG。此前未嵌入更新地址的安装包无法发现新版本。下文的未签名构建限制同样适用。
 
 ### 无发布签名的本地 macOS DMG
 

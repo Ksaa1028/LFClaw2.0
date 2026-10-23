@@ -16,6 +16,13 @@ describe('LFClaw signed update feed', () => {
       verifyLFClawUpdate(feed, publicKey)
     }).not.toThrow()
   })
+  it('accepts only a signed Mac DMG on the Mac feed', () => {
+    const macPayload = { version: '2026.10.23-1', files: [{ url: 'LFClaw-2026102301-mac-arm64.dmg', sha512: Buffer.alloc(64).toString('base64'), size: 456 }] }
+    const macFeed = { ...macPayload, lfclawSignature: sign(null, Buffer.from(JSON.stringify(macPayload)), keys.privateKey).toString('base64') }
+    expect(() => { verifyLFClawUpdate(macFeed, publicKey, 'mac-arm64') }).not.toThrow()
+    expect(() => { verifyLFClawUpdate(macFeed, publicKey, 'win-x64') }).toThrow()
+    expect(() => { verifyLFClawUpdate({ ...macFeed, files: [{ ...macPayload.files[0], size: 457 }] }, publicKey, 'mac-arm64') }).toThrow()
+  })
   it.each([
     { ...feed, version: '2026.10.22-1' },
     { ...feed, files: [{ ...payload.files[0], size: 124 }] },

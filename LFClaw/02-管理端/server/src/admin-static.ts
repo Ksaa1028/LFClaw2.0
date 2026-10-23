@@ -48,10 +48,12 @@ export function apply(ctx: Context, config: Config): void {
   const app = express()
   app.disable('x-powered-by')
   if (config.desktopDirectory) {
-    app.use('/lfclaw-updates/win-x64', express.static(resolve(config.desktopDirectory, 'win-x64'), {
-      dotfiles: 'deny', index: false, redirect: false, fallthrough: false,
-      setHeaders(response) { response.setHeader('Cache-Control', 'no-store') },
-    }))
+    for (const target of ['win-x64', 'mac-arm64']) {
+      app.use(`/lfclaw-updates/${target}`, express.static(resolve(config.desktopDirectory, target), {
+        dotfiles: 'deny', index: false, redirect: false, fallthrough: false,
+        setHeaders(response) { response.setHeader('Cache-Control', 'no-store') },
+      }))
+    }
   }
   app.use(express.static(web, { dotfiles: 'deny', index: 'index.html', redirect: false,
     setHeaders(response) { response.setHeader('Cache-Control', 'no-cache') } }))

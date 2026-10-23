@@ -62,7 +62,7 @@ export function createElectronBuilderConfig(
   if (lfclawUpdateUrl !== undefined) {
     const url = new URL(lfclawUpdateUrl)
     if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password || url.search || url.hash
-      || !url.pathname.endsWith('/lfclaw-updates/win-x64/')) throw new Error('Invalid LFClaw update URL')
+      || !url.pathname.endsWith(`/lfclaw-updates/${resolvedPlatform === 'darwin' ? 'mac-arm64' : 'win-x64'}/`)) throw new Error('Invalid LFClaw update URL')
   }
   const packagesMacOS = targetPlatform === 'darwin' || (targetPlatform === undefined && hostPlatform === 'darwin')
   const packagesWindows = resolvedPlatform === 'win32'
@@ -109,6 +109,7 @@ export function createElectronBuilderConfig(
     extraMetadata: {
       dshDesktopAppId: appId,
       ...(lfclawUpdateUrl === undefined ? {} : { lfclawUpdatePublicKey: readFileSync(fileURLToPath(new URL('../resources/lfclaw-update-public.pem', import.meta.url)), 'utf8') }),
+      ...(lfclawUpdateUrl === undefined ? {} : { lfclawUpdateUrl }),
       ...(policy === undefined ? {} : { dshMandatoryUpdatePolicy: policy }),
       ...buildVersion === productVersion ? {} : { version: buildVersion },
       ...packaged === undefined ? {} : { dshBuildCommit: packaged.commit, dshBuildDirty: packaged.dirty },
