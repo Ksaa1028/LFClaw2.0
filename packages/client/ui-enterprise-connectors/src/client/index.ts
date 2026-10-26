@@ -8,6 +8,8 @@ import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
 import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
 import type {} from '@deepseek-ai/dsh-client-locale/client'
 import type {} from '@deepseek-ai/dsh-client-ui-commands/client'
+import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
+import type {} from '@deepseek-ai/dsh-api-session-controller/client'
 import type {} from '@deepseek-ai/dsh-client-ui-workspace/client'
 import type { StartSessionOptions } from '@deepseek-ai/dsh-client-ui-workspace/client'
 import { IconLinkOutlineRegular } from '@deepseek-ai/dsh-client-ui-primitives'
@@ -30,7 +32,7 @@ export function apply(ctx: Context): void {
     const prompt: NonNullable<StartSessionOptions['prompt']> = { text: t('draftPrompt', { name }), references: [] }
     ctx.uiWorkspace.startSession(undefined, { prompt, reuseBlank: false })
   }
-  ctx.inject(['commandUi'], (scope) => {
+  ctx.inject(['commandUi', 'sessions', 'conversation'], (scope) => {
     scope.effect(() => scope.commandUi.register({
       name: 'connector', label: () => t('addConnector'), description: () => t('addConnectorDescription'),
       icon: IconLinkOutlineRegular, available: () => true,
@@ -39,8 +41,8 @@ export function apply(ctx: Context): void {
         searchLabels: () => ({ placeholder: t('search'), empty: t('empty'), noResults: t('noMatches') }),
         async options(_session, signal) {
           const [response, personalResponse] = await Promise.all([
-            fetch('/api/lfclaw/connector-center', { signal }),
-            fetch('/api/lfclaw/personal-connectors', { signal }).catch(() => undefined),
+            fetch('/api/lfclaw/connector-center?view=picker', { signal }),
+            fetch('/api/lfclaw/personal-connectors?view=picker', { signal }).catch(() => undefined),
           ])
           signal.throwIfAborted()
           if (!response.ok) throw new Error(t('unavailable'))
@@ -62,7 +64,26 @@ export function apply(ctx: Context): void {
             return [{ id: `personal:${item.id}`, label: item.name, group: { name: 'personal', label: t('personal') } }]
           })]
         },
-        onSelect(option) { startChat(option.label) },
+        onSelect(option, session) {
+          const binding = scope.sessions.binding(session.sessionId)
+          if (!binding) throw new Error(t('pickerChanged'))
+          const input = scope.conversation.input.for(binding.ctx)
+          const before = input.state.getSnapshot()
+          if (before.phase !== 'plain') throw new Error(t('pickerChanged'))
+          const selected = { text: t('draftPrompt', { name: option.label }) }
+          const prefix = before.draft ? before.draft + '\n' : ''
+          const result = scope.conversation.input.requestDraftInitialization(binding, {
+            clearPreviousDraft: true,
+            prompt: {
+              text: prefix + selected.text,
+              references: [
+                ...before.occurrences.map(({ occurrenceId: _id, ...reference }) => reference),
+              ],
+            },
+          })
+          if (result !== 'applied') throw new Error(t('pickerChanged'))
+          input.focus()
+        },
       },
     }), 'lfclaw: connector picker')
   })

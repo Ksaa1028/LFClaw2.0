@@ -56,7 +56,7 @@ export function mountPersonalConnectors(ctx: Context, config: Config): () => Pro
       (await store.list(owner)).some(saved => saved.id === item.id && saved.revision === item.revision && saved.enabled),
   )
   async function current(signal: AbortSignal, catalogMaxAgeMs = 0): Promise<string> {
-    const response = await ctx.enterpriseConnection.request('employee/me', {
+    const response = await ctx.enterpriseConnection.request('employee/identity', {
       signal: AbortSignal.any([signal, lifetime.signal]),
       catalogMaxAgeMs,
     })
@@ -277,6 +277,14 @@ export function mountPersonalConnectors(ctx: Context, config: Config): () => Pro
             const owner = await current(signal, request.method === 'GET' ? config.refreshIntervalMs : 0)
             if (request.method === 'GET') {
               if (employee !== owner) await sync()
+              if (new URL(request.url).searchParams.get('view') === 'picker') {
+                return Response.json({
+                  connectors: (await store.list(owner)).map(item => ({
+                    id: item.id, name: item.name, enabled: item.enabled,
+                    connected: status.get(item.id)?.connected ?? false,
+                  })),
+                })
+              }
               return Response.json({
                 connectors: (await store.list(owner)).map(item => ({
                   ...publicPersonalConnector(item),

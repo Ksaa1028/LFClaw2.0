@@ -99,6 +99,10 @@ stdio 使用 SDK 的基础环境变量白名单并合并管理员配置，不继
 
 员工以激活码调用 `POST /api/employee/activate`，`GET /api/employee/me` 只返回本人当前可用的资源；模型调用和商场 MCP 工具调用也在服务端重新校验当前授权，因此撤权后无需员工重新登录即可生效。
 
+Agent 准备阶段通过 `GET /api/employee/model-catalog` 获取 `{ models }`，通过 `GET /api/employee/skill-catalog` 获取 `{ employee: { id }, skills }`。两个接口每次重新校验员工身份与当前资源权限，返回 `Cache-Control: private, no-store`。响应保留模型容量和技能版本、摘要信息，不包含图标、连接器数据、专家及通知。完整 `/me` 响应继续供资源页面和旧客户端使用；服务端须先于使用准备目录接口的客户端部署。
+
+输入框列表通过 `GET /api/employee/identity` 获取 `{ employee: { id } }`，通过 `expert-picker` 获取企业和本人个人专家的展示信息，通过 `connector-picker` 获取连接器 ID、名称与 `hasAvailableTools`。响应不含图标、专家指令、工具定义、凭据或无关资源。每次请求重新检查当前身份和授权，包括企业专家团成员及连接器账号可用性，并返回 `Cache-Control: private, no-store`；服务端须先于使用这些接口的客户端部署。
+
 企业专家由管理员创建并分配给全员、部门或员工。百炼智能体填写已发布应用的 App ID、可选 Workspace ID 和服务端保存的 API Key；Dify Chatbot / Chatflow 填写以 `/v1` 结尾的 HTTPS API 基础地址、应用 API Key 和可选输入变量 JSON；WeKnora Agent 填写以 `/api/v1` 结尾的 API 基础地址、Agent ID 和具备 `chat` 权限的空间 API Key。WeKnora 接受 HTTP 和 HTTPS API 地址；HTTP 会明文传输空间 API Key，推荐在可用时使用 HTTPS。员工目录不返回密钥。已授权远程专家可通过 `POST /api/employee/experts/prepare` 返回远程调用标识，再由本机会话工具调用 `POST /api/employee/experts/:id/chat`；企业服务在每次调用时重新鉴权。Dify 调用先检查应用类型，再以当前员工标识、阻塞式 `chat-messages` 和返回的 `conversation_id` 继续对话；Agent、旧版 Agent 与 Workflow 不支持此接口。WeKnora 调用先创建会话，再向 `agent-chat` 发送问题，只汇总 SSE `answer` 事件并等待 `complete`；返回给客户端的会话标识按专家及员工签名，拒绝跨员工续聊。WeKnora 调用共用 `expertTimeoutMs` 的总等待时间，本地配置为 180 秒；超时返回 HTTP 504 和 `EXPERT_TIMEOUT`，本次不返回未完成的答复，远程会话可能仍在处理。其他外部平台需要对应的服务端对话适配器。专家团仅在本人同时获授权全部成员时可见。员工个人专家走独立接口：`POST /api/employee/personal-experts/draft` 使用本人可用的企业默认模型生成草稿，员工确认后再用 `POST /api/employee/personal-experts` 保存；本人可读取、修改、删除，其他员工无权操作，管理员数据接口不展示个人专家。
 
 连接器写入时分配范围只接受全员、有效部门或有效员工；模型、技能、连接器和专家支持 `scope: none`（都不授权），其 `scopeTarget` 必须为空，优先于个人覆盖拒绝所有员工访问。指定部门或员工的非空目标必须存在。员工可见的连接器及可调用工具在服务端按范围、个人覆盖与工具启用状态计算。列表里的工具开关是该连接器的全局可用工具清单；商场 MCP 的五项数据权限由员工详情另行设置。

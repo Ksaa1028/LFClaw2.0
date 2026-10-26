@@ -19,7 +19,7 @@ it('目录只返回企业授权模型，撤权后拒绝旧模型，员工令牌�
   const server = createServer(async (req, res) => {
     paths.push(req.url ?? '')
     expect(req.headers.authorization).toBe('Bearer employee-private-token')
-    if (req.url === '/api/employee/me') {
+    if (req.url === '/api/employee/model-catalog') {
       res.setHeader('Content-Type', 'application/json')
       res.end(
         JSON.stringify({
@@ -38,7 +38,7 @@ it('目录只返回企业授权模型，撤权后拒绝旧模型，员工令牌�
             : [],
         }),
       )
-    } else {
+    } else if (req.url === '/api/employee/v1/chat/completions') {
       res.setHeader('Content-Type', 'text/event-stream')
       const chunks = []
       for await (const chunk of req) chunks.push(chunk)
@@ -63,6 +63,8 @@ it('目录只返回企业授权模型，撤权后拒绝旧模型，员工令牌�
           'completion-test',
         ),
       )
+    } else {
+      res.writeHead(404).end()
     }
   }).listen(0, '127.0.0.1')
   await once(server, 'listening')
@@ -153,6 +155,8 @@ it('目录只返回企业授权模型，撤权后拒绝旧模型，员工令牌�
     authorized = false
     expect(await adapter.listModels('lfclaw')).toEqual([])
     await expect(adapter.prepareCall('lfclaw', 'm1')).rejects.toThrow('此模型尚未授权')
+    expect(paths).toContain('/api/employee/model-catalog')
+    expect(paths).not.toContain('/api/employee/me')
   } finally {
     server.closeAllConnections()
     await new Promise<void>(resolve =>

@@ -89,7 +89,7 @@ it('saves personal MCPs, masks credentials, registers callable tools, and reject
     enterpriseConnection: {
       value: {
         request: async (path: string) =>
-          path === 'employee/me'
+          path === 'employee/identity'
             ? Response.json({ employee: { id: employee } })
             : Response.json({}, { status: protectedService ? 403 : 200 }),
       },
@@ -158,6 +158,8 @@ it('saves personal MCPs, masks credentials, registers callable tools, and reject
     }
     const saved = catalog.connectors[0]!
     expect(saved.headers).toEqual({ 'X-API-Key': '' })
+    const picker = await route!.fetch(new Request('http://localhost/api/lfclaw/personal-connectors?view=picker'))
+    expect(await picker.json()).toEqual({ connectors: [{ id: saved.id, name: 'My service', enabled: true, connected: true }] })
     expect(tools.size).toBe(1)
     const tool = [...tools.values()][0]!
     expect(tool.description).toBe('My service：Look up fixture data')

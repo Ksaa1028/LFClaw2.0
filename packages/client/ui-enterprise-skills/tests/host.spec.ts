@@ -12,23 +12,23 @@ const roots: string[] = []
 afterEach(async () => {
   await Promise.all(roots.splice(0).map(root => rm(root, { recursive: true, force: true })))
 })
-it('技能选择器等待当前技能包，不等待后台个人清单上报', async () => {
+it('技能选择器读取轻量目录，不等待完整展示目录或后台个人清单上报', async () => {
   const dataDirectory = await mkdtemp(join(tmpdir(), 'lfclaw-picker-skills-'))
   roots.push(dataDirectory)
   const ctx = new Context()
   const report = Promise.withResolvers<Response>()
+  const display = Promise.withResolvers<Response>()
   const archive = zipSync({ 'SKILL.md': strToU8('---\nname: reports\ndescription: 日报\n---\n整理日报\n') })
   const sha256 = createHash('sha256').update(archive).digest('hex')
-  const request = vi.fn(async (path: string) =>
-    path.endsWith('/report')
-      ? report.promise
-      : path.endsWith('/download')
-        ? new Response(archive)
-        : Response.json({
-          employee: { id: 'a' },
-          skills: [{ id: 's1', name: '日报', description: '日报', version: '1', sha256 }],
-        }),
-  )
+  const request = vi.fn(async (path: string) => {
+    if (path === 'employee/me') return display.promise
+    if (path.endsWith('/report')) return report.promise
+    if (path.endsWith('/download')) return new Response(archive)
+    return Response.json({
+      employee: { id: 'a' },
+      skills: [{ id: 's1', name: '日报', description: '日报', version: '1', sha256 }],
+    })
+  })
   const routes = new Map<string, { fetch: (request: Request) => Promise<Response> }>()
   Object.defineProperties(ctx, {
     enterpriseConnection: { value: { request } },
@@ -68,7 +68,15 @@ it('技能选择器等待当前技能包，不等待后台个人清单上报', a
       expect(body).toMatchObject({ enterprise: [{ ready: true, invocationName: expect.any(String) }] })
     })
     await pending
+    expect(request.mock.calls.some(([path]) => path === 'employee/skill-catalog')).toBe(true)
+    expect(request.mock.calls.some(([path]) => path === 'employee/me')).toBe(false)
+    const fresh = await routes.get('/api/lfclaw/skill-center')!.fetch(
+      new Request('http://localhost/api/lfclaw/skill-center?wait=1&refresh=1'),
+    )
+    expect(fresh.status).toBe(200)
+    expect(request.mock.calls.some(([path]) => path === 'employee/me')).toBe(false)
   } finally {
+    display.resolve(Response.json({ employee: { id: 'a' }, skills: [] }))
     report.resolve(Response.json({ ok: true }))
     await ctx.fiber.dispose()
   }
@@ -80,6 +88,7 @@ it('本机接口使用 Host 员工身份；对话保存后可由标准技能接�
   const ctx = new Context()
   let employee = 'employee-a'
   let enterpriseAllowed = true
+  const catalogPaths: string[] = []
   const archive = zipSync({
     'SKILL.md': strToU8('---\nname: enterprise-reports\ndescription: 企业简介\n---\n使用企业日报流程\n'),
   })
@@ -92,8 +101,9 @@ it('本机接口使用 Host 员工身份；对话保存后可由标准技能接�
   Object.defineProperties(ctx, {
     enterpriseConnection: {
       value: {
-        request: vi.fn(async (path: string) =>
-          path.endsWith('/download')
+        request: vi.fn(async (path: string) => {
+          if (path === 'employee/me' || path === 'employee/skill-catalog') catalogPaths.push(path)
+          return path.endsWith('/download')
             ? new Response(archive)
             : Response.json({
               employee: { id: employee },
@@ -105,12 +115,12 @@ it('本机接口使用 Host 员工身份；对话保存后可由标准技能接�
                     description: '企业简介',
                     version: '2.0',
                     sha256,
-                    icon: 'data:image/png;base64,aWNvbg==',
-                  }
+                    ...(path === 'employee/me' ? { icon: 'data:image/png;base64,aWNvbg==' } : {}),
+                  },
                 ]
                 : [],
-            }),
-        ),
+            })
+        }),
       },
     },
     connection: {
@@ -171,6 +181,8 @@ it('本机接口使用 Host 员工身份；对话保存后可由标准技能接�
     ),
   ).rejects.toThrow('重新读取')
   expect((await provider!.get(list[0], {}))?.content).toContain('校验结果')
+  expect(catalogPaths.length).toBeGreaterThan(0)
+  expect(new Set(catalogPaths)).toEqual(new Set(['employee/skill-catalog']))
   const route = routes.get('/api/lfclaw/skill-center')!
   const response = await route.fetch(new Request('http://localhost/api/lfclaw/skill-center?employee=someone-else'))
   expect(await response.json()).toMatchObject({
@@ -178,6 +190,8 @@ it('本机接口使用 Host 员工身份；对话保存后可由标准技能接�
     personal: [{ name: 'report-helper' }],
   })
   expect(routes.has('/api/lfclaw/personal-skills/toggle')).toBe(false)
+  expect(catalogPaths.at(-1)).toBe('employee/me')
+  catalogPaths.length = 0
   const enterprise = providers.get('lfclaw-enterprise')!
   const enterpriseCatalog = await enterprise.list({})
   if (Array.isArray(enterpriseCatalog)) throw new Error('expected observation')
@@ -186,6 +200,7 @@ it('本机接口使用 Host 员工身份；对话保存后可由标准技能接�
   expect((await enterprise.get(candidate, {}))?.content).toContain('企业日报流程')
   enterpriseAllowed = false
   expect(await enterprise.get(candidate, {})).toBeUndefined()
+  expect(catalogPaths).toEqual(['employee/skill-catalog', 'employee/skill-catalog', 'employee/skill-catalog'])
   enterpriseAllowed = true
   const removed = await routes
     .get('/api/lfclaw/personal-skills/remove')!

@@ -11,6 +11,8 @@ import type {} from '@deepseek-ai/dsh-client-locale/client'
 import { IconSkillOutlineRegular } from '@deepseek-ai/dsh-client-ui-primitives'
 import type {} from '@deepseek-ai/dsh-api-remotes/client'
 import type {} from '@deepseek-ai/dsh-client-ui-commands/client'
+import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
+import type {} from '@deepseek-ai/dsh-api-session-controller/client'
 import { skillDraft } from './skill-draft.ts'
 import type { StartSessionOptions } from '@deepseek-ai/dsh-client-ui-workspace/client'
 import { SkillsPage } from './SkillsPage.tsx'
@@ -27,7 +29,7 @@ export function apply(ctx: Context): void {
   ctx.inject(['remote'], (scope) => {
     scope.remote.$on('skills/change', () => { window.dispatchEvent(new Event('lfclaw-skills-changed')) })
   })
-  ctx.inject(['commandUi'], (scope) => {
+  ctx.inject(['commandUi', 'sessions', 'conversation'], (scope) => {
     scope.effect(() => scope.commandUi.hideFromMenu('compact'), 'lfclaw: hide manual compaction command')
     scope.effect(() => scope.commandUi.hideFromMenu('model'), 'lfclaw: hide redundant model command')
     scope.effect(() => scope.commandUi.hideFromMenu('permission'), 'lfclaw: hide redundant permission command')
@@ -57,8 +59,26 @@ export function apply(ctx: Context): void {
               return [{ id: item.invocationName, label: item.name, group: { name: group, label: group } }]
             })
         },
-        onSelect(option) {
-          ctx.uiWorkspace.startSession(undefined, { prompt: skillDraft(option.label, option.id), reuseBlank: false })
+        onSelect(option, session) {
+          const binding = scope.sessions.binding(session.sessionId)
+          if (!binding) throw new Error(t('pickerChanged'))
+          const input = scope.conversation.input.for(binding.ctx)
+          const before = input.state.getSnapshot()
+          if (before.phase !== 'plain') throw new Error(t('pickerChanged'))
+          const selected = skillDraft(option.label, option.id)
+          const prefix = before.draft ? before.draft + '\n' : ''
+          const result = scope.conversation.input.requestDraftInitialization(binding, {
+            clearPreviousDraft: true,
+            prompt: {
+              text: prefix + selected.text,
+              references: [
+                ...before.occurrences.map(({ occurrenceId: _id, ...reference }) => reference),
+                ...selected.references.map(reference => ({ ...reference, offset: reference.offset + prefix.length })),
+              ],
+            },
+          })
+          if (result !== 'applied') throw new Error(t('pickerChanged'))
+          input.focus()
         },
       },
     }), 'lfclaw: skill picker')

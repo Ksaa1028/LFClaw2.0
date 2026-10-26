@@ -92,8 +92,10 @@ export function apply(ctx: Context, config: Config): void {
   const enterprise = new EnterpriseSkills(join(config.dataDirectory, '.enterprise'), config, path =>
     ctx.enterpriseConnection.request(path, { signal: lifetime.signal }),
   )
-  async function current(catalogMaxAgeMs = 0): Promise<EmployeeCatalog> {
-    const response = await ctx.enterpriseConnection.request('employee/me', { signal: lifetime.signal, catalogMaxAgeMs })
+  async function current(catalogMaxAgeMs = 0, display = false): Promise<EmployeeCatalog> {
+    const response = await ctx.enterpriseConnection.request(display ? 'employee/me' : 'employee/skill-catalog', {
+      signal: lifetime.signal, catalogMaxAgeMs,
+    })
     if (!response.ok) throw new Error('activation-required')
     return catalog(await response.json())
   }
@@ -478,6 +480,7 @@ export function apply(ctx: Context, config: Config): void {
                 operation === 'skill-center' && new URL(request.url).searchParams.get('refresh') !== '1'
                   ? config.refreshIntervalMs
                   : 0,
+                operation === 'skill-center' && new URL(request.url).searchParams.get('wait') !== '1',
               )
               if (operation === 'skill-center') {
                 if (new URL(request.url).searchParams.get('wait') !== '1') {

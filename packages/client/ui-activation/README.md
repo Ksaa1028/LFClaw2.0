@@ -29,6 +29,8 @@ The desktop profile connects with an employee activation code. The Host saves th
 
 The desktop catalog exposes employee-authorized OpenAI-compatible text models and uses the server default unless the existing personal selection remains valid. Every model call rechecks authorization; background catalog refresh runs every `refreshIntervalMs`. Provider keys stay on the server; the Host uses an employee token for the gateway. Separate client plugins supply enterprise skills, connectors and experts.
 
+Model discovery, selection and request preparation read `employee/model-catalog`, which returns only authorized model metadata. They do not download skill icons or connector catalogs. Deploy the server providing this endpoint before updating clients; an unavailable endpoint reports a catalog failure without falling back to the full employee response.
+
 A lost enterprise connection reports a retryable `TRANSPORT` model error and asks the user to check files already written in the workspace. Failure does not automatically delete existing files.
 
 The activation page uses a white welcome view, LFClaw text branding and orbital decoration. Small windows scroll internally while keeping inputs accessible. Decoration carries no interaction; keyboard focus stays inside the activation dialog. English and Chinese dictionaries supply fields and messages.

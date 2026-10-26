@@ -10,7 +10,7 @@ import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
 import type {} from '@deepseek-ai/dsh-client-ui-workspace/client'
 import type {} from '@deepseek-ai/dsh-client-ui-commands/client'
 import type {} from '@deepseek-ai/dsh-api-session-controller/client'
-import { loadExperts, prepareExpert } from './api.ts'
+import { loadExpertPicker, prepareExpert } from './api.ts'
 import { expertConversation } from './expert-conversation.ts'
 import type {} from '@deepseek-ai/dsh-client-ui-input-trigger/client'
 import { expertReferenceDraft, parseExpertReference } from './expert-reference.ts'
@@ -65,7 +65,10 @@ function BrandName({ t }: PropsLocale<'lfclaw'>): ReactNode {
 /** 页面依赖服务。 */
 export const inject = ['slots', 'locale', 'layout', 'uiWorkspace']
 
-/** Override default brand marks and register the expert panel and sidebar entry. @param ctx - Client plugin context. @param config - Share notification refresh settings. */
+/** Override default brand marks and register the expert panel and sidebar entry.
+ * @param ctx - Client plugin context.
+ * @param config - Share notification refresh settings.
+ */
 export function apply(ctx: Context, config: Config = { shareRefreshIntervalMs: 30000 }): void {
   ctx.effect(() => ctx.locale.register(NS, { zh, en }), 'lfclaw: dictionaries')
   const t = ctx.locale.bind(NS)
@@ -135,8 +138,8 @@ export function apply(ctx: Context, config: Config = { shareRefreshIntervalMs: 3
               kind: 'popupSelect',
               searchMode: 'fuzzy-label',
               searchLabels: () => ({ placeholder: t('search'), empty: t('noMatches'), noResults: t('noMatches') }),
-              async options() {
-                const catalog = await loadExperts()
+              async options(_session, signal) {
+                const catalog = await loadExpertPicker(signal)
                 return (
                   [
                     ['enterprise', catalog.experts],
@@ -168,27 +171,23 @@ export function apply(ctx: Context, config: Config = { shareRefreshIntervalMs: 3
                     })),
                 )
               },
-              async onSelect(option, session) {
+              onSelect(option, session) {
                 const binding = scope.sessions.binding(session.sessionId)
                 if (!binding) throw new Error(t('pickerChanged'))
                 const input = scope.conversation.input.for(binding.ctx),
                   before = input.state.getSnapshot()
-                const revision = before.draftRev
                 if (before.phase !== 'plain') throw new Error(t('pickerChanged'))
                 const split = option.id.indexOf(':'),
                   owner = option.id.slice(0, split)
                 if (owner !== 'enterprise' && owner !== 'personal') throw new Error(t('failed'))
-                const expert = await prepareExpert(owner, option.id.slice(split + 1))
-                const prompt = expertReferenceDraft(owner, option.id.slice(split + 1), expert.name, before.draft)
-                if (scope.sessions.binding(session.sessionId) !== binding || input.state.getSnapshot().draftRev !== revision)
-                  throw new Error(t('pickerChanged'))
+                const prompt = expertReferenceDraft(owner, option.id.slice(split + 1), option.label, before.draft)
                 const result = scope.conversation.input.requestDraftInitialization(binding, {
                   clearPreviousDraft: true,
                   prompt: {
                     text: prompt.text,
                     references: [
-                      ...prompt.references,
                       ...before.occurrences.map(({ occurrenceId: _id, ...reference }) => reference),
+                      ...prompt.references,
                     ],
                   },
                 })

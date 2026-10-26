@@ -1,5 +1,6 @@
 /** Connector center copy in both supported client locales. */
 export const zh = {
+  pickerChanged: '输入内容或会话已变化，请重新选择',
   title: '工具连接', subtitle: '连接企业服务与个人工作工具', refresh: '刷新列表',
   accountTitle: '账号连接', accountConfigured: '账号已连接', accountRequired: '请先完成账号连接',
   oauthConnect: '连接并授权', oauthOpen: '打开授权页面', oauthWaiting: '正在等待浏览器授权，完成后状态会自动更新。',
@@ -51,6 +52,7 @@ export const zh = {
 export type ConnectorCenterKey = keyof typeof zh
 /** English connector center copy. */
 export const en: Record<ConnectorCenterKey, string> = {
+  pickerChanged: 'The draft or conversation changed. Please choose again.',
   title: 'Connectors', subtitle: 'Connect enterprise services and personal tools', refresh: 'Refresh',
   accountTitle: 'Account connection', accountConfigured: 'Account connected', accountRequired: 'Connect your account first',
   oauthConnect: 'Connect and authorize', oauthOpen: 'Open authorization page', oauthWaiting: 'Waiting for browser authorization. Status updates automatically when complete.',

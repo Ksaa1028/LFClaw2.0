@@ -414,6 +414,21 @@ function employeeForToken(options: ServerOptions, req: Request): RecordItem | nu
   return employee
 }
 
+function employeeModels(db: Database, employee: RecordItem) {
+  return db.models.filter(model => authorizationFor(model, employee, db).allowed).map(model => ({
+    id: model.id, name: model.name, type: model.type, protocol: model.protocol, isDefault: model.isDefault, ...modelCapacity(model),
+    permissionSource: authorizationFor(model, employee, db).source,
+  }))
+}
+
+function employeeSkillMetadata(options: ServerOptions, skill: RecordItem, employee: RecordItem, db: Database) {
+  return {
+    id: skill.id, name: skill.name, version: skill.version, description: skill.description,
+    revision: skill.revision ?? 1, sha256: skill.sha256 ?? savedSkillArchive(options.skillsDirectory, skill, options.skillArchiveLimits).sha256,
+    source: skill.source, permissionSource: authorizationFor(skill, employee, db).source,
+  }
+}
+
 async function callModel(model: RecordItem, messages: unknown, maxTokens: number, timeoutMs: number,
   extras: Record<string, unknown> = {}, stream?: { signal: AbortSignal; write: (event: string) => Promise<void> }): Promise<{ status: number; body: unknown }> {
   const upstreamModelId = typeof model.upstreamModelId === 'string' && model.upstreamModelId.trim()
@@ -691,6 +706,50 @@ export function createApp(options: ServerOptions): express.Express {
     res.status(204).end()
   })
 
+  for (const catalog of ['model-catalog', 'skill-catalog'] as const) {
+    app.get(`/api/employee/${catalog}`, (req, res) => {
+      res.setHeader('Cache-Control', 'private, no-store')
+      const employee = employeeForToken(options, req)
+      if (!employee) {
+        res.status(401).json({ code: 'UNAUTHORIZED', message: '登录已失效或账号已停用' })
+        return
+      }
+      const db = options.store.read()
+      res.json(catalog === 'model-catalog' ? { models: employeeModels(db, employee) } : {
+        employee: { id: employee.id },
+        skills: db.skills.filter(skill => authorizationFor(skill, employee, db).allowed)
+          .map(skill => employeeSkillMetadata(options, skill, employee, db)),
+      })
+    })
+  }
+
+  for (const picker of ['identity', 'expert-picker', 'connector-picker'] as const) {
+    app.get(`/api/employee/${picker}`, (req, res) => {
+      res.setHeader('Cache-Control', 'private, no-store')
+      const employee = employeeForToken(options, req)
+      if (!employee) {
+        res.status(401).json({ code: 'UNAUTHORIZED', message: '登录已失效或账号已停用' })
+        return
+      }
+      if (picker === 'identity') { res.json({ employee: { id: employee.id } }); return }
+      const db = options.store.read()
+      if (picker === 'connector-picker') {
+        res.json({ connectors: employeeConnectors(db, employee).map(connector => ({
+          id: connector.id, name: connector.name, hasAvailableTools: connector.tools.length > 0,
+        })) })
+        return
+      }
+      res.json({
+        experts: db.experts.filter(expert => employeeCanUseExpert(expert, employee, db)).map(expert => ({
+          id: expert.id, name: expert.name, description: expert.description, source: expert.source,
+        })),
+        personalExperts: db.personalExperts.filter(expert => expert.ownerEmployeeId === employee.id).map(expert => ({
+          id: expert.id, name: expert.name, description: expert.description, kind: expert.kind,
+        })),
+      })
+    })
+  }
+
   app.get('/api/employee/me', (req, res) => {
     const employee = employeeForToken(options, req)
     if (!employee) {
@@ -701,14 +760,9 @@ export function createApp(options: ServerOptions): express.Express {
     res.json({ employee: { id: employee.id, name: employee.name, departmentId: employee.departmentId,
       departmentName: db.departments.find(department => department.id === employee.departmentId)?.name ?? null,
       status: employee.status, activationCode: employee.activationCode },
-      models: db.models.filter(model => authorizationFor(model, employee, db).allowed).map(model => ({
-        id: model.id, name: model.name, type: model.type, protocol: model.protocol, isDefault: model.isDefault, ...modelCapacity(model),
-        permissionSource: authorizationFor(model, employee, db).source,
-      })),
+      models: employeeModels(db, employee),
       skills: db.skills.filter(skill => authorizationFor(skill, employee, db).allowed).map(skill => ({
-        id: skill.id, name: skill.name, version: skill.version, description: skill.description,
-        revision: skill.revision ?? 1, sha256: skill.sha256 ?? savedSkillArchive(options.skillsDirectory, skill, options.skillArchiveLimits).sha256,
-        source: skill.source, icon: skill.icon, permissionSource: authorizationFor(skill, employee, db).source,
+        ...employeeSkillMetadata(options, skill, employee, db), icon: skill.icon,
       })),
       connectors: employeeConnectors(db, employee),
       experts: db.experts.filter(expert => employeeCanUseExpert(expert, employee, db)).map(expert => ({

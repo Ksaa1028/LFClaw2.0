@@ -1,5 +1,6 @@
 /** 技能管理的界面文案。 */
 export const zh = {
+  pickerChanged: '输入内容或会话已变化，请重新选择',
   edit: '对话修改', editPrompt: '请帮我修改已有的个人技能“{name}”。先读取它的当前内容，听我说明要改什么，再展示修改后的内容供我确认；确认后更新原技能，不要创建同名新技能。', loading: '正在准备', disabled: '已停用', notUserInvocable: '此技能仅供模型自动选用', importReplace: '替换同名技能', replaceConfirm: '已有同名技能，是否用该 ZIP 替换？原技能包资源也会替换。', metadataPending: '本机已保存，管理清单待同步',
 
   uninstall: '卸载技能', uninstallTitle: '卸载此个人技能？', uninstallDescription: '卸载“{name}”后，将从本机的个人技能目录移除。企业技能不受影响。',
@@ -19,6 +20,7 @@ export const zh = {
 export type SkillCenterKey = keyof typeof zh
 /** 英文界面文案。 */
 export const en: Record<SkillCenterKey, string> = {
+  pickerChanged: 'The draft or conversation changed. Please choose again.',
   edit: 'Edit in chat', editPrompt: 'Help me change my existing personal skill “{name}”. Read its current content first, ask what I want changed, and show me the revised content for confirmation. After I confirm, update the same skill without creating another one.', loading: 'Preparing', disabled: 'Disabled', notUserInvocable: 'This skill is available only for automatic model selection', importReplace: 'Replace skill', replaceConfirm: 'Replace the existing skill and its resources with this ZIP?', metadataPending: 'Saved locally; admin metadata sync is pending',
 
   uninstall: 'Uninstall skill', uninstallTitle: 'Uninstall this personal skill?', uninstallDescription: 'Remove “{name}” from your personal skills on this computer. Enterprise skills are preserved.',

@@ -123,6 +123,13 @@ export function apply(ctx: Context, config: Config): void {
       try {
         const params = new URL(request.url).searchParams
         const id = params.get('id')
+        if (!id && params.get('view') === 'picker') {
+          const response = await ctx.enterpriseConnection.request('employee/connector-picker', { signal: request.signal })
+          return new Response(response.body, {
+            status: response.status,
+            headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
+          })
+        }
         const revision = id ? null : params.get('revision')
         const catalogResponse = await ctx.enterpriseConnection.request(`employee/connector-catalog${revision ? `?revision=${encodeURIComponent(revision)}` : ''}`, {
           signal: request.signal, catalogMaxAgeMs: !id && !revision && params.get('refresh') !== '1' ? config.refreshIntervalMs : 0,

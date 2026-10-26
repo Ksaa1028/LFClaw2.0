@@ -44,9 +44,10 @@ export interface PreparedExpert {
   connectors: ExpertResource[]
   remote?: { id: string; source: 'bailian' | 'dify' | 'weknora' }
 }
-async function request<T>(path: string, method = 'GET', body?: object): Promise<T> {
+async function request<T>(path: string, method = 'GET', body?: object, signal?: AbortSignal): Promise<T> {
   const response = await fetch('/api/lfclaw/' + path, {
     method,
+    ...(signal ? { signal } : {}),
     ...(body ? { headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) } : {}),
   })
   if (!response.ok) {
@@ -59,15 +60,34 @@ async function request<T>(path: string, method = 'GET', body?: object): Promise<
   }
   return response.status === 204 ? (undefined as T) : ((await response.json()) as T)
 }
-/** Read authorized experts and dependencies. @param fresh - Bypass the display snapshot for explicit refresh. @returns Current employee catalog. */
+/** Read authorized experts and dependencies.
+ * @param fresh - Bypass the display snapshot for explicit refresh.
+ * @returns Current employee catalog.
+ */
 export function loadExperts(fresh = false): Promise<ExpertCatalog> {
   return request(fresh ? 'expert-center?refresh=1' : 'expert-center')
+}
+/** Expert and team options contain no working instructions or dependency definitions. */
+export interface ExpertPickerCatalog {
+  experts: Pick<EnterpriseExpert, 'id' | 'name' | 'description' | 'source' | 'kind'>[]
+  personalExperts: Pick<PersonalExpert, 'id' | 'name' | 'description' | 'kind'>[]
+}
+/** Read current authorized expert and team options.
+ * @param signal - Cancellation when the picker closes.
+ * @returns Lightweight enterprise and personal options.
+ */
+export function loadExpertPicker(signal: AbortSignal): Promise<ExpertPickerCatalog> {
+  return request('expert-center?view=picker', 'GET', undefined, signal)
 }
 /** Delete an owned expert. @param id - Personal expert identifier. @returns Completion. */
 export function deletePersonalExpert(id: string): Promise<void> {
   return request(`personal-experts?action=delete&id=${encodeURIComponent(id)}`, 'POST')
 }
-/** Recheck permission before preparing a chat. @param owner - Resource ownership. @param id - Selected expert. @returns Launch definition. */
+/** Recheck permission before preparing a chat.
+ * @param owner - Resource ownership.
+ * @param id - Selected expert.
+ * @returns Launch definition.
+ */
 export function prepareExpert(owner: 'enterprise' | 'personal', id: string): Promise<PreparedExpert> {
   return request('expert-prepare', 'POST', { owner, id })
 }

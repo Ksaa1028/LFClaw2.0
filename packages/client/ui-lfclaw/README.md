@@ -11,6 +11,8 @@ English | [中文](README.zh.md)
 
 Employees browse Enterprise Experts, My Experts and My Expert Teams. Creation and editing open a conversation with the expert-management skill, where employees refine requirements and save configuration. Using an expert checks live authorization and local dependencies before preparing the task. Only the owner can read and edit personal configuration.
 
+Composer experts and teams use the lightweight `employee/expert-picker` list. Selection appends a reference locally, preserving draft order, without requesting full configuration. Sending resolves current authorized instructions and dependencies; revoked access prevents submission.
+
 ## Table of Contents
 
 - [Usage](#usage)
@@ -23,7 +25,7 @@ Employees browse Enterprise Experts, My Experts and My Expert Teams. Creation an
 <a id="usage"></a>
 ## Usage
 
-Expert pages and composer expert/team pickers reuse the current employee's Host catalog snapshot. `expertCatalogMaxAgeMs` bounds display reuse, defaulting to 30000 milliseconds; 0 disables reuse. Manual refresh, preparation and execution always request current server state. Personal expert/team creation, modification and deletion invalidate prior catalogs. Account switches, logout and failed synchronization follow enterprise connection snapshot cleanup.
+Expert pages reuse the current employee's Host catalog snapshot. `expertCatalogMaxAgeMs` bounds display reuse, defaulting to 30000 milliseconds; 0 disables reuse. Manual refresh, preparation and execution always request current server state. Personal expert/team creation, modification and deletion invalidate prior catalogs. Account switches, logout and failed synchronization follow enterprise connection snapshot cleanup.
 
 Expert pages keep their heading, tabs and search visible while cards scroll. Notifications keep their heading and tabs visible; announcements and shared conversations each use ten entries per page with fixed pagination controls. Switching message tabs returns to the first page.
 
