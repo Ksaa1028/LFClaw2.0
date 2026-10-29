@@ -24,6 +24,8 @@ The composer skill picker appends to the current conversation without submitting
 <a id="use-this-package"></a>
 ## Use this package
 
+The management page reuses the full employee directory for up to `refreshIntervalMs`. Composer and expert skill-resolution requests (`wait=1`) use the lightweight skill catalog without icons or unrelated resources, waiting only for enterprise packages. Loading a skill checks current server authorization.
+
 The page keeps its heading, tabs and search visible while skill cards scroll within the remaining space.
 
 The composer menu hides manual `/compact`; automatic context compaction remains enabled by the session preset. Typing `/compact` directly remains available.
