@@ -8,6 +8,9 @@ This directory indexes historical work and validation evidence. Historical passe
 
 ## Record index
 
+- [2026-10-28 Windows default memory release](2026-10-28-Windows默认记忆能力发布.md)
+- [2026-10-28 Default Mnemon memory capability](2026-10-28-Mnemon默认记忆能力.md)
+
 <a id="记录索引"></a>
 
 - [2026-10-22 Local client blank-screen recovery](2026-10-22-本地客户端白屏恢复.md)

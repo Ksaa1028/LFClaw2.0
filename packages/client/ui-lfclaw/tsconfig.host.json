@@ -7,6 +7,7 @@
   },
   "files": [
     "src/index.ts",
+    "src/workflow-proxy.ts",
     "src/proxy.ts",
     "src/manager-name.ts",
     "src/expert-manager-skill.ts",

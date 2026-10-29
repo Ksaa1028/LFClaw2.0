@@ -59,6 +59,7 @@
   },
   "files": ["lib/**/*.js", "lib/**/*.css", "lib/**/*.d.ts"],
   "dependencies": {
+    "@deepseek-ai/dsh-util-crypto": "workspace:*",
     "@deepseek-ai/dsh-tools": "workspace:*",
     "@deepseek-ai/dsh-session": "workspace:*",
     "@deepseek-ai/dsh-session-format-catalog": "workspace:*",

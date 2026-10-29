@@ -1,0 +1,18 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`completion copies expose only supplied final results and no handling controls 1`] = `
+[
+  "返回列表",
+  "刷新",
+]
+`;
+
+exports[`shows participating workflows and preserves original notes beside the summary 1`] = `
+[
+  "返回列表",
+  "刷新",
+  "AI 整理交接摘要",
+  "提交需求变更",
+  "取消工作",
+]
+`;

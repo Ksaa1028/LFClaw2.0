@@ -144,6 +144,18 @@ try {
   assert.equal(decideAccess({ kind: 'dm', userAllowed: true }), 'allow')
   assert.equal(decideAccess({ kind: 'dm', userAllowed: false }), 'deny')
   console.error('runtime payload: LFClaw personal IM package and private-chat policy passed')
+  const memoryManifest = requireRuntime.resolve('dsh-mnemon/package.json')
+  assert.equal(JSON.parse(readFileSync(memoryManifest, 'utf8')).version, '0.5.30')
+  assert.match(readFileSync(join(dirname(memoryManifest), 'lib/client.js'), 'utf8'), /id: MNEMON_MAIN_PANEL_ID,\s+order: 1000/u)
+  const memoryRequire = createRequire(requireRuntime.resolve('@mnemon-dev/mnemon/package.json'))
+  const memoryNative = dirname(memoryRequire.resolve(`@mnemon-dev/mnemon-${process.platform}-${process.arch}/package.json`))
+  const memoryExecutable = join(memoryNative, 'bin', process.platform === 'win32' ? 'mnemon.exe' : 'mnemon')
+  const memoryVersion = execFileSync(memoryExecutable, ['--version'], {
+    encoding: 'utf8', timeout: 10_000, windowsHide: true,
+    env: { SYSTEMROOT: process.env.SYSTEMROOT, HOME: scratch, USERPROFILE: scratch },
+  })
+  assert.match(memoryVersion, /0\.2\.13/u)
+  console.error('runtime payload: LFClaw memory package, sidebar order and bundled native engine passed')
   console.error('runtime payload: koffi')
   checkKoffi()
   console.error('runtime payload: sharp')

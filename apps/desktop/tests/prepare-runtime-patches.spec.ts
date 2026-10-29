@@ -42,7 +42,7 @@ it('classifies the current workspace and shares only runtime patch bytes', () =>
   const repository = resolve(import.meta.dirname, '../../..')
   const before = readFileSync(join(repository, 'pnpm-lock.yaml'))
   const plan = prepareRuntimePatches(project, repository)
-  expect(plan.patches.map(entry => entry.spec)).toEqual(['@earendil-works/pi-ai@1.0.2', '@michengai/dsh-im-connect@0.1.77', 'node-pty@1.2.0-beta.15'])
+  expect(plan.patches.map(entry => entry.spec)).toEqual(['dsh-mnemon@0.5.30', '@earendil-works/pi-ai@1.0.2', '@michengai/dsh-im-connect@0.1.77', 'node-pty@1.2.0-beta.15'])
   expect(plan.workspaceOnly).toHaveLength(5)
   const settings = yaml.load(readFileSync(join(project, 'pnpm-workspace.yaml'), 'utf8')) as { overrides: Record<string, string> }
   expect(settings.overrides['@earendil-works/pi-ai']).toBeUndefined()

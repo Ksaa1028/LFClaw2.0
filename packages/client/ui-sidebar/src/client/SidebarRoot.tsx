@@ -17,7 +17,7 @@
  * pointing at carries no bar.
  */
 import { useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
+
 import clsx from 'clsx'
 import {
   IconNewChatOutlineMedium, IconNewChatOutlineRegular, IconPanelLeftOutlineRegular, isDarwinDesktop, ShortcutKeys, Tooltip,
@@ -238,12 +238,6 @@ export function SidebarRoot({
         {!darwinDesktop && toggle}
       </div>
 
-      {windowsTitlebar ? createPortal(<div className={css.settingsArea} data-sidebar-settings>
-        {renderSlot('sidebar.settings', { wide: true })}
-      </div>, document.body) : <div className={css.settingsArea} data-sidebar-settings>
-        {renderSlot('sidebar.settings', { wide })}
-      </div>}
-
       {/* The label fades before the hover/focus shortcut, including on translucent backgrounds. */}
       <Tooltip label={t('session.new.label')} shortcutKeys={newShortcut?.keys} delayMs={500} side={captionTooltipSide} disabled={wide}>
         <button
@@ -294,6 +288,9 @@ export function SidebarRoot({
       <div className={css.footArea}>
         <div className={css.footerActions}>
           {renderSlot('sidebar.footer.action', { wide })}
+        </div>
+        <div className={css.settingsArea} data-sidebar-settings>
+          {renderSlot('sidebar.settings', { wide: false })}
         </div>
       </div>
     </div>

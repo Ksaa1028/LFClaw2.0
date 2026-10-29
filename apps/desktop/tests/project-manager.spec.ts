@@ -1,10 +1,10 @@
 import { existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { dirname, join } from 'node:path'
+import { dirname, join, resolve } from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { resolveDesktopPaths } from '../src/paths.ts'
 import { DesktopProjectManager } from '../src/project-manager.ts'
-import { readProfilePlugins } from '@deepseek-ai/dsh-app-boot'
+import { createRuntimeResolution, loadProfileDirectory, readProfilePlugins } from '@deepseek-ai/dsh-app-boot'
 import { runtimeFixture } from './runtime-fixture.ts'
 
 const roots: string[] = []
@@ -43,6 +43,31 @@ afterEach(() => {
 })
 
 describe('desktop external plugin profile', () => {
+  it('makes default memory visible as an installation package without personal dependencies', async () => {
+    const { manager } = setup()
+    await manager.applyRelease()
+    const installAnchor = resolve(import.meta.dirname, '../../cli/package.json')
+    const profile = loadProfileDirectory('dsh', manager.paths.profile, installAnchor)
+    expect(profile.skippedBundles).toEqual([])
+    const resolution = await createRuntimeResolution({ installAnchor, profile, home: dirname(dirname(manager.paths.profile)) })
+    expect(resolution.entries.find(entry => entry.name === 'dsh-mnemon')).toMatchObject({
+      scope: 'installation', version: '0.5.30',
+    })
+  })
+  it('includes memory on fresh installs and adds it once to existing profiles', async () => {
+    const { manager } = setup()
+    await manager.applyRelease()
+    const path = join(manager.paths.profile, 'package.json')
+    const read = () => JSON.parse(readFileSync(path, 'utf8')) as { dsh: { profile: { bundles: string[] } } }
+    expect(read().dsh.profile.bundles.filter(name => name === 'dsh-mnemon')).toHaveLength(1)
+    const previous = read()
+    previous.dsh.profile.bundles = previous.dsh.profile.bundles.filter(name => name !== 'dsh-mnemon')
+    previous.dsh.profile.bundles.push('personal-bundle')
+    writeFileSync(path, JSON.stringify(previous))
+    await manager.applyRelease()
+    await manager.applyRelease()
+    expect(read().dsh.profile.bundles).toEqual([...previous.dsh.profile.bundles, 'dsh-mnemon'])
+  })
   it('preserves installed packages, profile state, and the lockfile when preparing a launch', async () => {
     const { manager } = setup()
     await manager.applyRelease()

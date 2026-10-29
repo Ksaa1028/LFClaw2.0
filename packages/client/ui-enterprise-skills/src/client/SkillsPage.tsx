@@ -20,6 +20,7 @@ interface Item {
   error: boolean
 }
 interface Catalog {
+  displayPending: boolean
   enterprise: Item[]
   personal: Item[]
   maxArchiveBytes: number
@@ -65,6 +66,7 @@ function parseCatalog(value: unknown): Catalog {
       }
     })
   return {
+    displayPending: 'displayPending' in value && value.displayPending === true,
     enterprise: items(value.enterprise),
     personal: items(value.personal),
     maxArchiveBytes: value.maxArchiveBytes,
@@ -123,7 +125,10 @@ export function SkillsPage({ t, startChat }: SkillsPageProps): ReactNode {
     const load = async (wait = false): Promise<void> => {
       try {
         const params = new URLSearchParams()
-        if (wait) params.set('wait', '1')
+        if (wait) {
+          params.set('wait', '1')
+          params.set('display', '1')
+        } else params.set('summary', '1')
         if (attempt) params.set('refresh', '1')
         const response = await fetch(`/api/lfclaw/skill-center${params.size ? `?${params}` : ''}`, { signal: controller.signal })
         if (!response.ok) throw new Error('unavailable')
@@ -131,7 +136,7 @@ export function SkillsPage({ t, startChat }: SkillsPageProps): ReactNode {
         if (controller.signal.aborted) return
         setData(result)
         setError(null)
-        if (!wait && result.enterprise.some(item => item.loading)) {
+        if (!wait && (result.displayPending || result.enterprise.some(item => item.loading))) {
           await load(true)
           return
         }

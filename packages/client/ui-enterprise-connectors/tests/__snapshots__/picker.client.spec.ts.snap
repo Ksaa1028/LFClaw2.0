@@ -1,5 +1,38 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`groups available enterprise and personal connectors and keeps selection behavior > connector selection preserves existing draft 1`] = `
+[
+  {
+    "references": [
+      {
+        "clipboardText": "/report",
+        "label": "日报",
+        "length": 7,
+        "offset": 0,
+        "ref": "/report",
+        "source": "skill",
+      },
+    ],
+    "text": "/report 帮我汇总
+Please use the tools from connector “企业数据” for this task: ",
+  },
+  {
+    "references": [
+      {
+        "clipboardText": "/report",
+        "label": "日报",
+        "length": 7,
+        "offset": 0,
+        "ref": "/report",
+        "source": "skill",
+      },
+    ],
+    "text": "/report 帮我汇总
+Please use the tools from connector “我的文档” for this task: ",
+  },
+]
+`;
+
 exports[`groups available enterprise and personal connectors and keeps selection behavior 1`] = `
 [
   {

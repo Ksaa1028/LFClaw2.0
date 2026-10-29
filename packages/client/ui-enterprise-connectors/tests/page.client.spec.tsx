@@ -24,6 +24,25 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
+it('shows connector summaries before deferred icons resolve', async () => {
+  const images = Promise.withResolvers<Response>()
+  const transport = vi.fn().mockResolvedValueOnce(Response.json({ ...catalog, summary: true,
+    connectors: catalog.connectors.map(item => ({ ...item, icon: '' })),
+  })).mockImplementation(() => images.promise)
+  vi.stubGlobal('fetch', transport)
+  const view = render(<ConnectorsPage t={t} startChat={vi.fn()} />)
+  try {
+    await screen.findByRole('button', { name: /商场数据/u })
+    await waitFor(() => expect(transport).toHaveBeenCalledTimes(2))
+    expect(transport.mock.calls[0]?.[0]).toContain('summary=1')
+    expect(transport.mock.calls[1]?.[0]).not.toContain('revision=')
+    expect(view.container.querySelector('img')).toBeNull()
+    expect(view.baseElement).toMatchSnapshot()
+    images.resolve(Response.json(catalog))
+    await waitFor(() => expect(view.container.querySelector('img')).not.toBeNull())
+  } finally { view.unmount(); images.resolve(Response.json(catalog)) }
+})
+
 it.each([true, false])(
   'blocks starting a connector without authorized tools when tool visibility is %s',
   async (showToolsInClient) => {

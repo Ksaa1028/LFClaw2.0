@@ -31,6 +31,9 @@ it('transfers upload and AI output bytes, creates an inherited local copy, and u
     { surfaceOp: 'append' },
   )
   source.append('deliverables/presented', { turn: 1, callId: ToolCallId('call-output'), files: [{ path: '/sender/output.txt' }] })
+  source.append('session-log-deepseek/delivery-accepted', {
+    sessionId: source.id, sessionFormatVersion: SESSION_FORMAT_VERSION, throughSeq: source.snapshotEvents().at(-1)!.seq,
+  })
   const original = JSON.stringify(source.snapshotEvents())
   let payload: unknown, received: Session | undefined
   const routes = new Map<string, (request: Request) => Promise<Response>>()
@@ -62,7 +65,8 @@ it('transfers upload and AI output bytes, creates an inherited local copy, and u
         { shareId: '00000000-0000-4000-8000-000000000001', senderId: 'sender', senderName: '甲', createdAt: 1, title: '分析聊天' },
       ])
     if (path.endsWith('/download')) return Response.json(payload)
-    payload = JSON.parse(String(init?.body))
+    if (typeof init?.body !== 'string') throw new Error('Expected serialized share payload')
+    payload = JSON.parse(init.body)
     payload = (payload as { payload: unknown }).payload
     return Response.json({ id: '00000000-0000-4000-8000-000000000001' }, { status: 201 })
   })
@@ -136,6 +140,7 @@ it('transfers upload and AI output bytes, creates an inherited local copy, and u
     expect(saveFile).toHaveBeenCalledWith({ data, name: 'input.txt' })
     expect(await readFile(join(root, result.sessionId, '0-output.txt'))).toEqual(output)
     expect(received?.header.agentPreset).toBe('receiver-preset')
+    expect(received?.header.parentSession).toBe(source.id)
     expect(received?.inheritedEventCount).toBe(source.snapshotEvents().length)
     expect(JSON.stringify(received?.snapshotEvents())).toContain(
       join(root, result.sessionId, '0-output.txt').replaceAll('\\', '\\\\'),

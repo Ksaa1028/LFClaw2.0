@@ -11,6 +11,7 @@
     "lib/cli.js"
   ],
   "dependencies": {
+    "@mnemon-dev/mnemon": "0.2.13",
     "koffi": "^3.1.0",
     "@deepseek-ai/libreoffice-kit": "^0.1.5",
     "@deepseek-ai/cordis": "workspace:~",

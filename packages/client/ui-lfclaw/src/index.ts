@@ -1,3 +1,4 @@
+import { mountWorkflowProxy } from './workflow-proxy.ts'
 /** Expert center proxy retains employee credentials in the Host. */
 import type { Context } from '@deepseek-ai/cordis'
 import type {} from '@deepseek-ai/dsh-client-connection'
@@ -51,6 +52,7 @@ export function apply(
       }),
     'lfclaw: expert manager skill',
   )
+  mountWorkflowProxy(ctx)
   mountExpertTools(ctx)
   ctx.effect(
     () =>

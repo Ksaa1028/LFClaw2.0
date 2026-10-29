@@ -632,7 +632,7 @@ export interface Limits {
 ## `@deepseek-ai/dsh-client-ui-lfclaw`
 
 - `inject`: `connection` · `enterpriseConnection` · `skills` · `tools`
-- `source`: [`packages/client/ui-lfclaw/src/index.ts:16`](../packages/client/ui-lfclaw/src/index.ts)
+- `source`: [`packages/client/ui-lfclaw/src/index.ts:17`](../packages/client/ui-lfclaw/src/index.ts)
 
 ```ts config-catalog
 /** Persistent directory for received share output files. */

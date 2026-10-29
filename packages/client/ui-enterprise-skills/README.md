@@ -9,9 +9,9 @@ English | [中文](README.zh.md)
 
 ## Summary
 
-The page and composer picker reuse the Host's employee directory snapshot for up to `refreshIntervalMs`; manual refresh requests fresh data. The picker waits only for its current enterprise skill packages, without waiting for personal inventory reports. Loading a skill still checks current server authorization.
+Employees can use authorized enterprise skills and manage personal skills through ZIP import, confirmed chat creation and editing, and removal. Enterprise packages are cached separately. Administrators receive only personal skill metadata; definitions and attachments stay local.
 
-Employees can use authorized enterprise skills and manage personal skills through ZIP import, confirmed chat creation and editing, and removal. Enterprise packages are checked and cached independently from personal data. Only personal skill metadata is reported to administrators; definitions and attachments stay local. The catalog toolbar provides search and the relevant actions.
+The composer skill picker appends to the current conversation without submitting, preserving the draft and attachments. The management page’s Use action starts a new conversation.
 
 ## Table of Contents
 
@@ -35,9 +35,13 @@ Cards keep a fixed height and a two-line summary. Details scroll within the dial
 <a id="understand-the-implementation"></a>
 ## Understand the implementation
 
+The management page first requests `summary=1` for skill summaries without icons. It then requests `wait=1&display=1` in the background, reading `employee/skill-catalog?icons=1` to fill icons and package readiness. Neither request includes models, connectors, experts or notifications; icons do not block the initial list. Composer and expert skill-resolution requests (`wait=1`) use the lightweight skill catalog without icons or unrelated resources, waiting only for enterprise packages. Loading a skill checks current server authorization.
+
 The independent `./archive` export validates ZIP structure, safe paths, metadata and invocation flags without starting a plugin. The enterprise server imports the same implementation. The unique outermost SKILL.md defines the main skill; nested skill guides and relative resources are retained within its directory. Archives with peer main entries or files outside the main directory are rejected. Wrapper directories are supported. Imports never execute scripts.
 
 Enterprise downloads verify SHA-256 and cache by employee, resource and digest. Actual reads recheck authorization. New and rolled-back digests select their own directories, preserving resources already used by running tasks. Package preparation does not block the initial directory response.
+
+Skill providers, personal skill operations and background preparation read `employee/skill-catalog` for current authorization and metadata without icons, model catalogs or connectors. Only the skill-center display requests the skill catalog with `icons=1` for card icons. Deploy the lightweight catalog endpoint before updating clients; permission checks remain fresh and failures stop the dependent operation.
 
 Personal skills live below `dataDirectory` in employee-hashed directories. Confirmed chat editing atomically replaces SKILL.md while preserving resources, enablement, invocation flags and extra metadata. Numeric versions increment automatically. Replacement ZIPs require explicit confirmation and the current revision. Stale revisions return conflict. Removal moves the skill out of the visible directory before cleanup; failed cleanup is logged.
 

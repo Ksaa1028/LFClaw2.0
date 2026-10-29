@@ -67,7 +67,7 @@ The shell is pure composition: `SidebarRootComponentProps` composes the layout o
 
 ### Slot discipline
 
-Declaration-aware `slots.inject()` lets a replacing package activate before or after the sidebar. The `sidebar.settings` seat renders at the top and shares its column state (`wide`); `sidebar.footer.action` remains at the foot for employee information. The `/client` exports are the plugin body (`apply`/`inject`) plus the contract types only; SidebarRoot, the row components, and the tree derivation remain package-internal behind the slot registration.
+Declaration-aware `slots.inject()` lets a replacing package activate before or after the sidebar. The `sidebar.settings` seat renders as an icon beside employee information in `sidebar.footer.action`; in the collapsed column these controls stack vertically. The `/client` exports are the plugin body (`apply`/`inject`) plus the contract types only; SidebarRoot, the row components, and the tree derivation remain package-internal behind the slot registration.
 
 </details>
 

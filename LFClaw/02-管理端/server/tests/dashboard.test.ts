@@ -9,7 +9,7 @@ const now = new Date('2026-10-16T12:00:00Z')
 
 function database(): Database {
   return {
-    branding: { headline: '测试', badge: '', showBadge: false },
+    workflows: [], branding: { headline: '测试', badge: '', showBadge: false },
     departments: [], employees: [], models: [], skills: [], connectors: [], experts: [],
     backups: [], versionPackages: [], operationLogs: [], recentActivities: [], notifications: [], systemErrors: [],
     personalSkillReports: [], personalExperts: [], connectorAccounts: [], modelUsage: [], employeeVersionReports: [], dashboardTrend: [], systemMetric: {},

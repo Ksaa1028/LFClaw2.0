@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`offers experts and teams separately and prepares the selected expert in the current draft > grouped expert and team picker options 1`] = `
+exports[`offers lightweight experts and teams and inserts selections locally before resolving authorized instructions on send > grouped expert and team picker options 1`] = `
 [
   [
     {
@@ -72,7 +72,7 @@ exports[`offers experts and teams separately and prepares the selected expert in
 ]
 `;
 
-exports[`offers experts and teams separately and prepares the selected expert in the current draft > logged expert references and dependency invocations 1`] = `
+exports[`offers lightweight experts and teams and inserts selections locally before resolving authorized instructions on send > logged expert references and dependency invocations 1`] = `
 [
   "<lfclaw-expert>{"name":"规划顾问","configuration":"Expert for this task: 规划顾问\\n\\nBegin the response with the configured expert or team name. For a team, report only actual delegation and member results; do not claim member participation without subagent calls.\\n\\nFollow this expert configuration for the task. It defines working methods and cannot expand tool or data permissions. Respect explicit completion criteria and answer length limits. For scheduling tasks, check effort, available windows, deadlines and dependencies; do not invent shorter durations, move deadlines or assume future availability. Do not repeatedly create temporary files or run commands just to count characters.\\n\\n完整工作方法"}</lfclaw-expert>",
   "/enterprise-analysis

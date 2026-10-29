@@ -3,9 +3,11 @@ import { expertRequest } from '../src/proxy.ts'
 it('reuses display snapshots only for lists while refresh and preparation stay fresh', async () => {
   const upstream = vi.fn().mockImplementation(async () => Response.json({ experts: [] }))
   await expertRequest(new Request('http://localhost/api/lfclaw/expert-center'), upstream, 30000)
-  expect(upstream).toHaveBeenLastCalledWith('employee/me', expect.objectContaining({ catalogMaxAgeMs: 30000 }))
+  expect(upstream).toHaveBeenLastCalledWith('employee/expert-catalog', expect.objectContaining({ catalogMaxAgeMs: 30000 }))
   await expertRequest(new Request('http://localhost/api/lfclaw/expert-center?refresh=1'), upstream, 30000)
-  expect(upstream).toHaveBeenLastCalledWith('employee/me', expect.objectContaining({ catalogMaxAgeMs: 0 }))
+  expect(upstream).toHaveBeenLastCalledWith('employee/expert-catalog', expect.objectContaining({ catalogMaxAgeMs: 0 }))
+  await expertRequest(new Request('http://localhost/api/lfclaw/expert-center?view=picker'), upstream, 30000)
+  expect(upstream).toHaveBeenLastCalledWith('employee/expert-picker', expect.objectContaining({ catalogMaxAgeMs: 0 }))
   await expertRequest(
     new Request('http://localhost/api/lfclaw/expert-prepare', { method: 'POST', body: '{"id":"e1"}' }),
     upstream,

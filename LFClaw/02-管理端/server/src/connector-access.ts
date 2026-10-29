@@ -72,7 +72,9 @@ export function sendConnectorCatalog(store: JsonStore, resolveEmployee: () => Re
       if (!force && req.query.revision === revision) return
       cleanup()
       res.setHeader('Cache-Control', 'no-store')
-      res.json({ revision, connectors: employeeConnectors(store.read(), employee) })
+      const connectors = employeeConnectors(store.read(), employee)
+      res.json({ revision, connectors: req.query.summary === '1'
+        ? connectors.map(connector => ({ ...connector, icon: '' })) : connectors })
     } catch (error) {
       cleanup()
       console.error('连接器授权读取失败:', error instanceof Error ? error.name : 'unknown')

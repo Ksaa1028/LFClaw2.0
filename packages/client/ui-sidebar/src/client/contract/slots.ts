@@ -4,8 +4,8 @@
  * owns column geometry, the brand row, New Session, and global panel rows;
  * everything between the workspace section header and the list bottom is the
  * `sidebar.workspaces` registrant's (ui-workspace), and the foot is the
- * `sidebar.footer.action` registrant's. Settings uses the top
- * `sidebar.settings` seat (the Windows titlebar on desktop).
+ * `sidebar.footer.action` registrant's. Settings uses an icon-only
+ * `sidebar.settings` seat beside the employee information.
  */
 import type { InjectFace, PropsLocale, PropsRenderSlots, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
 import type { ObservableSnapshot } from '@deepseek-ai/dsh-client-store'

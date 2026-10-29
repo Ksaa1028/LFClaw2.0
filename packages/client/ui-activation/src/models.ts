@@ -113,7 +113,7 @@ export class EnterpriseModels extends LlmAdapter {
     try {
       let response: Response
       try {
-        response = await this.transport(`${this.config.serverUrl}/employee/me`, {
+        response = await this.transport(`${this.config.serverUrl}/employee/model-catalog`, {
           headers: { Authorization: `Bearer ${grant.token}` },
           signal: AbortSignal.timeout(this.config.timeoutMs),
           redirect: 'error',
@@ -200,7 +200,8 @@ export class EnterpriseModels extends LlmAdapter {
     await this.refresh()
     await this.resolveModel(provider, model, signal)
     const call = await this.delegate.prepareCall(provider, model, signal)
-    const capacity = this.models.find(item => item.id === model)!
+    const capacity = this.models.find(item => item.id === model)
+    if (!capacity) throw new LlmError('此模型尚未授权或已被移除', 'MODEL_FORBIDDEN')
     return { model: call.model, stream: options => this.streamWithinCapacity(call, capacity, options) }
   }
   private async *streamWithinCapacity(

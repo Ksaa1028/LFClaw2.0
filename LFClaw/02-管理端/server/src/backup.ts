@@ -14,7 +14,7 @@ interface Manifest { format: 1; files: Record<string, string> }
 /** 为管理员生成可下载且可校验的独立 ZIP。 */
 export function createBackup(store: JsonStore, dataDirectory: string): RecordItem {
   const db = store.read()
-  const files: Record<string, Uint8Array> = { 'database.json': strToU8(JSON.stringify({ ...db, personalExperts: [], connectorAccounts: [] })) }
+  const files: Record<string, Uint8Array> = { 'database.json': strToU8(JSON.stringify({ ...db, personalExperts: [], connectorAccounts: [], workflows: [] })) }
   const skillFiles = new Set<string>()
   for (const skill of db.skills) {
     if (typeof skill.zipPath === 'string' && skill.zipPath) skillFiles.add(skill.zipPath)
@@ -80,7 +80,7 @@ function readBackup(archive: Uint8Array): { entries: Record<string, Uint8Array>;
 /** 管理员下载时再次脱敏旧归档，防止历史备份暴露员工私人专家。 */
 export function publicBackupArchive(archive: Uint8Array): Uint8Array {
   const { entries, restored } = readBackup(archive)
-  entries['database.json'] = strToU8(JSON.stringify({ ...restored, personalExperts: [], connectorAccounts: [] }))
+  entries['database.json'] = strToU8(JSON.stringify({ ...restored, personalExperts: [], connectorAccounts: [], workflows: [] }))
   const files = Object.fromEntries(Object.entries(entries).filter(([name]) => name !== 'manifest.json'))
   entries['manifest.json'] = strToU8(JSON.stringify({ format: 1,
     files: Object.fromEntries(Object.entries(files).map(([name, data]) => [name, digest(data)])) }))
@@ -90,6 +90,7 @@ export function publicBackupArchive(archive: Uint8Array): Uint8Array {
 /** 上传恢复前验证归档完整性；失败时保留原数据库。 */
 export function restoreBackup(archive: Uint8Array, store: JsonStore, dataDirectory: string): void {
   const { entries, names, restored, expected } = readBackup(archive)
+  restored.workflows = store.read().workflows
   restored.personalExperts = store.read().personalExperts
   restored.backups = []
   const safety = createBackup(store, dataDirectory)

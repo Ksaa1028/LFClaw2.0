@@ -25,6 +25,21 @@ afterEach(() => {
   vi.restoreAllMocks()
 })
 
+it('keeps the expert catalog separate and invalidates it after edits and account switches', async () => {
+  const f = fixture()
+  await f.connection.request('employee/me')
+  await f.connection.request('employee/expert-catalog')
+  await f.connection.request('employee/expert-catalog', display)
+  expect(f.transport).toHaveBeenCalledTimes(2)
+  await f.connection.request('employee/personal-experts/e1', { method: 'PUT' })
+  await f.connection.request('employee/expert-catalog', display)
+  expect(f.transport).toHaveBeenCalledTimes(4)
+  await f.storage.write({ serverUrl: server, token: 'employee-b' })
+  await f.connection.request('employee/expert-catalog', display)
+  expect(f.transport).toHaveBeenCalledTimes(5)
+  expect(new Headers(f.transport.mock.calls[4]?.[1]?.headers).get('Authorization')).toBe('Bearer employee-b')
+})
+
 it.each([
   ['employee/personal-experts', 'POST'],
   ['employee/personal-experts/e1', 'PUT'],

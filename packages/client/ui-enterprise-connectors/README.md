@@ -11,6 +11,8 @@ English | [中文](README.zh.md)
 
 Employees can use authorized enterprise connectors and manage personal remote and local connectors. Account settings stay in the Host or enterprise service; the renderer receives no saved credentials. Tool discovery and execution check current authorization; expired accounts or failed synchronization remove tool registrations.
 
+The composer connector picker appends the selection to the current conversation, preserving draft text, references and attachments without submitting. The management page’s Use action starts a new conversation.
+
 ## Table of Contents
 
 - [Connections and permissions](#connections-and-permissions)
@@ -25,7 +27,7 @@ Employee-owned enterprise OAuth uses a one-use callback on the desktop Host's `1
 
 The page keeps its heading, tabs and search visible while connector cards scroll within the remaining space.
 
-Directory views reuse Host snapshots for up to `refreshIntervalMs`; the enterprise revision watch continues to update them. Manual refresh, details, account operations and tool calls request fresh server state. The composer requests enterprise and personal directories concurrently.
+Directory views reuse Host snapshots for up to `refreshIntervalMs`; the enterprise revision watch continues to update them. Manual refresh, details, account operations and tool calls request fresh server state. The composer concurrently reads lightweight enterprise options and local personal options; employee identity checks use `employee/identity`. Picker responses omit icons, tool definitions and connection configuration. These paths require a server with the lightweight endpoints.
 
 Enterprise connectors support server-defined credential fields, API tokens and browser OAuth before tools are available. Accounts can be shared by the enterprise or bound separately by each employee. The renderer receives field descriptions and status, never saved secrets. Credential submissions include the displayed configuration digest; changed destinations require refreshed forms. Legacy WeChat bindings remain readable. Non-mall discovered tools are available automatically; connector assignment and enabled state still apply. Mall connectors retain tool and floor authorization.
 
@@ -80,3 +82,5 @@ A query rejected with `MCP_DATA_FORBIDDEN` keeps the authorized tool registered 
 ### Dev Note
 
 Account credentials remain in the Host or enterprise service; the UI receives only authorized display data.
+
+The enterprise page first requests `summary=1` to receive the authorized catalog without icon bytes, then fetches a fresh full catalog to fill icons before starting revision polling. Binding status, tool summaries and authorization checks are unchanged.

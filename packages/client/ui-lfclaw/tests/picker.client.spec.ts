@@ -5,7 +5,7 @@ import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
 import { apply, inject } from '../src/client/index.ts'
 afterEach(() => vi.unstubAllGlobals())
 
-it('offers experts and teams separately and prepares the selected expert in the current draft', async () => {
+it('offers lightweight experts and teams and inserts selections locally before resolving authorized instructions on send', async () => {
   const runtime = await SlotTestRuntime.create()
   const register = vi.fn().mockReturnValue(() => {}),
     registerSource = vi.fn().mockReturnValue(() => {})
@@ -13,7 +13,7 @@ it('offers experts and teams separately and prepares the selected expert in the 
   const reference = runtime.sessions.retain(sessionId)
   await reference.ready
   const binding = runtime.sessions.binding('s1')!,
-    state = { draft: '安排明日工作', draftRev: 4, phase: 'plain', occurrences: [] }
+    state = { draft: '安排明日工作', draftRev: 4, phase: 'plain', occurrences: [] as { source: string; ref: string; label: string; clipboardText: string; offset: number; length: number; occurrenceId: string }[] }
   const initialize = vi.fn().mockReturnValue('applied'),
     focus = vi.fn(),
     startSession = vi.fn()
@@ -43,9 +43,7 @@ it('offers experts and teams separately and prepares the selected expert in the 
     .fn()
     .mockResolvedValueOnce(Response.json(catalog))
     .mockResolvedValueOnce(Response.json(catalog))
-    .mockResolvedValueOnce(
-      Response.json({ name: '规划顾问', instructions: '按优先级安排', members: [], skills: [], connectors: [] }),
-    )
+
   vi.stubGlobal('fetch', (url: string, init?: RequestInit) =>
     url.startsWith('/api/lfclaw/sharing-') ? Promise.resolve(Response.json({ notifications: [], shares: [] })) : fetch(url, init),
   )
@@ -53,8 +51,9 @@ it('offers experts and teams separately and prepares the selected expert in the 
     await runtime.mount({ inject: [...inject], apply })
     const expert = register.mock.calls.find(call => call[0].name === 'expert')![0]
     const team = register.mock.calls.find(call => call[0].name === 'team')![0]
-    const options = await expert.ui.options()
-    const teamOptions = await team.ui.options()
+    const signal = new AbortController().signal
+    const options = await expert.ui.options({}, signal)
+    const teamOptions = await team.ui.options({}, signal)
     expect([options, teamOptions]).toMatchSnapshot('grouped expert and team picker options')
     expect(options.map((option: { id: string }) => option.id)).toEqual([
       'enterprise:e1',
@@ -64,7 +63,10 @@ it('offers experts and teams separately and prepares the selected expert in the 
       'personal:p1',
     ])
     expect(teamOptions.map((option: { id: string }) => option.id)).toEqual(['enterprise:et1', 'personal:t1'])
+    expect(fetch).toHaveBeenNthCalledWith(1, '/api/lfclaw/expert-center?view=picker', { method: 'GET', signal })
+    expect(fetch).toHaveBeenCalledTimes(2)
     await expert.ui.onSelect(options[4], { sessionId: 's1' })
+    expect(fetch).toHaveBeenCalledTimes(2)
     expect(initialize).toHaveBeenCalledWith(
       binding,
       expect.objectContaining({
@@ -102,13 +104,21 @@ it('offers experts and teams separately and prepares the selected expert in the 
     ).rejects.toThrow('专家授权已撤回')
     expect(startSession).not.toHaveBeenCalled()
     expect(focus).toHaveBeenCalledOnce()
-    state.draftRev++
-    fetch.mockImplementationOnce(async () => {
-      state.draftRev++
-      return Response.json({ name: '规划顾问', instructions: '安排', members: [], skills: [], connectors: [] })
-    })
-    await expect(expert.ui.onSelect(options[3], { sessionId: 's1' })).rejects.toThrow()
+    state.phase = 'submitting'
+    expect(() => expert.ui.onSelect(options[3], { sessionId: 's1' })).toThrow()
     expect(initialize).toHaveBeenCalledTimes(1)
+    state.phase = 'plain'
+    state.draft = '/report 安排明日工作'
+    state.occurrences = [{ source: 'skill', ref: '/report', label: '日报', clipboardText: '/report', offset: 0, length: 7, occurrenceId: 'existing' }]
+    const requestsBeforeTeam = fetch.mock.calls.length
+    await team.ui.onSelect(teamOptions[1], { sessionId: 's1' })
+    expect(fetch).toHaveBeenCalledTimes(requestsBeforeTeam)
+    expect(initialize.mock.lastCall?.[0]).toBe(binding)
+    expect(initialize.mock.lastCall?.[1].prompt.text).toBe('/report 安排明日工作\n@任务团')
+    expect(initialize.mock.lastCall?.[1].prompt.references.map((reference: { offset: number }) => reference.offset))
+      .toEqual([0, state.draft.length + 1])
+    expect(startSession).not.toHaveBeenCalled()
+    expect(focus).toHaveBeenCalledTimes(2)
   } finally {
     reference.release()
     await runtime.dispose()

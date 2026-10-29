@@ -227,6 +227,24 @@ it.each([false, true])('unpacks platform ripgrep executables with external sourc
   }
 })
 
+it('keeps the native memory engine outside ASAR', async () => {
+  const input = await fixture(false)
+  const engine = join('node_modules', '@mnemon-dev', 'mnemon-win32-x64')
+  for (const file of ['package.json', 'bin/mnemon.exe']) {
+    const path = join(input.source, engine, file)
+    await mkdir(dirname(path), { recursive: true })
+    await writeFile(path, 'memory fixture')
+  }
+  const config = unsignedWindowsConfig('com.example.memory', input.source)
+  input.config.asarUnpack = [...config.asarUnpack]
+  await packageFixture(input)
+  const archive = await readAsar(join(input.resources, 'app.asar'))
+  for (const file of ['package.json', 'bin/mnemon.exe']) {
+    expect(archive.getFile(join('dsh', engine, file), false).unpacked).toBe(true)
+    expect(await readFile(join(input.resources, 'app.asar.unpacked', 'dsh', engine, file), 'utf8')).toBe('memory fixture')
+  }
+})
+
 it.each([false, true])('keeps the complete Office engine outside ASAR with external source=%s', async (external) => {
   const input = await fixture(external)
   const engine = join('node_modules', '@deepseek-ai', 'libreoffice-kit-win32-x64')

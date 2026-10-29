@@ -1,0 +1,50 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`adds enterprise and personal skills to the existing draft without creating a session > skill selection preserves existing references 1`] = `
+[
+  {
+    "references": [
+      {
+        "clipboardText": "@report.txt",
+        "label": "report.txt",
+        "length": 11,
+        "offset": 0,
+        "ref": "/report.txt",
+        "source": "file",
+      },
+      {
+        "clipboardText": "/enterprise-analysis",
+        "label": "分析方法",
+        "length": 20,
+        "offset": 17,
+        "ref": "/enterprise-analysis",
+        "source": "skill",
+      },
+    ],
+    "text": "@report.txt 帮我分析
+/enterprise-analysis ",
+  },
+  {
+    "references": [
+      {
+        "clipboardText": "@report.txt",
+        "label": "report.txt",
+        "length": 11,
+        "offset": 0,
+        "ref": "/report.txt",
+        "source": "file",
+      },
+      {
+        "clipboardText": "/personal-analysis",
+        "label": "分析方法",
+        "length": 18,
+        "offset": 17,
+        "ref": "/personal-analysis",
+        "source": "skill",
+      },
+    ],
+    "text": "@report.txt 帮我分析
+/personal-analysis ",
+  },
+]
+`;

@@ -67,7 +67,7 @@ dsh Web 客户端的侧边栏让用户识别应用、启动新会话、将导航
 
 ### slot 纪律
 
-声明感知的 `slots.inject()` 让替换包无论先于还是后于侧边栏激活都能生效。`sidebar.settings` 席位位于顶部，共享栏状态（`wide`）；底部的 `sidebar.footer.action` 用于员工信息。`/client` 导出接口只包含插件主体（`apply`/`inject`）及约定类型；SidebarRoot、行组件与树派生仍由 slot 注册封装在包内。
+声明感知的 `slots.inject()` 让替换包无论先于还是后于侧边栏激活都能生效。`sidebar.settings` 席位以图标形式位于底部 `sidebar.footer.action` 员工信息右侧；侧边栏折叠时两个入口纵向排列。`/client` 导出接口只包含插件主体（`apply`/`inject`）及约定类型；SidebarRoot、行组件与树派生仍由 slot 注册封装在包内。
 
 </details>
 

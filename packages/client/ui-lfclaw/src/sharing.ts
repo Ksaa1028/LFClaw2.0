@@ -232,7 +232,7 @@ export function mountSharing(ctx: Context, directory: string): void {
       seed,
       inheritedEventCount: SessionLogOffset(events.length),
       signal,
-      meta: { cwd: root, isSeeded: true, ...(preset ? { agentPreset: preset.id } : {}) },
+      meta: { cwd: root, isSeeded: true, parentSession: SessionId(artifact.header.id), ...(preset ? { agentPreset: preset.id } : {}) },
       agentOptions: ctx.agentDefaultModel.currentSelection(),
       setup: async (agentCtx) => {
         if (presets && preset) await presets.mount(agentCtx, preset.id)
@@ -307,7 +307,7 @@ export function mountSharing(ctx: Context, directory: string): void {
                     ...(request.method === 'POST'
                       ? { body: await request.text(), headers: { 'Content-Type': 'application/json' } }
                       : {}),
-                  }
+                  },
                 ))
               return new Response(response.body, {
                 status: response.status,

@@ -123,8 +123,19 @@ export function apply(ctx: Context, config: Config): void {
       try {
         const params = new URL(request.url).searchParams
         const id = params.get('id')
+        if (!id && params.get('view') === 'picker') {
+          const response = await ctx.enterpriseConnection.request('employee/connector-picker', { signal: request.signal })
+          return new Response(response.body, {
+            status: response.status,
+            headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
+          })
+        }
         const revision = id ? null : params.get('revision')
-        const catalogResponse = await ctx.enterpriseConnection.request(`employee/connector-catalog${revision ? `?revision=${encodeURIComponent(revision)}` : ''}`, {
+        const summary = !id && params.get('summary') === '1'
+        const query = new URLSearchParams()
+        if (revision) query.set('revision', revision)
+        if (summary) query.set('summary', '1')
+        const catalogResponse = await ctx.enterpriseConnection.request(`employee/connector-catalog${query.size ? `?${query}` : ''}`, {
           signal: request.signal, catalogMaxAgeMs: !id && !revision && params.get('refresh') !== '1' ? config.refreshIntervalMs : 0,
         })
         if (!catalogResponse.ok) return Response.json({ code: 'CATALOG_UNAVAILABLE' }, { status: catalogResponse.status === 401 ? 401 : 503 })
@@ -132,6 +143,7 @@ export function apply(ctx: Context, config: Config): void {
         const currentRevision = catalogRevision(value)
         const connectors = parseConnectors(value)
         if (!id) return Response.json({
+          summary,
           connectors: connectors.map(connector => ({ ...connector, hasAvailableTools: connector.tools.length > 0,
             tools: connector.showToolsInClient ? connector.tools : [] })),
           revision: currentRevision, refreshIntervalMs: config.refreshIntervalMs,

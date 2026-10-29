@@ -5,7 +5,7 @@ import type { Database } from '../src/store.ts'
 
 function database(): Database {
   return {
-    branding: { headline: '测试', badge: '', showBadge: false },
+    workflows: [], branding: { headline: '测试', badge: '', showBadge: false },
     departments: [], employees: [{ id: 'e1', name: '员工甲' }, { id: 'e2', name: '员工乙' }],
     models: [{ id: 'm1', name: '模型甲' }, { id: 'm2', name: '模型乙' }],
     skills: [], connectors: [], experts: [], backups: [], versionPackages: [], operationLogs: [],

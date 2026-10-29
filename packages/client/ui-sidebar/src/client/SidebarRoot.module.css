@@ -539,36 +539,12 @@
   padding-left: 0;
 }
 
-/* Footer seats: additive actions stack above Settings. Each occupant owns its
-   button geometry and hover chrome. */
-.footArea {
-  flex: none;
-  display: flex;
-  flex-direction: column;
-}
-
-.settingsArea,
-.footerActions {
-  flex: none;
-  min-width: 0;
-  width: 100%;
-}
-
-.footerActions {
-  display: flex;
-}
-
-.collapsed .footArea {
-  align-items: center;
-}
-
-.collapsed .settingsArea,
-.collapsed .footerActions {
-  display: flex;
-  justify-content: center;
-  width: auto;
-}
-
+/* Employee information and settings share the sidebar footer. */
+.footArea { flex: none; display: flex; align-items: center; gap: 8px; }
+.settingsArea { flex: none; -webkit-app-region: no-drag; }
+.footerActions { flex: 1; min-width: 0; display: flex; }
+.collapsed .footArea { flex-direction: column; }
+.collapsed .footerActions { flex: none; justify-content: center; }
 @media (prefers-reduced-motion: reduce) {
   .wide,
   .fading > *,
@@ -580,22 +556,4 @@
     transition: none;
     animation: none;
   }
-}
-
-:global([data-windows-titlebar]) .settingsArea {
-  position: fixed;
-  top: 0;
-  left: 48px;
-  z-index: 1100;
-  width: auto;
-  height: var(--dsh-windows-titlebar-height);
-  display: flex;
-  align-items: center;
-  -webkit-app-region: no-drag;
-}
-:global([data-windows-titlebar]) .settingsArea button {
-  height: 28px;
-  min-height: 28px;
-  border-radius: 6px;
-  font-size: 13px;
 }

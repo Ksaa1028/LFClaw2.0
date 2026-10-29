@@ -14,6 +14,8 @@ export const name = 'lfclaw-enterprise-api'
 export const inject = ['webServer']
 
 export interface Config {
+  /** 工作流 JSON 请求总字节上限，包含附件的 Base64 编码。 */
+  workflowRequestMaxBytes: number
   /** 技能 ZIP 压缩体积、解压体积和文件条目上限；需与员工端保持一致。 */
   skillArchiveLimits: Limits
   oauthCallbackUrl: string
@@ -37,6 +39,7 @@ export interface Config {
 }
 
 export const Config: z<Config> = z.object({
+  workflowRequestMaxBytes: z.number().step(1).min(1024).default(4194304),
   skillArchiveLimits: z.object({
     maxArchiveBytes: z.number().step(1).min(1).required(),
     maxUnpackedBytes: z.number().step(1).min(1).required(),
@@ -74,7 +77,7 @@ export function apply(ctx: Context, config: Config): void {
   const lifetime = new AbortController()
   ctx.effect(() => () => lifetime.abort(), 'lfclaw: OAuth callback cleanup')
   const app = createApp({ store, auth, dataDirectory, signal: lifetime.signal, skillsDirectory: join(dataDirectory, 'skills'),
-    skillArchiveLimits: config.skillArchiveLimits,
+    skillArchiveLimits: config.skillArchiveLimits, workflowRequestMaxBytes: config.workflowRequestMaxBytes,
     oauthCallbackUrl: config.oauthCallbackUrl, oauthFlowTtlMs: config.oauthFlowTtlMs,
     allowedOrigin: config.allowedOrigin, mcpTimeoutMs: config.mcpTimeoutMs,
     expertTimeoutMs: config.expertTimeoutMs, modelTimeoutMs: config.modelTimeoutMs,

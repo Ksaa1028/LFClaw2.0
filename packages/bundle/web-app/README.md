@@ -7,6 +7,8 @@ kind: "package-bundle"
 
 English | [中文](README.zh.md)
 
+LFClaw's Desktop profile selects the Mnemon bundle carried by this package so its Host and client modules are installation-owned. The Web profile does not select it by default; Desktop supplies the native engine. See [Desktop](../../../apps/desktop/README.md).
+
 LFClaw disables Session feedback commands, feedback UI (including message ratings), and Session telemetry export and its upload preference in this composition. Existing local feedback events remain; Session log download is available in Web and hidden in Desktop.
 
 The Desktop profile mounts the LFClaw connector center beside the skill center. Its Host reads the employee-scoped enterprise catalog and registers only currently authorized MCP tools; the server rechecks authorization on each call. The regular Web profile does not mount this enterprise integration.

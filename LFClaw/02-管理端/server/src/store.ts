@@ -1,3 +1,4 @@
+import { validWorkItems, type WorkItem } from './workflow.ts'
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { randomUUID } from 'node:crypto'
@@ -18,6 +19,7 @@ export const mutableCollectionNames = [
 export type CollectionName = typeof collectionNames[number]
 export type RecordItem = Record<string, unknown> & { id: string }
 export type Database = Record<CollectionName, RecordItem[]> & {
+  workflows: WorkItem[]
   branding: Branding
   personalSkillReports: RecordItem[]
   personalExperts: RecordItem[]
@@ -36,6 +38,7 @@ export class StoreError extends Error {
 
 function emptyDatabase(): Database {
   return {
+    workflows: [],
     branding: { ...defaultBranding },
     departments: [], employees: [], models: [], skills: [], connectors: [], experts: [],
     personalSkillReports: [], personalExperts: [], connectorAccounts: [],
@@ -51,6 +54,8 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function parseDatabase(value: unknown): Database {
   if (!isRecord(value)) throw new StoreError('DATA_INVALID', '数据文件顶层必须是对象')
+  if (value.workflows === undefined) value.workflows = []
+  if (!validWorkItems(value.workflows)) throw new StoreError('DATA_INVALID', '工作流记录损坏，原数据已保留')
   if (value.branding === undefined) value.branding = { ...defaultBranding }
   if (!validBranding(value.branding)) throw new StoreError('DATA_INVALID', '首页文案配置无效')
   for (const name of collectionNames) {
@@ -162,6 +167,7 @@ export class JsonStore {
       current.employeeVersionReports = db.employeeVersionReports
       current.dashboardTrend = db.dashboardTrend
       current.systemMetric = db.systemMetric
+      current.workflows = db.workflows
       current.modelUsage = db.modelUsage
       current.personalExperts = db.personalExperts
       current.branding = db.branding

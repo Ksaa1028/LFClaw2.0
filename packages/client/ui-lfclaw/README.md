@@ -11,9 +11,12 @@ English | [中文](README.zh.md)
 
 Employees browse Enterprise Experts, My Experts and My Expert Teams. Creation and editing open a conversation with the expert-management skill, where employees refine requirements and save configuration. Using an expert checks live authorization and local dependencies before preparing the task. Only the owner can read and edit personal configuration.
 
+Composer experts and teams use the lightweight `employee/expert-picker` list. Selection appends a reference locally, preserving draft order, without requesting full configuration. Sending resolves current authorized instructions and dependencies; revoked access prevents submission.
+
 ## Table of Contents
 
 - [Usage](#usage)
+- [Workflows](#workflows)
 - [Session sharing](#session-sharing)
 - [Implementation and failures](#implementation-and-failures)
 - [Model Experience](#model-experience)
@@ -23,6 +26,8 @@ Employees browse Enterprise Experts, My Experts and My Expert Teams. Creation an
 <a id="usage"></a>
 ## Usage
 
+Expert pages load `employee/expert-catalog`, retaining complete expert instructions, prompts and team membership while fetching only IDs and names for related skills and connectors. Unrelated icons, model configuration and notifications are excluded. Detail views need no second fetch, and starting an expert still validates current permissions and dependencies.
+
 Expert pages and composer expert/team pickers reuse the current employee's Host catalog snapshot. `expertCatalogMaxAgeMs` bounds display reuse, defaulting to 30000 milliseconds; 0 disables reuse. Manual refresh, preparation and execution always request current server state. Personal expert/team creation, modification and deletion invalidate prior catalogs. Account switches, logout and failed synchronization follow enterprise connection snapshot cleanup.
 
 Expert pages keep their heading, tabs and search visible while cards scroll. Notifications keep their heading and tabs visible; announcements and shared conversations each use ten entries per page with fixed pagination controls. Switching message tabs returns to the first page.
@@ -31,6 +36,21 @@ LFClaw sidebar names, icons and conversation branding use priority `-1` to overr
 
 The desktop composition mounts this plugin; the enterprise Web preview overlay also enables activation, skills, connectors and expert assistance. Host dependencies are `connection`, `enterpriseConnection`, `skills` and `tools`; Client dependencies are `slots`, `locale`, `layout` and `uiWorkspace`. Host `sharedSessionDirectory` stores claimed shared outputs persistently, defaulting to `.lfclaw/shared-sessions` under the user home; the desktop uses `lfclaw/shared-sessions` under its DSH home. Client `shareRefreshIntervalMs` defaults to 30000 milliseconds with a 1000-millisecond minimum.
 
+<a id="workflows"></a>
+## Workflows
+
+The employee entry and panel are currently hidden. Implementation and existing server records are retained.
+
+Start with a conversation: AI drafts a title, requirements, acceptance criteria and handoff summary, resolves explicitly named employees, and asks for missing details. Review the proposed work before confirming assignment. Detailed fields remain editable; completion copies support name search, department filtering and checkboxes. Returning to the list retains the unsent draft while this panel remains mounted; successful creation opens Started by me. Subsequent operations can generate a missing handoff summary automatically from the handling notes.
+
+The Workflows sidebar entry supports work within and across departments: confirm requirements, assign one handler, request clarification, transfer, submit, return for changes, approve and copy the final result. The creator selects the reviewer and completion-copy recipients. Requirement changes retain snapshots and require the handler to accept before processing continues. Cancellation by the creator preserves the record.
+
+Every operation requires original notes and a handoff summary. AI organizes the supplied text and lists missing requirements; it does not inspect uploaded files or approve work. Employees confirm suggestions or write summaries manually. Submitted files are immutable per operation; HTTP/HTTPS links remain externally owned and their contents can change. Final copies expose only the last submission and approval, while participants can read all history.
+
+The enterprise service persists records, checks current identity and node ownership, and rejects stale revisions. Exact retries use an operation ID; changing a previously submitted request requires reviewing the saved record first. Failed requests preserve input. The list refreshes using shareRefreshIntervalMs while open. The server workflowRequestMaxBytes setting limits the complete JSON request including Base64 files, defaulting to 4194304 bytes; large files should use shared links.
+
+This MVP uses sequential handlers and manual assignment. It has no parallel approvals, configurable process designer or automatic escalation. Administrators can list metadata only and cannot process work. Workflow content is excluded from downloadable administrator backups; operator filesystem backups must preserve the full database.
+
 <a id="session-sharing"></a>
 ## Session sharing
 
@@ -38,7 +58,7 @@ Notifications separate enterprise announcements from colleague shares, showing t
 
 Share session in the history menu searches active employees across the enterprise and supports multiple departments. It sends complete session logs, durable attachments and AI output files declared by `deliverables/presented`; missing files, read failures and exceeded limits reject sending. The Host retains employee credentials. After server copies are saved, recipients see source, title, time and expiry in colleague shares; online refresh updates unread counts.
 
-Claiming a share copies attachments and outputs, relocates historical output paths and creates an independent inherited local session with the recipient's default Agent preset and model. The original remains unchanged; DSH inheritance separates original history from new recipient content. Repeated claims return the same local session. Claimed files do not depend on continued server share availability. Later connector calls use the recipient's enterprise identity and current authorization.
+Claiming a share copies attachments and outputs, relocates historical output paths and creates an independent inherited local session with the recipient's default Agent preset and model. Its parent Session ID identifies the source so inherited delivery receipts remain readable. The original remains unchanged; DSH inheritance separates original history from new recipient content. Repeated claims return the same local session. Claimed files do not depend on continued server share availability. Later connector calls use the recipient's enterprise identity and current authorization.
 
 Deleting or clearing messages changes only recipient notifications, not shared files or local sessions. Download failures retain messages. A network interruption during sending may leave an unknown outcome; recipients must check before retrying. Storage failures during claiming may leave unreferenced persistent attachments and outputs; user directories are not automatically erased. Shared presets, tool code and enterprise credentials are not installed in the recipient environment.
 

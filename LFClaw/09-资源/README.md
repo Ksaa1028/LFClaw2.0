@@ -22,6 +22,13 @@ This directory stores resources for administrator upload. Resources are grouped 
 
 | Name | ID | Version | Skill package | Icon |
 |---|---|---|---|---|
+| 苏格拉底提问 | `socratic-inquiry` | 原包未声明 | [技能包](技能/苏格拉底提问/苏格拉底提问.zip) | [图标](技能/苏格拉底提问/图标.png) |
+| 双层解释法 | `two-layer-explain` | 原包未声明 | [技能包](技能/双层解释法/双层解释法.zip) | [图标](技能/双层解释法/图标.png) |
+| 反向拆解 | `reverse-teardown` | 原包未声明 | [技能包](技能/反向拆解/反向拆解.zip) | [图标](技能/反向拆解/图标.png) |
+| 横纵分析 | `horizontal-vertical-analysis` | 原包未声明 | [技能包](技能/横纵分析/横纵分析.zip) | [图标](技能/横纵分析/图标.png) |
+| 第一性原理 | `first-principles` | 原包未声明 | [技能包](技能/第一性原理/第一性原理.zip) | [图标](技能/第一性原理/图标.png) |
+| 双向钢人 | `steelman-both-sides` | 原包未声明 | [技能包](技能/双向钢人/双向钢人.zip) | [图标](技能/双向钢人/图标.png) |
+| 挖掘隐藏天赋 | `hidden-talent` | 原包未声明 | [技能包](技能/挖掘隐藏天赋/挖掘隐藏天赋.zip) | [图标](技能/挖掘隐藏天赋/图标.png) |
 | Nuwa | `huashu-nuwa` | 1.0.0 | [Package](技能/女娲/女娲.zip) | [Icon](技能/女娲/图标.png) |
 | Obsidian Notes | `obsidian` | 1.0.0 | [Package](技能/Obsidian笔记/Obsidian笔记.zip) | [Icon](技能/Obsidian笔记/图标.png) |
 | PPT Master | `ppt-master` | 6.7.2 | [Package](技能/PPT大师/PPT大师.zip) | [Icon](技能/PPT大师/图标.png) |
@@ -45,3 +52,7 @@ New skills use short Chinese folder and ZIP names matching the administration di
 The unified Lark archive retains its `lark-unified/` root, embedded Meegle skills and icons, with two entry descriptions localized. Icon metadata uses package-relative paths; source-device installation time and obsolete installation-content hashes are removed. ZIP validation does not establish Lark login or business API acceptance.
 
 Nuwa comes from [alchaincyf/nuwa-skill](https://github.com/alchaincyf/nuwa-skill). With user confirmation, the upload removes promotional images, animation and the promo directory while retaining skill text, scripts, references and every persona example, changing only the main description. The complete original archive, source, digest and removal list remain in [source records](来源归档/女娲/来源与处理记录.json); promotional README image links may no longer display.
+
+The Inspiration Design archive is retained in full as confirmed by the user. At about 37 MiB, it exceeds the current 32 MiB upload limit and cannot yet be uploaded directly.
+
+The seven auxiliary thinking skills come from LearnPrompt/laoyeye. Their original Chinese descriptions and prompts remain intact, with the source license included. See the [delivery notes](来源归档/辅助思考技能/交付说明.md) for invocation dependencies and use.

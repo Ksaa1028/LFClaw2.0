@@ -141,11 +141,12 @@ export function ConnectorsPage({
   useEffect(() => {
     const controller = new AbortController()
     let revision: string | undefined
+    let summary = true
     let timer: ReturnType<typeof setTimeout> | undefined
     const load = async () => {
       try {
         const response = await fetch(
-          `/api/lfclaw/connector-center${revision ? `?revision=${revision}` : attempt ? '?refresh=1' : ''}`,
+          `/api/lfclaw/connector-center${summary ? `?summary=1${attempt ? '&refresh=1' : ''}` : revision ? `?revision=${revision}` : '?refresh=1'}`,
           { signal: controller.signal, cache: 'no-store' },
         )
         if (response.status === 401 || response.status === 403) {
@@ -153,20 +154,23 @@ export function ConnectorsPage({
           setSelectedId(null)
         }
         if (!response.ok) throw new Error('catalog')
-        const next = parseCatalog(await response.json())
+        const value: unknown = await response.json()
+        const pendingIcons = value !== null && typeof value === 'object' && 'summary' in value && value.summary === true
+        const next = parseCatalog(value)
         if (controller.signal.aborted) return
         if (revision && next.revision !== revision) {
           checkGeneration.current++
           setCheck('idle')
         }
-        revision = next.revision
+        summary = false
+        revision = pendingIcons ? undefined : next.revision
         setCatalog(next)
         setError(null)
         timer = setTimeout(
           () => {
             void load()
           },
-          revision ? 0 : next.refreshIntervalMs,
+          pendingIcons || revision ? 0 : next.refreshIntervalMs,
         )
       } catch {
         if (!controller.signal.aborted) {

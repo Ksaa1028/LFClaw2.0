@@ -424,4 +424,148 @@ exports[`blocks starting a connector without authorized tools when tool visibili
 </body>
 `;
 
+exports[`shows connector summaries before deferred icons resolve 1`] = `
+<body>
+  <div>
+    <section
+      class="_page_f1961c"
+    >
+      <header
+        class="_header_f1961c"
+      >
+        <div>
+          <h1>
+            工具连接
+          </h1>
+          <p>
+            连接企业服务与个人工作工具
+          </p>
+        </div>
+        <div
+          class="_actions_f1961c"
+        >
+          <button
+            class="_button_4d2f85 _outline_4d2f85 _md_4d2f85"
+            type="button"
+          >
+            刷新列表
+          </button>
+        </div>
+      </header>
+      <nav
+        aria-label="连接器来源"
+        class="_tabs_f1961c"
+      >
+        <button
+          aria-current="page"
+          type="button"
+        >
+          企业连接器
+        </button>
+        <button
+          type="button"
+        >
+          我的连接器
+        </button>
+      </nav>
+      <div
+        class="_catalogBody_f1961c"
+      >
+        <div
+          class="_toolbar_f1961c"
+        >
+          <span
+            class="_wrap_759a2d"
+          >
+            <span
+              class="_icon_759a2d"
+            >
+              <svg
+                aria-hidden="true"
+                fill="none"
+                height="16"
+                stroke-width="1"
+                viewBox="0 0 16 16"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6.58727 11.8586C9.55061 11.8586 11.9529 9.45637 11.9529 6.49304C11.9529 3.5297 9.55061 1.12744 6.58727 1.12744C3.62394 1.12744 1.22168 3.5297 1.22168 6.49304C1.22168 9.45637 3.62394 11.8586 6.58727 11.8586Z"
+                  stroke="currentColor"
+                />
+                <path
+                  d="M10.2991 10.3933L14.7783 14.8725"
+                  stroke="currentColor"
+                />
+              </svg>
+            </span>
+            <input
+              aria-label="搜索连接器或工具"
+              class="_input_759a2d"
+              placeholder="搜索连接器或工具"
+              value=""
+            />
+          </span>
+        </div>
+        <div
+          class="_scrollBody_f1961c"
+        >
+          <div
+            class="_grid_f1961c"
+          >
+            <button
+              class="_card_f1961c"
+              type="button"
+            >
+              <span
+                class="_icon_f1961c"
+              >
+                <svg
+                  aria-hidden="true"
+                  fill="none"
+                  height="22"
+                  stroke-width="1"
+                  viewBox="0 0 16 16"
+                  width="22"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6.59961 9.40051C6.82779 9.6334 7.10015 9.81842 7.40074 9.94472C7.70132 10.071 8.02409 10.1361 8.35013 10.1361C8.67618 10.1361 8.99894 10.071 9.29953 9.94472C9.60011 9.81842 9.87247 9.6334 10.1007 9.40051L12.9015 6.59967C13.3658 6.13541 13.6266 5.50572 13.6266 4.84915C13.6266 4.19258 13.3658 3.56289 12.9015 3.09863C12.4372 2.63436 11.8075 2.37354 11.151 2.37354C10.4944 2.37354 9.86472 2.63436 9.40045 3.09863L9.05034 3.44873"
+                    stroke="currentColor"
+                  />
+                  <path
+                    d="M9.40051 6.59959C9.17233 6.3667 8.89997 6.18169 8.59939 6.05538C8.2988 5.92907 7.97603 5.86401 7.64999 5.86401C7.32395 5.86401 7.00118 5.92907 6.70059 6.05538C6.40001 6.18169 6.12765 6.3667 5.89946 6.59959L3.09863 9.40043C2.63436 9.8647 2.37354 10.4944 2.37354 11.151C2.37354 11.8075 2.63436 12.4372 3.09863 12.9015C3.56289 13.3657 4.19258 13.6266 4.84915 13.6266C5.50572 13.6266 6.13541 13.3657 6.59967 12.9015L6.94978 12.5514"
+                    stroke="currentColor"
+                  />
+                </svg>
+              </span>
+              <span
+                class="_cardContent_f1961c"
+              >
+                <strong>
+                  商场数据
+                </strong>
+                <span>
+                  mcp
+                </span>
+              </span>
+              <span
+                class="_count_f1961c"
+              >
+                1 个可用工具
+              </span>
+              <span
+                class="_details_f1961c"
+              >
+                查看详情
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+`;
+
 exports[`updates the displayed floor scope on a server notification and ignores an older connection check 1`] = `"商场数据可用工具数据范围：二层search_sales查询销售数据检查连接开始使用"`;

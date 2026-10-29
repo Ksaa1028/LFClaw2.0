@@ -16,7 +16,8 @@ export async function expertRequest(
   const action = url.searchParams.get('action')
   let method = request.method
   let path: string
-  if (operation === 'expert-center' && request.method === 'GET') path = 'employee/me'
+  if (operation === 'expert-center' && request.method === 'GET')
+    path = url.searchParams.get('view') === 'picker' ? 'employee/expert-picker' : 'employee/expert-catalog'
   else if (operation === 'expert-prepare' && request.method === 'POST') path = 'employee/experts/prepare'
   else if (operation === 'personal-experts' && request.method === 'POST' && id && action === 'delete') {
     path = `employee/personal-experts/${encodeURIComponent(id)}`
@@ -27,7 +28,7 @@ export async function expertRequest(
       method,
       signal: request.signal,
       ...(operation === 'expert-center'
-        ? { catalogMaxAgeMs: url.searchParams.get('refresh') === '1' ? 0 : catalogMaxAgeMs }
+        ? { catalogMaxAgeMs: url.searchParams.get('refresh') === '1' || url.searchParams.get('view') === 'picker' ? 0 : catalogMaxAgeMs }
         : {}),
       ...(['POST', 'PUT'].includes(method) ? { headers: { 'Content-Type': 'application/json' }, body: await request.text() } : {}),
     })
@@ -35,7 +36,7 @@ export async function expertRequest(
       status: response.status,
       headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
     })
-  } catch (error) {
+  } catch (_error) {
     // Upstream mutations may have committed before the connection failed.
     return Response.json(
       { code: 'EXPERT_CONNECTION_FAILED', message: '无法确认操作结果，请刷新专家列表核对后再操作' },

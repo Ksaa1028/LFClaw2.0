@@ -7,6 +7,8 @@ kind: "package-bundle"
 
 [English](README.md) | 中文
 
+LFClaw Desktop Profile 选择本包携带的 Mnemon 组合，使其 Host 与客户端模块属于安装级依赖。Web Profile 默认不选择该组合；本地引擎由 Desktop 提供，参见 [Desktop](../../../apps/desktop/README.zh.md)。
+
 LFClaw 在此组合中禁用会话反馈命令、反馈界面（含消息评分）和会话遥测上传及其上传开关。已有本地反馈事件保留；会话日志在 Web 端可下载，在桌面端隐藏。
 
 桌面配置在技能中心旁挂载 LFClaw 连接器中心。Host 读取当前员工的企业目录，只注册现行授权的 MCP 工具；服务端在每次调用时重新校验授权。普通 Web 配置不挂载这项企业集成。

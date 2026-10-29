@@ -51,6 +51,7 @@
     }
   },
   "dependencies": {
+    "dsh-mnemon": "0.5.30",
     "@michengai/dsh-im-connect": "0.1.77",
     "@deepseek-ai/dsh-agent-instructions": "workspace:*",
     "@deepseek-ai/dsh-agent-preset": "workspace:*",

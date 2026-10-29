@@ -1,4 +1,5 @@
 export const zh = {
+  workflow: {"panel":"工作流转","description":"只读查看工作流及进度；管理端不参与处理。","title":"工作标题","creator":"发起人 / 部门","assignee":"当前负责人 / 部门","status":"状态","deadline":"截止时间","createdAt":"发起时间","updatedAt":"更新时间","search":"搜索标题、员工或部门","overdue":"已逾期","processing":"处理中","review":"待验收","supplement":"待补充","confirmation":"待确认变更","completed":"已完结","cancelled":"已取消","failed":"加载失败，请刷新重试。"},
   branding: {
     title: '首页文案', description: '统一设置员工端首页。保存后，员工重新打开首页或切回窗口时更新；这些文字属于公开品牌信息。',
     headline: '首页口号（最多 40 字）', badge: '标签文字（最多 12 字）', showBadge: '显示标签', preview: '首页文案预览',
@@ -65,6 +66,7 @@ export const zh = {
   welcomeBack: '欢迎回来，{name}',
 
   nav: {
+    workflows: '工作流转',
     dashboard: '总览',
     usage: '模型用量',
     departments: '部门管理',

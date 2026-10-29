@@ -54,9 +54,15 @@
     "@deepseek-ai/dsh-brand": "workspace:*",
     "@deepseek-ai/dsh-client-ui-workspace": "workspace:*",
     "@deepseek-ai/dsh-api-remotes": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-commands": "workspace:*"
+    "@deepseek-ai/dsh-client-ui-commands": "workspace:*",
+    "@deepseek-ai/dsh-client-ui-conversation": "workspace:*",
+    "@deepseek-ai/dsh-api-session-controller": "workspace:*"
   },
-  "files": ["lib/**/*.js", "lib/**/*.css", "lib/**/*.d.ts"],
+  "files": [
+    "lib/**/*.js",
+    "lib/**/*.css",
+    "lib/**/*.d.ts"
+  ],
   "dependencies": {
     "fflate": "^0.8.2",
     "yaml": "2.9.0",

@@ -49,6 +49,7 @@ External packages installed for runtime use or distributed inside the prebuilt b
 | [`@lexical/text`](https://github.com/facebook/lexical) | MIT |
 | [`@lexical/utils`](https://github.com/facebook/lexical) | MIT |
 | [`@michengai/dsh-im-connect`](https://github.com/MichengAI/dsh-im-connect) | Apache-2.0 |
+| [`@mnemon-dev/mnemon`](https://github.com/mnemon-dev/mnemon) | Apache-2.0 |
 | [`@modelcontextprotocol/client`](https://github.com/modelcontextprotocol/typescript-sdk) | MIT |
 | [`@modelcontextprotocol/sdk`](https://github.com/modelcontextprotocol/typescript-sdk) | MIT |
 | [`@noble/hashes`](https://github.com/paulmillr/noble-hashes) | MIT |
@@ -88,6 +89,7 @@ External packages installed for runtime use or distributed inside the prebuilt b
 | [`cors`](https://github.com/expressjs/cors) | MIT |
 | [`diff`](https://github.com/kpdecker/jsdiff) | BSD-3-Clause |
 | [`dompurify`](https://github.com/cure53/DOMPurify) | (MPL-2.0 OR Apache-2.0) |
+| [`dsh-mnemon`](https://github.com/omdsh-dev/dsh-mnemon) | MIT |
 | [`electron-updater`](https://github.com/electron-userland/electron-builder) | MIT |
 | [`eventsource-parser`](https://github.com/rexxars/eventsource-parser) | MIT |
 | [`exceljs`](https://github.com/exceljs/exceljs) | MIT |
@@ -147,6 +149,7 @@ External packages installed for runtime use or distributed inside the prebuilt b
 
 pnpm applies local patches to the following packages at install time, so shipped artifacts carry modified copies; each patch file is the complete record of the modification:
 
+- `dsh-mnemon@0.5.30` — [`LFClaw/patches/dsh-mnemon@0.5.30.patch`](LFClaw/patches/dsh-mnemon@0.5.30.patch)
 - `@michengai/dsh-im-connect@0.1.77` — [`LFClaw/patches/@michengai__dsh-im-connect@0.1.77.patch`](LFClaw/patches/@michengai__dsh-im-connect@0.1.77.patch)
 - `@earendil-works/pi-ai@1.0.2` — [`patches/@earendil-works__pi-ai@1.0.2.patch`](patches/@earendil-works__pi-ai@1.0.2.patch)
 - `@electron/osx-sign@1.3.3` — [`patches/@electron__osx-sign@1.3.3.patch`](patches/@electron__osx-sign@1.3.3.patch)

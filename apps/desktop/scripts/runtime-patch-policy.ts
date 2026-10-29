@@ -8,6 +8,7 @@ export type DesktopRuntimePatch =
 
 /** Every workspace patch requires an explicit Desktop decision; runtime-only entries may add or replace a patch. */
 export const DESKTOP_RUNTIME_PATCHES: Readonly<Record<string, DesktopRuntimePatch>> = {
+  'dsh-mnemon@0.5.30': { scope: 'shared', reason: 'LFClaw places its built-in memory panel last in the sidebar and hides the Agent Teams compatibility notice.' },
   '@earendil-works/pi-ai@1.0.2': { scope: 'shared', reason: 'Runtime providers need the streamed argument parsing fix.' },
   '@michengai/dsh-im-connect@0.1.77': { scope: 'shared', reason: 'LFClaw ships the personal IM sidebar and private-chat access policy.' },
   '@electron/osx-sign@1.3.3': { scope: 'workspace-only', reason: 'Signing executes on the build host.' },

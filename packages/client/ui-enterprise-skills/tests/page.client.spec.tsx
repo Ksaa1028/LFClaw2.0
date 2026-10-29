@@ -6,6 +6,25 @@ import type {} from '../src/client/index.ts'
 import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
 import { zh } from '../src/client/locales.ts'
 const t = makeTranslate(zh)
+
+it('完整展示资料尚未返回时，先显示精简技能目录', async () => {
+  const display = Promise.withResolvers<Response>()
+  const transport = vi.fn().mockResolvedValueOnce(Response.json({
+    enterprise: [{ id: 's1', name: '快速目录', description: '可先浏览' }],
+    personal: [], maxArchiveBytes: 10000, refreshIntervalMs: 30000, displayPending: true,
+  })).mockImplementation(() => display.promise)
+  vi.stubGlobal('fetch', transport)
+  const view = render(<SkillsPage t={t} startChat={vi.fn()} />)
+  try {
+    await screen.findByText('快速目录')
+    expect(transport.mock.calls[0]?.[0]).toContain('summary=1')
+    await waitFor(() => expect(transport.mock.calls[1]?.[0]).toContain('display=1'))
+    expect(screen.getByText('可先浏览')).toBeTruthy()
+  } finally {
+    view.unmount()
+    display.resolve(Response.json({ enterprise: [], personal: [], maxArchiveBytes: 10000, refreshIntervalMs: 30000 }))
+  }
+})
 const catalog = {
   enterprise: [{ name: '企业日报', description: '授权技能', version: '2.0' }],
   personal: [{ name: 'report-helper', description: '个人日报', invocationName: 'my-report-helper', revision: 'r1' }],

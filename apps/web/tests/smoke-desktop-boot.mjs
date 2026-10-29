@@ -11,7 +11,9 @@ if (!updateConfig.includes('http://8.216.38.213:39811/lfclaw-updates/win-x64/') 
   throw new Error('Desktop update feed must point only to LFClaw')
 }
 const directory = await mkdtemp(join(tmpdir(), 'lfclaw-ui-smoke-'))
-const environment = { ...process.env, DSH_HOME: join(directory, 'home'), APPDATA: join(directory, 'appdata') }
+const environment = { ...process.env, DSH_HOME: join(directory, 'home'), APPDATA: join(directory, 'appdata'),
+  HOME: directory, USERPROFILE: directory }
+delete environment.MNEMON_CLI_PATH
 delete environment.ELECTRON_RUN_AS_NODE
 let application
 try {
@@ -34,6 +36,10 @@ try {
   await wordmark.waitFor({ state: 'attached', timeout: 60_000 })
   if (await wordmark.textContent() !== 'LFClaw') throw new Error('Desktop product name is not LFClaw')
   await page.getByRole('button', { name: /渠道接入|Channel Connections/i, includeHidden: true }).first().waitFor({ state: 'attached', timeout: 60_000 })
+  const memory = page.getByRole('button', { name: /^(记忆系统|Memory System)$/, includeHidden: true }).first()
+  await memory.waitFor({ state: 'attached', timeout: 60_000 })
+  await memory.dispatchEvent('click')
+  await page.getByText(/运行时记忆|Runtime Memory/i).first().waitFor({ state: 'attached', timeout: 30_000 })
   await page.getByRole('button', { name: /^(设置|Settings)$/, includeHidden: true }).first().dispatchEvent('click')
   const versionRow = page.locator('[data-client-version]')
   await versionRow.waitFor({ state: 'attached', timeout: 30_000 })
@@ -56,7 +62,7 @@ try {
     throw new Error('Desktop interface disappeared after initial startup')
   }
   if (process.argv[3]) await page.screenshot({ path: resolve(process.argv[3]) })
-  console.log(`desktop UI: LFClaw brand name, logo, IM assistant and installed version ${installedVersion} verified`)
+  console.log(`desktop UI: LFClaw brand name, logo, IM assistant, default memory and installed version ${installedVersion} verified`)
 } finally {
   if (application !== undefined) await application.close()
   await rm(directory, { recursive: true, force: true, maxRetries: 10, retryDelay: 300 })

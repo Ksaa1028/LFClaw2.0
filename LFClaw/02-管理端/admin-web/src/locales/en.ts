@@ -1,4 +1,5 @@
 export const en = {
+  workflow: {"panel":"Workflows","description":"Read-only workflow progress. Administrators cannot process work.","title":"Title","creator":"Creator / Department","assignee":"Assignee / Department","status":"Status","deadline":"Deadline","createdAt":"Created","updatedAt":"Updated","search":"Search titles, employees or departments","overdue":"Overdue","processing":"In progress","review":"Awaiting review","supplement":"Awaiting clarification","confirmation":"Awaiting change acceptance","completed":"Completed","cancelled":"Cancelled","failed":"Unable to load. Refresh to retry."},
   branding: {
     title: 'Welcome text', description: 'Set the employee home page text. Updates load when the home page opens or the window regains focus. This is public branding information.',
     headline: 'Headline (up to 40 characters)', badge: 'Badge (up to 12 characters)', showBadge: 'Show badge', preview: 'Welcome text preview',
@@ -65,6 +66,7 @@ export const en = {
   welcomeBack: 'Welcome back, {name}',
 
   nav: {
+    workflows: 'Workflows',
     dashboard: 'Dashboard',
     usage: 'Model usage',
     departments: 'Departments',

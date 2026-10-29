@@ -9,7 +9,7 @@ exports[`transfers upload and AI output bytes, creates an inherited local copy, 
     "sharedAt": 1,
     "title": "分析聊天",
   },
-  "seq": 3,
+  "seq": 4,
   "time": 1,
   "type": "lfclaw/share-received",
 }

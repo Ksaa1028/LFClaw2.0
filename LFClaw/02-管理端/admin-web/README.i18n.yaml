@@ -3,5 +3,8 @@
 # After editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write LFClaw/02-管理端/admin-web/README.md
 /lfclaw-administration-web:
-  en: cd1f9904ede1bacd
-  zh: b84fb4997c7e0ec3
+  en: ab7cd34ca85dd89c
+  zh: d11944aa04090ea7
+/lfclaw-administration-web/workflows:
+  en: 2b31b923c883a35a
+  zh: b7c159eabaf519bc

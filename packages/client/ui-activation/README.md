@@ -21,13 +21,15 @@ Employees activate the desktop with a code, view authorized models and send requ
 <a id="use-and-authorization"></a>
 ## Use and authorization
 
-The Host retains current-employee memory snapshots for `employee/me` and connector catalogs, updating them from background responses. Only display calls explicitly using `catalogMaxAgeMs` may reuse recent responses; default requests, permission checks and tool execution contact the enterprise service. Account changes, logout, failed synchronization and connector account edits clear related snapshots. Expired snapshots are refetched; late older responses cannot replace newer results.
+The Host retains current-employee memory snapshots for `employee/me`, expert catalogs and connector catalogs, updating them from background responses. Only display calls explicitly using `catalogMaxAgeMs` may reuse recent responses; default requests, permission checks and tool execution contact the enterprise service. Account changes, logout, failed synchronization and connector account edits clear related snapshots. Expired snapshots are refetched; late older responses cannot replace newer results.
 
 The desktop profile connects with an employee activation code. The Host saves the service address and token in credentials storage; the renderer receives only verification status and the employee name. Opening a workspace checks the employee endpoint again; expired or offline authorization blocks entry. Offline failures retain local credentials for retry after service recovery.
 
 `serverUrl` is the enterprise API root including `/lfclaw/api`; `timeoutMs` bounds requests. The desktop defaults to `http://8.216.38.213:39811/lfclaw/api`, also used for local operation and manual integration. `allowInsecureHttp` defaults to false; the shipped HTTP deployment explicitly enables it but still rejects URLs containing credentials, query parameters or fragments. `LFCLAW_SERVER_URL` supports user-requested address changes. Switching servers requires reactivation, never sends the old token to the new address, and neither migrates nor deletes local chats.
 
 The desktop catalog exposes employee-authorized OpenAI-compatible text models and uses the server default unless the existing personal selection remains valid. Every model call rechecks authorization; background catalog refresh runs every `refreshIntervalMs`. Provider keys stay on the server; the Host uses an employee token for the gateway. Separate client plugins supply enterprise skills, connectors and experts.
+
+Model discovery, selection and request preparation read `employee/model-catalog`, which returns only authorized model metadata. They do not download skill icons or connector catalogs. Deploy the server providing this endpoint before updating clients; an unavailable endpoint reports a catalog failure without falling back to the full employee response.
 
 A lost enterprise connection reports a retryable `TRANSPORT` model error and asks the user to check files already written in the workspace. Failure does not automatically delete existing files.
 

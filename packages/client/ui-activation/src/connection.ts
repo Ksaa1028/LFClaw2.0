@@ -33,7 +33,7 @@ export class EnterpriseConnection extends Service {
       && (/^employee\/connectors\/[^/]+\/(?:credentials|account)$/.test(path)
         || /^employee\/personal-(?:experts(?:\/[^/]+)?|expert-teams)$/.test(path))
     if (mutation) this.clearCatalogs()
-    const key = path === 'employee/me' ? path
+    const key = path === 'employee/me' || path === 'employee/expert-catalog' ? path
       : path === 'employee/connector-catalog' || path.startsWith('employee/connector-catalog?revision=') ? 'employee/connector-catalog' : undefined
     const cached = key && path === key && !mutation ? this.catalogs.get(key) : undefined
     if (cached && Date.now() - cached.receivedAt < catalogMaxAgeMs) {

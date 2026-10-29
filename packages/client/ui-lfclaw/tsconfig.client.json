@@ -12,6 +12,7 @@
     "src/sharing-types.ts"
   ],
   "references": [
+    { "path": "../../util/crypto" },
     {
       "path": "../../../vendor/cordis"
     },

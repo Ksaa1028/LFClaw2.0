@@ -2,6 +2,13 @@
 
 English | [中文](README.zh.md)
 
+
+The workflow navigation entry is currently hidden; existing workflow data is retained.
+
+## Workflows
+
+The Workflows page lists workflow metadata only, with search across titles, employees and departments, status filtering and creation-date filtering. It shows creator, current handler, deadline, last update and overdue state. Administrators cannot read original notes or attachments, assign handlers, approve, return, cancel or modify work. Refresh failures are visible and retain the previously loaded rows.
+
 <a id="lfclaw-管理-web"></a>
 
 Model Usage loads enterprise gateway records on demand, filtered by UTC date, employee and model. Account and model summaries show request count, input/output/total tokens and missing-usage counts, with ten rows per page. Deleted employees or models currently retain their IDs in historical summaries. Personal plugins calling outside models directly are excluded. Monthly overview costs come from server aggregation; initial administration data no longer carries individual usage records.

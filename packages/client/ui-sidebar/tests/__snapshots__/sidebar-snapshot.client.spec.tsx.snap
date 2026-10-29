@@ -78,6 +78,15 @@ exports[`sidebar shell snapshots > renders Windows caption controls in expanded 
           style="display: contents;"
         />
       </div>
+      <div
+        class="settingsArea"
+        data-sidebar-settings="true"
+      >
+        <div
+          data-slot="sidebar.settings"
+          style="display: contents;"
+        />
+      </div>
     </div>
   </div>
 </div>
@@ -129,18 +138,9 @@ exports[`sidebar shell snapshots > renders Windows caption controls in expanded 
               style="display: contents;"
             >
               <span
-                class="localBuildBrand"
+                class="fallbackBrandName"
               >
-                <span
-                  class="localBuildTitle"
-                >
-                  LFClaw
-                </span>
-                <span
-                  class="buildVersion"
-                >
-                  1.2.3-rc.4-abc1234-dirty
-                </span>
+                LFClaw
               </span>
             </div>
           </span>
@@ -209,6 +209,15 @@ exports[`sidebar shell snapshots > renders Windows caption controls in expanded 
       >
         <div
           data-slot="sidebar.footer.action"
+          style="display: contents;"
+        />
+      </div>
+      <div
+        class="settingsArea"
+        data-sidebar-settings="true"
+      >
+        <div
+          data-slot="sidebar.settings"
           style="display: contents;"
         />
       </div>
@@ -269,15 +278,6 @@ exports[`sidebar shell snapshots > renders the collapsed rail after the crossfad
         />
       </button>
     </div>
-    <div
-      class="settingsArea"
-      data-sidebar-settings="true"
-    >
-      <div
-        data-slot="sidebar.settings"
-        style="display: contents;"
-      />
-    </div>
     <button
       aria-label="New session"
       class="newSession"
@@ -318,6 +318,15 @@ exports[`sidebar shell snapshots > renders the collapsed rail after the crossfad
       >
         <div
           data-slot="sidebar.footer.action"
+          style="display: contents;"
+        />
+      </div>
+      <div
+        class="settingsArea"
+        data-sidebar-settings="true"
+      >
+        <div
+          data-slot="sidebar.settings"
           style="display: contents;"
         />
       </div>
@@ -372,18 +381,9 @@ exports[`sidebar shell snapshots > renders the expanded column (wordmark, capsul
               style="display: contents;"
             >
               <span
-                class="localBuildBrand"
+                class="fallbackBrandName"
               >
-                <span
-                  class="localBuildTitle"
-                >
-                  LFClaw
-                </span>
-                <span
-                  class="buildVersion"
-                >
-                  1.2.3-rc.4-abc1234-dirty
-                </span>
+                LFClaw
               </span>
             </div>
           </span>
@@ -406,15 +406,6 @@ exports[`sidebar shell snapshots > renders the expanded column (wordmark, capsul
           xmlns="http://www.w3.org/2000/svg"
         />
       </button>
-    </div>
-    <div
-      class="settingsArea"
-      data-sidebar-settings="true"
-    >
-      <div
-        data-slot="sidebar.settings"
-        style="display: contents;"
-      />
     </div>
     <button
       aria-label="New session"
@@ -461,6 +452,15 @@ exports[`sidebar shell snapshots > renders the expanded column (wordmark, capsul
       >
         <div
           data-slot="sidebar.footer.action"
+          style="display: contents;"
+        />
+      </div>
+      <div
+        class="settingsArea"
+        data-sidebar-settings="true"
+      >
+        <div
+          data-slot="sidebar.settings"
           style="display: contents;"
         />
       </div>
@@ -515,18 +515,9 @@ exports[`sidebar shell snapshots > renders the expanded column in the default lo
               style="display: contents;"
             >
               <span
-                class="localBuildBrand"
+                class="fallbackBrandName"
               >
-                <span
-                  class="localBuildTitle"
-                >
-                  LFClaw
-                </span>
-                <span
-                  class="buildVersion"
-                >
-                  1.2.3-rc.4-abc1234-dirty
-                </span>
+                LFClaw
               </span>
             </div>
           </span>
@@ -549,15 +540,6 @@ exports[`sidebar shell snapshots > renders the expanded column in the default lo
           xmlns="http://www.w3.org/2000/svg"
         />
       </button>
-    </div>
-    <div
-      class="settingsArea"
-      data-sidebar-settings="true"
-    >
-      <div
-        data-slot="sidebar.settings"
-        style="display: contents;"
-      />
     </div>
     <button
       aria-label="新建会话"
@@ -604,6 +586,15 @@ exports[`sidebar shell snapshots > renders the expanded column in the default lo
       >
         <div
           data-slot="sidebar.footer.action"
+          style="display: contents;"
+        />
+      </div>
+      <div
+        class="settingsArea"
+        data-sidebar-settings="true"
+      >
+        <div
+          data-slot="sidebar.settings"
           style="display: contents;"
         />
       </div>

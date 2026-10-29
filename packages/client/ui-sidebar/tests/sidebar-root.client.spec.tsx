@@ -100,16 +100,16 @@ function mountShell({ collapsed = false, width = 300, shortcuts = [] }: {
 }
 
 describe('SidebarRoot shell', () => {
-  it('keeps one Windows settings seat outside the collapsing column with a stable label', () => {
+  it('keeps icon-only settings beside employee information', () => {
     document.documentElement.dataset.windowsTitlebar = ''
     const shell = mountShell({})
     const seat = screen.getByTestId('settings-seat').parentElement!
-    expect(seat.parentElement).toBe(document.body)
-    expect(shell.settingsOwner().wide).toBe(true)
+    expect(seat.previousElementSibling?.contains(screen.getByTestId('footer-action-seat'))).toBe(true)
+    expect(shell.settingsOwner().wide).toBe(false)
     shell.rerender({ collapsed: true, width: 0 })
     expect(screen.getAllByTestId('settings-seat')).toHaveLength(1)
     expect(screen.getByTestId('settings-seat').parentElement).toBe(seat)
-    expect(shell.settingsOwner().wide).toBe(true)
+    expect(shell.settingsOwner().wide).toBe(false)
   })
   it('advertises the effective new-session binding', () => {
     const shortcut: ShortcutCatalogEntry = { id: 'session.new' as ShortcutCommandId, label: 'New', aliases: [],
@@ -202,7 +202,7 @@ describe('SidebarRoot shell', () => {
     const b = mountShell()
     expect(b.regionOwner().wide).toBe(true)
     // The settings seat rides the same wide flag (ui-settings renders the row).
-    expect(b.settingsOwner().wide).toBe(true)
+    expect(b.settingsOwner().wide).toBe(false)
     expect(b.footerActionOwner().wide).toBe(true)
     // Expanded: the request is a no-op (no accidental collapse).
     b.regionOwner().expandSidebar()

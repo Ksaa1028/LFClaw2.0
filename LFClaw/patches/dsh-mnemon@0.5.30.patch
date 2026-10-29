@@ -1,0 +1,25 @@
+diff --git a/lib/client.js b/lib/client.js
+index 3c6b2ebf27472e83a9e93a010b3f1450087455cd..3c8cfc613c464314b1f85db3772f5806d9851aec 100644
+--- a/lib/client.js
++++ b/lib/client.js
+@@ -14534,11 +14534,6 @@ window.__ModuleLoader__.load({
+ 						role: "status",
+ 						children: t("workspace.remoteReadOnly")
+ 					}),
+-					status?.lifecycle?.current?.idleReviewBlocked === "agent-team" && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+-						className: MnemonView_module_css_default.alert,
+-						role: "status",
+-						children: t("status.reviewTeamPaused")
+-					}),
+ 					status?.lifecycle?.current?.lastError !== void 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+ 						className: MnemonView_module_css_default.alert,
+ 						role: "alert",
+@@ -15162,7 +15157,7 @@ window.__ModuleLoader__.load({
+ 						stopIcon = ctx.slots.register({
+ 							name: "sidebar.panellist",
+ 							id: MNEMON_MAIN_PANEL_ID,
+-							order: 30,
++							order: 1000,
+ 							label: () => t("tab.label"),
+ 							locale: "mnemon"
+ 						}, MnemonSidebarIcon);
